@@ -1,0 +1,707 @@
+[
+  {
+    "category": "Summer Special",
+    "items": [
+      { "name": "Aamras" },
+      { "name": "Angoori Basundi", "description": "Angoori basundi is a rich and creamy dessert made with sweetened condensed milk" },
+      { "name": "Hapus Pyaari Aamras", "description": "A smooth blend of hapus and pyaari mangoes prepared with added sugar" },
+      { "name": "Dahi Vada", "description": "Dahi vada is a classic Indian snack made of soft, deep fried lentil dumplings" },
+      { "name": "Mango Blast" },
+      { "name": "Cranberry Fruit Halwa" },
+      { "name": "Melon Fruit Halwa" },
+      { "name": "Kiwi Fruit Halwa" },
+      { "name": "Blueberry Fruit Halwa" },
+      { "name": "Santra Fruit Halwa" }
+    ]
+  },
+  {
+    "category": "Snacks",
+    "items": [
+      { "name": "Punjabi Samosa", "description": "The Indian samosa is a globally beloved savory snack known for its crispy outer layer" },
+      { "name": "Cheese Corn Ball", "description": "Cheese Corn Balls are delicious, crispy bite-sized snacks that combine the creamy richness of cheese with sweet corn" },
+      { "name": "Cheese Chilli Samosa", "description": "Cheese chilli samosa is a delicious fusion snack that marries the crispy, golden exterior with a spicy cheese filling" },
+      { "name": "Pure Ghee Jalebi", "description": "Savor the magic of golden spirals, expertly fried in rich desi ghee" },
+      { "name": "Fresh Corn Bhakarwadi", "description": "A unique version of bhakarwadi featuring a filling that blends fresh corn" },
+      { "name": "Kothimbir Wadi", "description": "Kothimbir Wadi combines fresh coriander leaves with besan, green chilies, ginger, and spices" },
+      { "name": "Chinese Samosa", "description": "For all you chinese lovers out there, this snack dish is a combination of Chinese and Indian flavors" },
+      { "name": "Fresh Green Lilva Kachori", "description": "Lilva Kachori is a traditional delicacy filled with a flavorful mixture of fresh green lilva beans" },
+      { "name": "Onion Samosa", "description": "The onion samosa is smaller, crispier and lighter, filled with finely chopped onions" },
+      { "name": "Jaipuri Aloo Pyaaz Kachori", "description": "Jaipuri aloo pyaaz kachori is a famous Rajasthani snack from Jaipur, known for its spicy potato and onion filling" },
+      { "name": "Vegetable Samosa", "description": "The vegetable samosa is a classic Indian snack consisting of a crispy, green shell with vegetable filling" },
+      { "name": "Khasta Kachori", "description": "[No Onion No Garlic] Khasta kachori is a round, deep fried pastry stuffed with spiced lentils" },
+      { "name": "Aloo Wadi", "description": "Patra is prepared by spreading a flavorful spiced batter over fresh taro leaves" },
+      { "name": "Dahi Vada", "description": "Dahi vada is a classic Indian snack made of soft, deep fried lentil dumplings soaked in yogurt" },
+      { "name": "Imarti", "description": "Imarti is a traditional Indian sweet made from urad dal batter, deep fried into a flower shape" },
+      { "name": "Schezwan Corn Roll [1 Pieces]", "description": "Schezwan Corn Roll is a popular Indo-Chinese snack featuring a crispy, deep-fried roll with schezwan and corn filling" },
+      { "name": "Paneer Chilli Samosa", "description": "This samosa features a crunchy, deep-fried outer layer filled with a delicious paneer and chilli stuffing" }
+    ]
+  },
+  {
+    "category": "Sweets",
+    "subcategories": [
+      {
+        "subcategory": "General Sweets",
+        "items": [
+          { "name": "Pure Ghee Jalebi", "description": "Savor the magic of golden spirals, expertly fried in rich desi ghee" },
+          { "name": "Special Milk Cake", "description": "Milk cake is a popular Indian sweet made by slowly simmering milk, sugar until it solidifies" },
+          { "name": "Pure Ghee Motichoor Laddu", "description": "Traditional Indian sweet made with fine boondi where the balls are tiny and soft" },
+          { "name": "Kaju Katli", "description": "Indulge in the luxurious taste of kaju katli, a delicate blend of cashews and sugar" },
+          { "name": "Desi Ghee Boondi", "description": "Desi ghee boondi is a traditional Indian sweet made from chickpea flour (besan)" },
+          { "name": "Malai Peda", "description": "Malai Peda is a rich and creamy Indian sweet made from reduced milk" },
+          { "name": "Rajkot Peda", "description": "[Veg preparation] Rajkot peda is a famous Indian sweet made with khoya (mawa)" },
+          { "name": "Pure Ghee Gond Laddu", "description": "Pure Ghee Goond Laddo is a traditional Indian sweet made from goond (edible gum)" },
+          { "name": "Mohanthal", "description": "Mohanthal is a traditional Gujarati sweet made from besan (gram flour), ghee, sugar" },
+          { "name": "Pure Ghee Churma Laddu", "description": "Churma Laddu is a traditional Indian sweet delicacy, especially popular in Rajasthan" },
+          { "name": "Desi Ghee Besan Laddu", "description": "Desi Ghee Besan Laddo is a rich, melt-in-the-mouth Indian sweet made from roasted gram flour" },
+          { "name": "Mango Kalakand", "description": "Mango kalakand is made with pure milk, mango pulp, soft and creamy" },
+          { "name": "Sutarfeni", "description": "Delicate, thread like crispy sweet made from fine flour strands roasted to perfection" },
+          { "name": "Mathura Peda", "description": "Mathura Peda is a traditional Indian sweet originating from Mathura, made with full-fat milk" },
+          { "name": "Kaachi Peda", "description": "Kacchi peda is a traditional Indian sweet made from fresh khoya (mawa), sugar" },
+          { "name": "Imarti", "description": "Imarti is a traditional Indian sweet made from urad dal batter, deep fried into flower shape" },
+          { "name": "Malai Kesar Puri", "description": "Malai kesar puri is a delicious, rich Indian fried dessert made from dough with saffron and cream" },
+          { "name": "Kesar Burfi", "description": "Kesar Burfi is a rich and aromatic Indian sweet made from khoya (mawa) and saffron" },
+          { "name": "Malai Butterscotch Roll", "description": "Malai butterscotch wati is a decadent Indian sweet that combines the rich, creamy malai with butterscotch" },
+          { "name": "Mini Kaju Katli", "description": "Indulge in the luxurious taste of kaju katli in mini size, a delicate blend of cashews and sugar" },
+          { "name": "Saffron Katri", "description": "Saffron katli made with premium cashews, saffron, and pistachios, low on sugar" },
+          { "name": "Mini Kesar Kaju Katli", "description": "Saffron katli made with premium cashews, saffron and pistachios, low on sugar" },
+          { "name": "Anjeer Katli", "description": "[Veg preparation] Anjeer kaju katli is a premium Indian sweet that combines the richness of figs and cashews" },
+          { "name": "Blueberry Katli", "description": "Blueberry kaju katli is a modern twist on the classic Indian cashew fudge" },
+          { "name": "Strawberry Katli", "description": "Strawberry kaju katli is a delightful fusion sweet that blends the creamy richness of cashews with strawberry" },
+          { "name": "Anjeer Kalakand", "description": "[Veg preparation] Anjeer Kalakand is a soft, moist Indian milk-based sweet infused with figs" },
+          { "name": "Kesar Peda", "description": "A traditional Indian sweet made by combining khoya along with some sugar, pure saffron" },
+          { "name": "Bikaneri Burfi", "description": "Bikaneri burfi is a popular sweet made from khoya (mawa), sugar, flavored with spices" },
+          { "name": "Malai Sandwich Burfi", "description": "[Veg preparation] Malai Sandwich Burfi is a creamy, indulgent Indian sweet" },
+          { "name": "Malai Vanilla Wati", "description": "Malai Vanilla Wati is a creamy, smooth Indian sweet made from a mixture of malai and vanilla" },
+          { "name": "Malai Pista Roll", "description": "Malai Pista Roll is a rich, indulgent Indian sweet made from malai (cream) and pistachios" },
+          { "name": "Pure Ghee Boondi Laddu", "description": "Pure Ghee Boondi Laddo is a classic Indian sweet made from crispy boondi and pure ghee" },
+          { "name": "Pure Ghee Besan Laddu", "description": "Pure Ghee Besan Laddo is a rich, traditional Indian sweet made from roasted gram flour" },
+          { "name": "Pure Ghee Methi Laddu", "description": "Pure Ghee Methi Laddo is a nutritious and aromatic Indian sweet made from fenugreek" },
+          { "name": "Pure Ghee Dink Laddu", "description": "Pure Ghee Dink Laddo is a traditional Indian sweet made from roasted coconut and edible gum" },
+          { "name": "Pista Burfi", "description": "Pista burfi is a decadent Indian sweet made from khoya (mawa), sugar, pistachios" },
+          { "name": "Chocolate Burfi", "description": "Chocolate Burfi is a delicious fusion sweet made from khoya (mawa), sugar, and chocolate" },
+          { "name": "South Mysore Pak", "description": "South Mysore pak is a variation of the classic Mysore pak originating from South India" },
+          { "name": "Maharashtrian Mysore Pak", "description": "Maharashtrian Mysore Pak is a rich, soft, and ghee-loaded sweet made from gram flour" },
+          { "name": "Desi Ghee Khaja", "description": "Desi Ghee Khaja is a traditional Indian sweet made from layers of flour and ghee" },
+          { "name": "Desi Ghee Balushahi", "description": "Desi Ghee Bhalushi is a rich, traditional Indian sweet made from wheat flour" },
+          { "name": "Sugar Free Oats Makhana Laddu", "description": "Sugar-Free Oats Makhana Laddo is a healthy, Indian sweet made from roasted oats and makhana" },
+          { "name": "Sugar Free Nachni Khajur Laddu", "description": "Sugar-Free Nachni Khajur Laddo is a nutritious and delicious Indian sweet made from nachni and dates" },
+          { "name": "Special Malai Chikki" },
+          { "name": "Desi Ghee Valiyati Halwa", "description": "Desi ghee valiyati halwa is a rich, luxurious sweet made in pure desi ghee" },
+          { "name": "Desi Ghee Badami Halwa", "description": "Desi ghee badami halwa is a rich, luxurious sweet made in pure desi ghee with almonds" }
+        ]
+      },
+      {
+        "subcategory": "Bengali Sweets",
+        "items": [
+          { "name": "Kesar Rasmalai", "description": "Kesar Rasmalai is a soft, spongy chhena (paneer) dessert soaked in fragrant saffron-infused milk" },
+          { "name": "Gulab Jamun [Mini]", "description": "Mini gulab jamun are soft, bite sized milk dumplings soaked in fragrant sugar syrup" },
+          { "name": "Sponge Rasgulla", "description": "Sponge rasgulla is a soft, spongy, and juicy sweet made from fresh chena" },
+          { "name": "Gulab Jamun", "description": "Gulab Jamun is a classic Indian sweet made from soft, deep-fried milk dumplings soaked in sugar syrup" },
+          { "name": "Rasgulla [Mini]", "description": "Mini rasgulla are bite sized, spongy chena balls soaked in fragrant sugar syrup" },
+          { "name": "Malai Sandwich", "description": "Malai Sandwich is a soft, creamy dessert made with layers of fresh cream" },
+          { "name": "Santra Chaap", "description": "Santra chaap is a refreshing Indian sweet made from tender, juicy orange soaked in syrup" },
+          { "name": "Desi Gud Rasgulla", "description": "[Veg preparation] Desi gud rasgulla is a traditional Indian sweet made from soft chena balls with jaggery syrup" },
+          { "name": "Kala Jamun", "description": "Kala jamun is a rich, deep brown variation of the classic sweet" },
+          { "name": "Malai Chaap", "description": "Malai chaap is a rich and creamy dessert made from soft, spongy chena" },
+          { "name": "Gulab Toast", "description": "Malai Sandwich [1 Piece] with Gulab Toast [1 Piece]" },
+          { "name": "Mango Blast" }
+        ]
+      },
+      {
+        "subcategory": "Dry Fruits Sweets",
+        "items": [
+          { "name": "Santra Ball" },
+          { "name": "Silver Touch" },
+          { "name": "Rose Blossom" },
+          { "name": "Fresh Pine" },
+          { "name": "Dry Fruit Watermelon" },
+          { "name": "Kaju Kalash" },
+          { "name": "Bharela Kaju" },
+          { "name": "Litchi Delight" },
+          { "name": "Summer Fruit" },
+          { "name": "Berry Delight" }
+        ]
+      },
+      {
+        "subcategory": "Sugar Free Sweets",
+        "items": [
+          { "name": "Sugar Free Orange Pak", "description": "[Veg preparation] Sugar free orange pak is a healthy, guilt-free sweet made with orange" },
+          { "name": "Sugar Free Khajur Pak", "description": "Sugar free khajur pak is a wholesome, guilt-free sweet made with nutrient rich dates" },
+          { "name": "Sugar Free Anjeer Pak", "description": "Sugar free anjeer pak is a wholesome, guilt free sweet made with nutrient-packed figs" },
+          { "name": "Sugar Free Cranberry", "description": "[Veg preparation] Sugar free cranberry pak is a healthy, guilt free sweet made with cranberry" },
+          { "name": "Sugar Free Blueberry Pak", "description": "[Veg preparation] Sugar-Free Blueberry Pak is a wholesome, guilt-free sweet with blueberries" },
+          { "name": "Sugar Free Oats Makhana Laddu", "description": "Sugar-Free Oats Makhana Laddo is a healthy, Indian sweet made from roasted oats and makhana" },
+          { "name": "Sugar Free Nachni Khajur Laddu", "description": "Sugar-Free Nachni Khajur Laddo is a nutritious and delicious Indian sweet made from nachni and dates" },
+          { "name": "Jaggery Kaju Katli", "description": "[Veg preparation] Jaggery Kaju Katli is a wholesome twist on the classic cashew sweet using jaggery" },
+          { "name": "Sugar Free Kaju Katli", "description": "Sugar-Free Kaju Katli is a rich and smooth cashew-based sweet made with Stevia, without sugar" },
+          { "name": "Sugar Free Dry Fruits Laddu", "description": "Sugar free dry fruits laddu is a wholesome, guilt free sweet made from mixed dry fruits" }
+        ]
+      },
+      {
+        "subcategory": "Special Basundi",
+        "items": [
+          { "name": "Angoori Basundi", "description": "Angoori basundi is a rich and creamy dessert made with sweetened condensed milk" }
+        ]
+      },
+      {
+        "subcategory": "Petha's",
+        "items": [
+          { "name": "Agra Petha", "description": "Agra Petha is a translucent, soft, and juicy sweet made from ash gourd" },
+          { "name": "Kesar Angoori Petha", "description": "Kesar angoori petha is a bite sized, juicy, saffron infused delicacy made from ash gourd" }
+        ]
+      },
+      {
+        "subcategory": "Premium Crunch",
+        "items": [
+          { "name": "Oreo Crunchy", "description": "A perfect blend of creamy indulgence and crunchy delight with Oreo" },
+          { "name": "Bourbon Crunch", "description": "[Veg preparation] A rich and indulgent treat made with Bourbon biscuits" },
+          { "name": "Mango Crunch", "description": "A refreshing tropical delight with a crunchy twist blending mango" },
+          { "name": "Hazelnut Crunchy", "description": "[Veg preparation] A rich, nutty indulgence crafted with hazelnuts" },
+          { "name": "Kesar Crunch", "description": "[Veg preparation] A royal Indian delight with a modern crunchy twist using saffron" }
+        ]
+      },
+      {
+        "subcategory": "Premium Bites",
+        "items": [
+          { "name": "Mewa Bites" },
+          { "name": "Orange Bites" },
+          { "name": "Chocolate Bites" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Shrikhand",
+    "items": [
+      { "name": "Dry Fruit Shrikhand", "description": "Dry fruit shrikhand is a creamy, traditional Indian dessert made from thickened yogurt and dry fruits" },
+      { "name": "Kharvas [Regular]", "description": "Kesar Kharvas is a traditional Indian sweet pudding made from fresh colostrum milk" },
+      { "name": "Kesar Shrikhand", "description": "Kesar shrikhand is thick, soft, creamy and flavored with saffron" },
+      { "name": "Dry Fruit Rose Petal Shrikhand", "description": "Dry Fruit Rose Petal Shrikhand is a luxurious, creamy dessert made from thickened yogurt with rose petals and dry fruits" },
+      { "name": "Gud Kharvas", "description": "[Veg preparation] Gud Kharvas is a traditional Indian sweet pudding made from fresh colostrum milk with jaggery" },
+      { "name": "Mango Shrikhand", "description": "Mouth watery mango shrikhand, high in taste, thick and flavorful" }
+    ]
+  },
+  {
+    "category": "Bombay Halwa",
+    "subcategories": [
+      {
+        "subcategory": "Halwa Specials",
+        "items": [
+          { "name": "Kesar Halwa", "description": "Kesar halwa is a rich, aromatic dessert made from pure ghee, semolina, and saffron" },
+          { "name": "Pista Halwa", "description": "Pista halwa is a rich, creamy dessert made from finely ground pistachios, sugar and ghee" },
+          { "name": "Pineapple Halwa", "description": "Pineapple halwa is a sweet, tropical dessert made from fresh pineapple, sugar and ghee" },
+          { "name": "Maharaja Halwa", "description": "Maharaja halwa is a rich and indulgent dessert made with premium ingredients" },
+          { "name": "Anjeer Halwa", "description": "Anjeer halwa is a rich, wholesome dessert made from nutrient-packed figs, ghee and sugar" },
+          { "name": "Desi Ghee Valiyati Halwa", "description": "Desi ghee valiyati halwa is a rich, luxurious sweet made in pure desi ghee" },
+          { "name": "Desi Ghee Badami Halwa", "description": "Desi ghee badami halwa is a rich, luxurious sweet made in pure desi ghee with almonds" }
+        ]
+      },
+      {
+        "subcategory": "Assorted Halwa",
+        "items": [
+          { "name": "Assorted Regular Desi Ghee Halwa", "description": "Assorted Regular Desi Ghee Halwa [280 g]" },
+          { "name": "Assorted Fruit Desi Ghee Halwa", "description": "Assorted Fruit Desi Ghee Halwa [280 g]" },
+          { "name": "Assorted Badami Halwa", "description": "Assorted Badami Halwa [280 g]" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Dubai Special Baklava",
+    "items": [
+      { "name": "Pyramid Baklava", "description": "[Veg preparation] Pyramid baklava is a rich, layered pastry made with crisp phyllo dough" },
+      { "name": "Walnut Baklava", "description": "Walnut Baklava is a rich, layered pastry made with crisp phyllo dough generously filled with walnuts" }
+    ]
+  },
+  {
+    "category": "Fafda and Papdi",
+    "items": [
+      { "name": "Hing Mari Fafda", "description": "Hing Mari Fafda is a crispy, savory Gujarati snack flavored with a hint of asafoetida and pepper" },
+      { "name": "Nylon Papdi", "description": "Nylon Papdi is a light, crispy, and delicate snack made from refined flour" },
+      { "name": "Vanela Gathiya [200 g]", "description": "Vanela Gathiya is a traditional Gujarati snack made from gram flour, subtly flavored with spices" }
+    ]
+  },
+  {
+    "category": "Upvas Specials",
+    "items": [
+      { "name": "Special Milk Cake", "description": "Milk cake is a popular Indian sweet made by slowly simmering milk, sugar until it solidifies" },
+      { "name": "Kaju Katli", "description": "Indulge in the luxurious taste of kaju katli, a delicate blend of cashews and sugar" },
+      { "name": "Malai Peda", "description": "Malai Peda is a rich and creamy Indian sweet made from reduced milk" },
+      { "name": "Kela Chiwda", "description": "A crispy and flavorful snack made from thinly sliced raw bananas and dryfruits" },
+      { "name": "Mathura Peda", "description": "Mathura Peda is a traditional Indian sweet originating from Mathura, made with full-fat milk" },
+      { "name": "Diet Long Masala Banana Chips [250 g]", "description": "Diet long masala banana chips are thin, elongated raw banana slices that are lightly spiced" },
+      { "name": "Diet Long Banana Chips [250 g]", "description": "Diet Long Banana Chips are thin, elongated slices of raw banana that are lightly fried" },
+      { "name": "Potato Wafer [200 g]", "description": "Potato wafer is a thin, crispy snack made from fresh potatoes, lightly seasoned" },
+      { "name": "Dry Sabudana Stick [250 g]", "description": "Crispy, light, and crunchy sticks made from sabudana, perfect for fasting and tea-time snacking" },
+      { "name": "Dry Sabudana Puri [200 g]" },
+      { "name": "Yellow Banana Chips", "description": "Yellow Banana Chips are thin, crispy slices of ripe bananas, lightly fried" },
+      { "name": "Mari Banana Wafer", "description": "Mari Banana Wafer is a crispy, thinly sliced banana snack, lightly fried and spiced with pepper" },
+      { "name": "Dry Sada Salli [250 g]", "description": "Dry Sada Potato Salli is a simple, dry-style Indian dish made with thinly sliced potatoes" },
+      { "name": "Dry Masala Salli [250 g]", "description": "Dry Masala Potato Salli is a simple, dry-style Indian dish made with thinly sliced spiced potatoes" },
+      { "name": "Dry Sabudana Chiwda [200 g]", "description": "Light, crispy mix made from sabudana, peanuts, dryfruits, and mild spices, perfect for fasting" },
+      { "name": "Dry Rajgira Chiwda [200 g]" },
+      { "name": "Farali Chiwda" },
+      { "name": "Special Farali Chiwda", "description": "A crunchy vrat snack made with thin potato salli (fried potato sticks)" },
+      { "name": "Upwas Bhakri [200 gms]", "description": "Soft and nutritious flatbread made from rajgira flour, perfect for fasting (upwas)" },
+      { "name": "Upwas Fulwadi [200 gms]" },
+      { "name": "Kesar Peda", "description": "A traditional Indian sweet made by combining khoya along with some sugar, pure saffron" }
+    ]
+  },
+  {
+    "category": "Namkeen",
+    "subcategories": [
+      {
+        "subcategory": "General Namkeen",
+        "items": [
+          { "name": "Moong Dal Chakli [250 g]", "description": "Moong Dal Chakli is a crunchy, spiral-shaped snack made from moong dal flour" },
+          { "name": "Bhajani Chakli [250 g]", "description": "Bhajni Chakli is a mix of various roasted grains and pulses, ground into flour and fried" },
+          { "name": "Makai Chivda [250 g]", "description": "Makai Chiwda is a crunchy and flavorful snack made from fried corn flakes" },
+          { "name": "Whole Wheat Jeera Puri [250 g]", "description": "Whole wheat jeera puri is a crisp, golden brown deep fried bread made with cumin" },
+          { "name": "Garlic Chiwda [250 g]", "description": "Garlic chiwda is a crunchy, savory snack made by roasting flattened rice (poha) with garlic" },
+          { "name": "Potato Wafer [200 g]", "description": "Potato wafer is a thin, crispy snack made from fresh potatoes, lightly seasoned" },
+          { "name": "Patal Poha Chivda [250 g]", "description": "Patla Poha Chiwda is a light, crispy Maharashtrian snack made from thin flattened rice" },
+          { "name": "Sev Puri [250 g]" },
+          { "name": "Butter Chakli [200 g]", "description": "Butter chakli is a crispy, spiral-shaped snack made with a rich blend of butter and spices" },
+          { "name": "Butter Nachni Chakli [Mini, 200 g]", "description": "Butter Nachni Chakli is a crispy, spiral-shaped snack made from nutritious nachni (ragi)" },
+          { "name": "Dry Karanji [8 Pieces]", "description": "The dry karanji is made from a mixture of sukha naral, powdered sugar" },
+          { "name": "Moong Dal Murukku [250 g]", "description": "Moong Dal Murukku is a crunchy, spiral-shaped snack made from moong dal flour" },
+          { "name": "Mini Chorafali [250 g]", "description": "Mini Chorafali is a crispy, light, airy Gujarati snack made from urad dal" },
+          { "name": "Bhavnagari Gathiya [250 g]", "description": "Bhavnagari Gathiya is a soft, mildly spiced Gujarati snack made from gram flour" },
+          { "name": "Soya Stick [250 g]", "description": "Soya Stick is a crunchy, savory snack made from nutritious soya flour" },
+          { "name": "Ujjaini Sev [250 g]", "description": "Ujjaini Sev is made from gram flour (besan) and lightly spiced with salt" },
+          { "name": "Schezwan Stick [250 g]", "description": "Schezwan stick is a spicy, crunchy snack made from flour and infused with schezwan flavors" },
+          { "name": "Manchurian Stick [250 g]" },
+          { "name": "Tomato Stick [250 g]" },
+          { "name": "Mixed Farsan [250 g]" },
+          { "name": "Patal Poha Chiwda [250 g]", "description": "Patla Poha Chiwda is a light, crispy Maharashtrian snack made from thin flattened rice" },
+          { "name": "Yellow Banana Chips", "description": "Yellow Banana Chips are thin, crispy slices of ripe bananas, lightly fried" },
+          { "name": "Coconut Yellow Banana Chips [250 g]", "description": "[Veg preparation] Coconut Yellow Banana Chips are crispy, thin slices of ripe bananas with coconut" },
+          { "name": "Mari Banana Wafer", "description": "Mari Banana Wafer is a crispy, thinly sliced banana snack, lightly fried and spiced" },
+          { "name": "Banana Tomato Chips [250 g]", "description": "Banana tomato chips are thinly sliced raw banana chips flavored with tomato" },
+          { "name": "Sweet Kela (Banana) Chips [250 g]", "description": "[Veg preparation] Sweet kela chips are thin slices of ripe banana that are lightly fried" },
+          { "name": "Fanas Chips [200 g]", "description": "Fanas chips are thinly sliced raw jackfruit pieces that are deep-fried until crisp" },
+          { "name": "Butter Masala Chakli [Mini, 200 g]", "description": "Butter Masala Chakli is a crispy, spiral-shaped snack made with a buttery masala dough" },
+          { "name": "Mozzarella Cheese Stick [250 g]" },
+          { "name": "Sada Sev [250 g]" },
+          { "name": "Nylon Sev [250 g]" },
+          { "name": "Butter Bhavnagri Gathiya [200 g]", "description": "Butter Bhavnagri Gathiya is a rich, soft, and melt-in-the-mouth Gujarati snack made from gram flour with butter" },
+          { "name": "Tikha Gathiya [250 g]", "description": "Tikha Ghatiya is a traditional spicy and crunchy snack from Maharashtra made with gram flour" },
+          { "name": "Tikha Sev [250 g]", "description": "Tikha Sev is a spicy, crispy Indian snack made from gram flour (besan)" },
+          { "name": "Baked Shakarpara [250 g]", "description": "Baked Shankarpara is a healthier, oven-baked version of the traditional crispy Indian snack" },
+          { "name": "Jain Chiwda [250 g]", "description": "Jain Chiwda is a mild, crispy mixture made from flattened rice (poha), peanuts without onion/garlic" },
+          { "name": "Mahalaxmi Chiwda [250 g]", "description": "Mahalaxmi Chiwda is a popular, ready-made Maharashtrian snack mix known for its crunchy texture" },
+          { "name": "Dry Fruit Mahalaxmi Chiwda [250 g]" },
+          { "name": "Dry Fruit Corn Chivda [250 g]" },
+          { "name": "Indori Mixture [250 g]", "description": "[Veg preparation] Indori Mixture is a crunchy blend of sev, poha, peanuts, and spices" },
+          { "name": "Golden Mixture [250 g]", "description": "Golden Mixture is a crispy mix of sev, boondi, lentils, peanuts, and spices" },
+          { "name": "Puneri Misal Mixture [250 g]", "description": "Puneri Misal Mixture is a crunchy, mildly spicy blend of farsan, sev, chivda" },
+          { "name": "Nadiyadi Bhusa [250 g]", "description": "Nadiyadi Bhusa is a soft-crunchy, spiced farsan mix made with thin sev, puffed rice" },
+          { "name": "Navratan Mixture [250 g]" },
+          { "name": "Panchratan Mixture [250 g]" },
+          { "name": "Ratlami Sev [250 g]", "description": "Ratlami Sev is made from gram flour (besan) and a blend of special spices" },
+          { "name": "Lounge Sev [250 g]", "description": "Lounge Sev is made from gram flour (besan), fried into thin, crispy strands" },
+          { "name": "Garlic Sev [250 g]", "description": "Garlic Sev is a savory, crunchy Indian snack made from gram flour (besan) with garlic" },
+          { "name": "Schezwan Potato Sev [250 g]", "description": "Made from gram flour and potato, this sev is crispy, spicy, and tangy with schezwan flavors" },
+          { "name": "Sada Boondi [250 g]", "description": "Sada Boondi is plain, lightly salted, and crunchy, without any added spices or masala" },
+          { "name": "Masala Boondi [250 g]", "description": "Masala Boondi is a spiced, crunchy snack made from gram flour (besan) droplets fried in oil" },
+          { "name": "Dry Sada Salli [250 g]", "description": "Dry Sada Potato Salli is a simple, dry-style Indian dish made with thinly sliced potatoes" },
+          { "name": "Dry Masala Salli [250 g]", "description": "Dry Masala Potato Salli is a simple, dry-style Indian dish made with thinly sliced spiced potatoes" },
+          { "name": "Masala Patla Poha Chiwda [250 g]", "description": "Masala Patla Poha Chiwda is a spicy and crispy Maharashtrian snack made from thin flattened rice" },
+          { "name": "Manglori Mixture [250 g]", "description": "Manglori Mixture is a crispy blend of sev, peanuts, lentils, and spices" },
+          { "name": "Papad Mixture [250 g]", "description": "Papad Mixture is a crunchy and savory Indian snack mix that features crispy papad pieces" },
+          { "name": "Moong Dal [250 g]" },
+          { "name": "Chana Dal [250 g]", "description": "Chana dal when fried and salted, becomes a crunchy, protein rich snack" },
+          { "name": "Green Moong [250 g]" },
+          { "name": "Masala Moong [250 g]" },
+          { "name": "Oli Karanji [5 Pieces]", "description": "The Karanji stuffing is made from freshly grated coconut, jaggery, cardamom powder" },
+          { "name": "Meetha Shankarpali [250 g]", "description": "Meetha Shankarpali is a sweet, crispy, diamond-shaped snack made from flour and sugar" },
+          { "name": "Khara Shankarpali [250 g]", "description": "Khara Shankarpali is a savory, crispy snack made from flour, salt, ajwain/jeera" },
+          { "name": "Rumali Chorafali [250 g]", "description": "Rumali Chorafali is a crispy, light, airy Gujarati snack made from urad dal" },
+          { "name": "Singh Bhujiya [250 gms]" }
+        ]
+      },
+      {
+        "subcategory": "Roasted Snacks",
+        "items": [
+          { "name": "Diet Long Masala Banana Chips [250 g]", "description": "Diet long masala banana chips are thin, elongated raw banana slices that are lightly spiced" },
+          { "name": "Roasted Jawari Chiwda [250 g]" },
+          { "name": "Diet Long Banana Chips [250 g]", "description": "Diet Long Banana Chips are thin, elongated slices of raw banana that are lightly fried" },
+          { "name": "Roasted Soya Chips [250 g]", "description": "Roasted Soya Chips are thin, crunchy chips made from soya flour" },
+          { "name": "Roasted Multigrain Mixture [250 g]" },
+          { "name": "Roasted Karela Chips [100 g]", "description": "Roasted Karela Chips are thin slices of bitter gourd that are lightly roasted" },
+          { "name": "Diet Long Mari Chips [250 g]", "description": "Diet long mari chips are thin, elongated chips made from raw tapioca" },
+          { "name": "Roasted Nachani Chips [250 g]", "description": "Roasted Nachani Chips are crispy chips made from nachni (ragi/finger millet) flour" },
+          { "name": "Roasted Beetroot Chips [250 g]", "description": "Roasted Beetroot Chips are thinly sliced beetroot that are baked until crispy" },
+          { "name": "Roasted Tri In One Chips [200 g]", "description": "A healthy, crunchy snack mix made from palak (spinach), beetroot, and pumpkin slices" },
+          { "name": "Roasted Jalapeno Chips [200 g]", "description": "Roasted Jalapeno Chips are thin slices of jalapeno peppers that are roasted until crispy" },
+          { "name": "Diet Chiwda [250 g]" },
+          { "name": "Roasted Nachni Chiwda [250 g]" },
+          { "name": "Roasted Quinoa Mixture [250 g]" },
+          { "name": "Roasted Kabuli Chana [250 g]" },
+          { "name": "Roasted Healthy Bhindy [100 g]", "description": "Roasted Healthy Bhindy is thinly sliced okra that is lightly roasted until crispy" },
+          { "name": "Roasted Paneer Peanut Nutties [250 g]" },
+          { "name": "Diet Mini Chakli [250 g]" },
+          { "name": "Roasted Pista Peanut [250 gms]" }
+        ]
+      },
+      {
+        "subcategory": "Kettle Cooked Chips (Roasted)",
+        "items": [
+          { "name": "Kettle Spinach Chips [200 gms]", "description": "Kettle-cooked spinach chips are a type of snack made by cooking spinach until crispy" },
+          { "name": "Kettle Beetroot Chips [200 gms]", "description": "Kettle beetroot chips are a type of crunchy snack made from beetroot" },
+          { "name": "Kettle Carrot Chips [200 Gms]", "description": "Kettle carrot chips are a crunchy, savory snack made primarily from carrots" },
+          { "name": "Kettle Nachni Chips [200 Gms]", "description": "Kettle nachni chips are crunchy, savory snack chips made primarily from nachni (ragi)" },
+          { "name": "Kettle Jawar Chips [200 Gms]", "description": "Gluten Free Kettle Cooked Jowar Chips are crunchy, made from jowar (sorghum)" },
+          { "name": "Kettle Bajri Chips [200 Gms]", "description": "Gluten Free Kettle Cooked Bajra Chips are crunchy, wholesome snacks made from bajra" },
+          { "name": "Kettle Moong Chips [200 Gms]", "description": "Gluten Free Kettle Cooked Moong Chips are crunchy chips made from moong" }
+        ]
+      },
+      {
+        "subcategory": "Bingo's",
+        "items": [
+          { "name": "Cheese Bingo [250 g]" },
+          { "name": "Achari Bingo [250 g]" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Makhana",
+    "items": [
+      { "name": "Cheese Makhana [100 g]" },
+      { "name": "Black Pepper Makhana [100 g]" },
+      { "name": "Pudina Makhana [100 g]" },
+      { "name": "Peri Peri Makhana [100 g]" },
+      { "name": "Cream & Onion Makhana [100 g]" },
+      { "name": "Salted Makhana [100 g]" },
+      { "name": "Raw Makhana [250 g]" }
+    ]
+  },
+  {
+    "category": "Dry Fruits and Nuts",
+    "items": [
+      { "name": "Salted Pista", "description": "Pistachio are a wonderful, fun & tasty snack which are lightly salted" },
+      { "name": "Special California Badam" },
+      { "name": "Special Goa Kaju" },
+      { "name": "Akhrot" },
+      { "name": "Anjeer Dry Fruits" },
+      { "name": "Special Indian Kismis" },
+      { "name": "Black Seedless Kismis" },
+      { "name": "Special Afghan Kismis", "description": "[Veg preparation]" },
+      { "name": "Special Tukda Mixed Dry Fruits" },
+      { "name": "Special Shahi Mixed Dry Fruits", "description": "[Veg preparation]" },
+      { "name": "Omani Seedless Dates" },
+      { "name": "Omani Dates" },
+      { "name": "Sugar Free Ajwa Dates" },
+      { "name": "Roasted Kadi Patta Kaju" },
+      { "name": "Roasted Salted Kaju" },
+      { "name": "Ghee Fired Salted Kaju" },
+      { "name": "Museli and Dryfruit Mix" },
+      { "name": "Millenium Mixture" },
+      { "name": "Honey Alwa [250 g]" },
+      { "name": "Sugar Free Cranberry Fruit" },
+      { "name": "Sugar Free Blueberry Fruit" },
+      { "name": "Golden Kharek" },
+      { "name": "Mixed Dry Fruit [250 g]" }
+    ]
+  },
+  {
+    "category": "Bakery",
+    "subcategories": [
+      {
+        "subcategory": "General Bakery",
+        "items": [
+          { "name": "Poona Butter" },
+          { "name": "Amul Butter Khari" },
+          { "name": "Special Maska Butter" },
+          { "name": "Twist Butter" },
+          { "name": "Multigrain Toast" },
+          { "name": "Garlic Toast" },
+          { "name": "Whole Wheat Toast" },
+          { "name": "Special Indori Mawa Toast [400 g]" },
+          { "name": "Fruit Cake Toast" },
+          { "name": "Chocolate Cake Toast" },
+          { "name": "Mawa Cake Toast" },
+          { "name": "Diet Nachni Khari" },
+          { "name": "Whole Wheat Methi Khari" },
+          { "name": "Oats & Honey Toast" },
+          { "name": "Whole Wheat Sugar Free Toast" },
+          { "name": "Butter Dry Fruit Rusk" },
+          { "name": "Dry Fruit Cake Rusk" },
+          { "name": "Butter Cake Rusk" }
+        ]
+      },
+      {
+        "subcategory": "Cookies",
+        "items": [
+          { "name": "Pista Badam Cookies [200 g]", "description": "Buttery, crunchy cookies made with the rich flavors of pistachios and almonds" },
+          { "name": "Royal Cookies [200 g]", "description": "Royal cookies are premium, rich cookies often made with butter and rich flour" },
+          { "name": "Fruity Cookies [200 g]", "description": "[Veg preparation] Fruity cookies are sweet, soft to crisp cookies studded with fruit pieces" },
+          { "name": "Dry Fruits Cookies [200 g]", "description": "Dry fruits cookies are rich, flavorful cookies made with a mix of dried fruits" },
+          { "name": "Nachni Cookies [200 g]", "description": "Nachni cookies are wholesome, crunchy cookies made with nachni (ragi/finger millet) flour" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Dairy Products",
+    "items": [
+      { "name": "Fresh Mawa", "description": "Khoya is a dairy product made by slowly heating and reducing full fat milk" },
+      { "name": "Fresh Malai Paneer", "description": "Fresh, soft, and protein-rich paneer made from pure milk, perfect for curries, snacks" },
+      { "name": "Homemade White Makhan [100 g]", "description": "[Veg preparation] Homemade white makhan is fresh, creamy, and naturally churned butter" },
+      { "name": "A2 Cow Ghee", "description": "Desi Gir Cow A2 Bilona Ghee! Pure and aromatic packed with rich flavor" }
+    ]
+  },
+  {
+    "category": "Khakhra",
+    "subcategories": [
+      {
+        "subcategory": "Gluten Free Khakhra",
+        "items": [
+          { "name": "Gluten Free Oats Nachni Khakhra" },
+          { "name": "Gluten Free Moong Khakhra" },
+          { "name": "Gluten Free Jowar Khakhra" },
+          { "name": "Gluten Free Bajri Khakhra" },
+          { "name": "Gluten Free Methi Khakhra" }
+        ]
+      },
+      {
+        "subcategory": "Coin Khakhra",
+        "items": [
+          { "name": "Coin Manchurian Khakhra" },
+          { "name": "Coin Sada Khakhra" },
+          { "name": "Coin Jeera Khakhra" },
+          { "name": "Coin Jeeralu Khakhra" },
+          { "name": "Coin Hot Pizza Khakhra" },
+          { "name": "Coin Chat Masala Khakhra" },
+          { "name": "Coin Dahi Methi Khakhra" }
+        ]
+      },
+      {
+        "subcategory": "Whole Wheat Khakhra",
+        "items": [
+          { "name": "Special Methi Khakhra", "description": "Special Methi Khakhra made with whole wheat flour, fenugreek leaves and other Indian spices" },
+          { "name": "Ghee Jeera Khakhra" },
+          { "name": "Achari Tadka Khakhra" },
+          { "name": "Special BJP Khakhra", "description": "[Veg preparation]" },
+          { "name": "Special Peanut Chutney Khakhra" },
+          { "name": "Chorafali Khakhra" },
+          { "name": "Special Methi Masala Khakhra" },
+          { "name": "Special Pani Puri Khakhra" },
+          { "name": "Special Onion Khakhra" },
+          { "name": "Special Garlic Khakhra", "description": "[Veg preparation]" },
+          { "name": "Special Manglori Khakhra", "description": "[Veg preparation]" },
+          { "name": "Special Methi Sambhari Khakhra" },
+          { "name": "Special Vada Pav Khakhra" },
+          { "name": "Special Bajra Methi Khakhra" },
+          { "name": "Special Schezwan Khakhra" },
+          { "name": "Special Sada Masala Khakhra" },
+          { "name": "Special Pizza Khakhra" },
+          { "name": "Special Maggie Masala Khakhra" },
+          { "name": "Special Nachani Khakhra" },
+          { "name": "Special Pav Bhaji Khakhra [250 gm]", "description": "Packed item [250 gm]" },
+          { "name": "Special Dahi Methi Khakhra" },
+          { "name": "Special Peri Peri Khakhra" },
+          { "name": "Special Palak Khakhra" }
+        ]
+      },
+      {
+        "subcategory": "Gud Khakhra",
+        "items": [
+          { "name": "Gud Nachni Khakhra [200 g]" },
+          { "name": "Gud Jawari Khakhra [200 g]" },
+          { "name": "Gud Multigrain Khakhra [200 g]" },
+          { "name": "Ghee Gud Khakhra [200 g]" },
+          { "name": "Gud Bajra Khakhra [200 g]" }
+        ]
+      },
+      {
+        "subcategory": "Dosa Khakhra",
+        "items": [
+          { "name": "Schezwan Dosa Khakhra" },
+          { "name": "Cheese Dosa Khakhra" },
+          { "name": "Chilly Cheese Dosa Khakhra" },
+          { "name": "Amul Masala Dosa Khakhra" },
+          { "name": "Amul Sada Dosa Khakhra" },
+          { "name": "Mysore Masala Dosa Khakhra" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Homemade White Makhan",
+    "items": [
+      { "name": "Homemade White Makhan [100 g]", "description": "[Veg preparation] Homemade white makhan is fresh, creamy, and naturally churned butter" }
+    ]
+  },
+  {
+    "category": "Mukhwas Paan Specials",
+    "subcategories": [
+      {
+        "subcategory": "Paan Special",
+        "items": [
+          { "name": "Magai Paan", "description": "[Non tobacco] Maghai meetha paan is a traditional indian mouth freshener" },
+          { "name": "Calcutta Paan", "description": "[Non tobacco] Calcutta meetha paan is a classic, sweet style paan" },
+          { "name": "Banarasi Paan", "description": "[Non tobacco] Banarasi meetha paan is a traditional sweet paan variety" },
+          { "name": "Paan Shots", "description": "[Non tobacco] Paan shots are a modern, fun twist on traditional meetha paan" },
+          { "name": "Gola Paan [1 Box, 15 Pieces]", "description": "[Non tobacco] Gola paan is a fun, vibrant and refreshing variant of traditional paan" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Masala Special",
+    "items": [
+      { "name": "Vyas Special Chai Masala [50 g]" },
+      { "name": "Vyas Special Milk Masala [50 g]" }
+    ]
+  },
+  {
+    "category": "Combos",
+    "items": [
+      { "name": "Cheese Chilli Samosa [4 Pc] + Chinese Samosa [4 Pc]" },
+      { "name": "Cheese Chilli Samosa [4 Pc] + Paneer Chilli Samosa [4 Pc]" }
+    ]
+  },
+  {
+    "category": "Winter Specials",
+    "items": [
+      { "name": "Pure Ghee Gond Laddu", "description": "Pure Ghee Goond Laddo is a traditional Indian sweet made from goond (edible gum)" },
+      { "name": "Sutarfeni", "description": "Delicate, thread like crispy sweet made from fine flour strands roasted to perfection" },
+      { "name": "Til Shikhari", "description": "[Veg preparation] Til shikhari is a traditional Indian sweet delicacy made from roasted sesame seeds" },
+      { "name": "Gul Poli" },
+      { "name": "Pure Ghee Methi Laddu", "description": "Pure Ghee Methi Laddo is a nutritious and aromatic Indian sweet made from fenugreek" },
+      { "name": "Pure Ghee Dink Laddu", "description": "Pure Ghee Dink Laddo is a traditional Indian sweet made from roasted coconut and edible gum" },
+      { "name": "Sugar Free Oats Makhana Laddu", "description": "Sugar-Free Oats Makhana Laddo is a healthy, Indian sweet made from roasted oats and makhana" },
+      { "name": "Sugar Free Dry Fruits Laddu", "description": "Sugar free dry fruits laddu is a wholesome, guilt free sweet made from mixed dry fruits" },
+      { "name": "Sugar Free Khajur Pak", "description": "Sugar free khajur pak is a wholesome, guilt-free sweet made with nutrient rich dates" },
+      { "name": "Dry Fruits Chikki" },
+      { "name": "Til Gud Rotla", "description": "Til Gud Rotla is a traditional festive delicacy made with roasted sesame seeds and jaggery" },
+      { "name": "Peanut Cube Chikki [200 gms]", "description": "Peanut Laddu is a wholesome traditional sweet made from roasted peanuts and jaggery" }
+    ]
+  },
+  {
+    "category": "Pickle",
+    "items": [
+      { "name": "Chilli Rajasthani Green Stuffed [1 Box]", "description": "Chilli Rajasthani Green Stuffed is a spicy and flavorful Rajasthani delicacy featuring fresh stuffed green chilies" }
+    ]
+  },
+  {
+    "category": "Gift Hampers",
+    "subcategories": [
+      {
+        "subcategory": "Mithai Hampers",
+        "items": [
+          { "name": "Octagon Dryfruit Sweet [16 Pieces]" },
+          { "name": "Fancy Dryfruit [400 g]" },
+          { "name": "Assorted Kaju Katli [500 g]" },
+          { "name": "Fancy Dryfruit Mix [800 g]" },
+          { "name": "Assorted Sugar Free Sweet [12 Pieces]" }
+        ]
+      },
+      {
+        "subcategory": "Assorted Sweets",
+        "items": [
+          { "name": "Pure Ghee Mix Sweets" },
+          { "name": "Special Malai Mix Sweet" },
+          { "name": "Pure Ghee Milk Mawa Mix Sweets" }
+        ]
+      },
+      {
+        "subcategory": "Dry Fruits Hampers",
+        "items": [
+          { "name": "4 Part Dryfruit Box [200 g]", "description": "Kaju [50 g] + Almond [50 g] + Salted Pista [50 g] + Kismis [50 g]" },
+          { "name": "6 Part Dryfruit Box [300 g]", "description": "Kaju [50 g] + Almond [50 g] + Salted Pista [50 g] + Kismis [50 g] + Jardalu + Kiwi Fruit [50 g]" },
+          { "name": "8 Part Dryfruit Box [400 g]", "description": "Kaju [50 g] + Almond [50 g] + Salted Pista [50 g] + Kismis [50 g] + Anjeer [50 g] + Jardalu [50 g] + and more" },
+          { "name": "6 Part Dryfruit Box [600 g]", "description": "Kaju [100 g] + Almond [100 g] + Salted Pista [100 g] + Afghan Kismis [100 g] + Jardalu [100 g] + Akhrot [100 g]" }
+        ]
+      },
+      {
+        "subcategory": "Baskets",
+        "items": [
+          { "name": "Dryfruit Tin 4 Jar Gift Box", "description": "Plain Kaju [100 g] + Almond [100 g] + Kismis [100 g] + Roasted Pista [100 g]" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Drinks (Beverages)",
+    "items": [
+      { "name": "Zero Sugar Coca Cola [Can]" },
+      { "name": "Diet Coca Cola [Can]" },
+      { "name": "Red Bull [Can]" },
+      { "name": "Sugar Free Red Bull [Can]" },
+      { "name": "Monster Energy Drink [Can]" },
+      { "name": "Zero Sugar Monster Energy Drink [Can]" }
+    ]
+  },
+  {
+    "category": "Peanuts and Chana",
+    "subcategories": [
+      {
+        "subcategory": "Flavoured Chana's",
+        "items": [
+          { "name": "Roasted Peeled Chana [200 g]" },
+          { "name": "Roasted Unpeeled Chana [200 g]" },
+          { "name": "Roasted Mahabaleshwar Chana [200 g]" },
+          { "name": "Roasted Pudina Chana [200 g]" },
+          { "name": "Roasted Hing Jeera Chana [200 g]" },
+          { "name": "Roasted Peri Peri Chana [200 g]" }
+        ]
+      },
+      {
+        "subcategory": "Typical Peanuts",
+        "items": [
+          { "name": "Roasted Chana and Peanuts Assorted [200 g]" },
+          { "name": "Baruch Peanut Salted [200 g]" },
+          { "name": "Baruch Peanut Saltless [200 g]" },
+          { "name": "Roasted Unpeeled Salted Peanut [200 g]" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Frozen Snacks",
+    "items": [
+      { "name": "Frozen Vegetable Samosa" },
+      { "name": "Frozen Chinese Samosa" },
+      { "name": "Frozen Kanda Poha Samosa" },
+      { "name": "Frozen Paneer Chilli Samosa" },
+      { "name": "Frozen Cheese Corn Ball" },
+      { "name": "Frozen Cheese Chilli Samosa" },
+      { "name": "Frozen Jaipuri Aloo Pyaaz Kachori" },
+      { "name": "Frozen Kothimbir Wadi" }
+    ]
+  },
+  {
+    "category": "Mahashiv Ratri Special",
+    "items": [
+      { "name": "Kaju Katli", "description": "Indulge in the luxurious taste of kaju katli, a delicate blend of cashews and sugar" },
+      { "name": "Mango Kalakand", "description": "Mango kalakand is made with pure milk, mango pulp, soft and creamy" },
+      { "name": "Dry Sabudana Stick [250 g]", "description": "Crispy, light, and crunchy sticks made from sabudana, perfect for fasting" },
+      { "name": "Dry Sada Salli [250 g]", "description": "Dry Sada Potato Salli is a simple, dry-style Indian dish made with thinly sliced potatoes" },
+      { "name": "Dry Masala Salli [250 g]", "description": "Dry Masala Potato Salli is a simple, dry-style Indian dish made with thinly sliced spiced potatoes" },
+      { "name": "Special Farali Chiwda", "description": "A crunchy vrat snack made with thin potato salli (fried potato sticks)" }
+    ]
+  },
+  {
+    "category": "Dahi Bhalle",
+    "items": [
+      { "name": "Dahi Bhalle" }
+    ]
+  },
+  {
+    "category": "Gudi Padwa Special",
+    "items": [
+      { "name": "Pure Ghee Jalebi", "description": "Savor the magic of golden spirals, expertly fried in rich desi ghee" },
+      { "name": "Angoori Basundi", "description": "Angoori basundi is a rich and creamy dessert made with sweetened condensed milk" },
+      { "name": "Kothimbir Wadi", "description": "Kothimbir Wadi combines fresh coriander leaves with besan, green chilies, ginger, and spices" },
+      { "name": "Hapus Pyaari Aamras", "description": "A smooth blend of hapus and pyaari mangoes prepared with added sugar" },
+      { "name": "Dry Fruit Shrikhand", "description": "Dry fruit shrikhand is a creamy, traditional Indian dessert made from thickened yogurt and dry fruits" },
+      { "name": "Kesar Shrikhand", "description": "Kesar shrikhand is thick, soft, creamy and flavored with saffron" },
+      { "name": "Dry Fruit Rose Petal Shrikhand", "description": "Dry Fruit Rose Petal Shrikhand is a luxurious, creamy dessert made from thickened yogurt with rose petals" },
+      { "name": "Mango Shrikhand", "description": "Mouth watery mango shrikhand, high in taste, thick and flavorful" },
+      { "name": "Batasha [1 Haar]" }
+    ]
+  }
+]

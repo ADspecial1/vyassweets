@@ -1,0 +1,386 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm pastel palette */
+    --saffron:        #F4A261;
+    --saffron-dark:   #E8762A;
+    --ivory:          #FFF3E0;
+    --ivory-dark:     #FFECD2;
+    --pistachio:      #A8D5BA;
+    --pistachio-dark: #7DC49A;
+    --rose:           #F7A8A8;
+    --rose-dark:      #E88888;
+    --cocoa:          #4A2C2A;
+    --cocoa-light:    #7A5C5A;
+    --gold-warm:      #D4A017;
+
+    /* Legacy aliases kept for pages not yet restyled */
+    --crimson:      #F4A261;
+    --crimson-dark: #E8762A;
+    --gold:         #D4A017;
+    --gold-light:   #F7C948;
+    --saffron-alt:  #E8891A;
+    --cream:        #FFF3E0;
+    --dark:         #4A2C2A;
+    --dark-2:       #7A5C5A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #FFF3E0;
+    color: #4A2C2A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ══════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════ */
+
+@keyframes orb-drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  25%      { transform: translate(40px,-50px) scale(1.1); }
+  50%      { transform: translate(-25px,30px) scale(0.92); }
+  75%      { transform: translate(20px,45px) scale(1.06); }
+}
+
+@keyframes orb-drift-2 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(-50px,30px) scale(1.12); }
+  66%      { transform: translate(35px,-40px) scale(0.9); }
+}
+
+@keyframes orb-drift-3 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  40%      { transform: translate(20px,-60px) scale(1.08); }
+  80%      { transform: translate(-30px,20px) scale(0.95); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shine-sweep {
+  from { left: -120%; }
+  to   { left: 150%; }
+}
+
+@keyframes shimmer-gold {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes spin-slow-rev {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+@keyframes bounce-soft {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(244,162,97,0.4); }
+  70%  { box-shadow: 0 0 0 14px rgba(244,162,97,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,162,97,0); }
+}
+
+@keyframes pulse-ring-red {
+  0%   { box-shadow: 0 0 0 0 rgba(244,162,97,0.35); }
+  70%  { box-shadow: 0 0 0 12px rgba(244,162,97,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,162,97,0); }
+}
+
+@keyframes float-soft {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-14px) rotate(4deg); }
+}
+
+@keyframes gradient-border {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+@keyframes glow-pulse {
+  0%,100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+
+@keyframes float-badge {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* ══════════════════════════════════════
+   ANIMATION UTILITIES
+══════════════════════════════════════ */
+
+.animate-fade-up        { animation: fade-up 0.65s cubic-bezier(0.22,1,0.36,1) both; }
+.animate-fade-in        { animation: fade-in 0.5s ease both; }
+.animate-scale-in       { animation: scale-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+.animate-marquee        { animation: marquee linear infinite; }
+.animate-spin-slow      { animation: spin-slow 24s linear infinite; }
+.animate-spin-slow-rev  { animation: spin-slow-rev 18s linear infinite; }
+.animate-bounce-soft    { animation: bounce-soft 2.5s ease-in-out infinite; }
+.animate-pulse-ring     { animation: pulse-ring 2.2s ease-out infinite; }
+.animate-pulse-ring-red { animation: pulse-ring-red 2.2s ease-out infinite; }
+.animate-float-soft     { animation: float-soft 4s ease-in-out infinite; }
+.animate-glow-pulse     { animation: glow-pulse 2s ease-in-out infinite; }
+.animate-float-badge    { animation: float-badge 3s ease-in-out infinite; }
+
+/* Stagger delays */
+.d-0  { animation-delay: 0s; }
+.d-1  { animation-delay: 0.08s; }
+.d-2  { animation-delay: 0.16s; }
+.d-3  { animation-delay: 0.24s; }
+.d-4  { animation-delay: 0.32s; }
+.d-5  { animation-delay: 0.40s; }
+.d-6  { animation-delay: 0.50s; }
+.d-7  { animation-delay: 0.60s; }
+.d-8  { animation-delay: 0.72s; }
+
+/* ══════════════════════════════════════
+   TYPOGRAPHY UTILITIES
+══════════════════════════════════════ */
+
+.font-serif-display {
+  font-family: 'Playfair Display', Georgia, Cambria, serif;
+}
+
+.gold-text {
+  background: linear-gradient(135deg, #D4A017 0%, #F4A261 40%, #E8762A 70%, #D4A017 100%);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-gold 4s ease infinite;
+}
+
+.saffron-text {
+  background: linear-gradient(135deg, #F4A261, #E8762A);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pistachio-text {
+  background: linear-gradient(135deg, #A8D5BA, #7DC49A);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ══════════════════════════════════════
+   GLASS MORPHISM (light theme)
+══════════════════════════════════════ */
+
+.glass {
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(244,162,97,0.18);
+}
+
+.glass-warm {
+  background: rgba(255,243,224,0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(244,162,97,0.25);
+}
+
+.glass-dark {
+  background: rgba(74,44,42,0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(74,44,42,0.15);
+}
+
+/* ══════════════════════════════════════
+   BUTTON SHINE EFFECT
+══════════════════════════════════════ */
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+.btn-shine:hover::after {
+  animation: shine-sweep 0.55s ease forwards;
+}
+
+/* ══════════════════════════════════════
+   CARD EFFECTS
+══════════════════════════════════════ */
+
+.cat-card {
+  transition:
+    transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+    box-shadow 0.28s ease,
+    border-color 0.2s ease;
+  will-change: transform;
+}
+.cat-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 20px 48px rgba(244,162,97,0.2);
+}
+
+.product-card-hover {
+  transition:
+    transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+    box-shadow 0.3s ease;
+  will-change: transform;
+}
+.product-card-hover:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 24px 56px rgba(244,162,97,0.22);
+}
+
+.sweet-card-hover {
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+  will-change: transform;
+}
+.sweet-card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(74,44,42,0.12);
+}
+
+/* ══════════════════════════════════════
+   BACKGROUND PATTERNS
+══════════════════════════════════════ */
+
+/* Very subtle mandala repeat – used on body/hero */
+.indian-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none'%3E%3Ccircle cx='40' cy='40' r='18' stroke='%23F4A261' stroke-opacity='0.08' stroke-width='0.6'/%3E%3Ccircle cx='40' cy='40' r='9' stroke='%23F4A261' stroke-opacity='0.07' stroke-width='0.5'/%3E%3Ccircle cx='40' cy='40' r='3' fill='%23F4A261' fill-opacity='0.06'/%3E%3Cline x1='40' y1='18' x2='40' y2='28' stroke='%23F4A261' stroke-opacity='0.07' stroke-width='0.5'/%3E%3Cline x1='40' y1='52' x2='40' y2='62' stroke='%23F4A261' stroke-opacity='0.07' stroke-width='0.5'/%3E%3Cline x1='18' y1='40' x2='28' y2='40' stroke='%23F4A261' stroke-opacity='0.07' stroke-width='0.5'/%3E%3Cline x1='52' y1='40' x2='62' y2='40' stroke='%23F4A261' stroke-opacity='0.07' stroke-width='0.5'/%3E%3Cline x1='24' y1='24' x2='31' y2='31' stroke='%23F4A261' stroke-opacity='0.05' stroke-width='0.4'/%3E%3Cline x1='56' y1='24' x2='49' y2='31' stroke='%23F4A261' stroke-opacity='0.05' stroke-width='0.4'/%3E%3Cline x1='24' y1='56' x2='31' y2='49' stroke='%23F4A261' stroke-opacity='0.05' stroke-width='0.4'/%3E%3Cline x1='56' y1='56' x2='49' y2='49' stroke='%23F4A261' stroke-opacity='0.05' stroke-width='0.4'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 80px 80px;
+}
+
+.dot-grid {
+  background-image: radial-gradient(rgba(74,44,42,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.dot-grid-light {
+  background-image: radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.grid-lines {
+  background-image:
+    linear-gradient(rgba(74,44,42,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,44,42,0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ══════════════════════════════════════
+   GRADIENT ANIMATED BORDER
+══════════════════════════════════════ */
+
+.gradient-border {
+  position: relative;
+  border-radius: 1.5rem;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #F4A261, #A8D5BA, #F7A8A8, #F4A261);
+  background-size: 300% 300%;
+  animation: gradient-border 3s ease infinite;
+  z-index: -1;
+}
+
+/* ══════════════════════════════════════
+   SECTION DIVIDER
+══════════════════════════════════════ */
+
+.divider-warm {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(244,162,97,0.3), rgba(168,213,186,0.3), transparent);
+}
+
+/* ══════════════════════════════════════
+   CUSTOM SCROLLBAR
+══════════════════════════════════════ */
+
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #FFF3E0; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #F4A261, #E8762A); border-radius: 999px; }
+
+/* ══════════════════════════════════════
+   TAILWIND LAYER UTILITIES
+══════════════════════════════════════ */
+
+@layer utilities {
+  .bg-ivory           { background-color: #FFF3E0; }
+  .bg-ivory-dark      { background-color: #FFECD2; }
+  .text-cocoa         { color: #4A2C2A; }
+  .text-cocoa-light   { color: #7A5C5A; }
+  .text-saffron       { color: #F4A261; }
+  .border-saffron     { border-color: #F4A261; }
+
+  .btn-primary {
+    @apply bg-[#F4A261] text-white font-bold px-6 py-3 rounded-xl
+           hover:bg-[#E8762A] transition-all duration-200 active:scale-95;
+  }
+  .btn-gold {
+    @apply bg-gradient-to-r from-[#F4A261] to-[#E8762A] text-white font-black
+           px-7 py-3.5 rounded-full shadow-lg hover:shadow-xl
+           transition-all duration-200 active:scale-95 hover:-translate-y-0.5;
+  }
+  .btn-outline {
+    @apply border-2 border-[#F4A261] text-[#F4A261] font-bold px-6 py-3 rounded-xl
+           hover:bg-[#F4A261] hover:text-white transition-all duration-200;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-orange-100;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 border border-orange-200 rounded-xl text-sm bg-white
+           focus:outline-none focus:ring-2 focus:ring-[#F4A261]/30 focus:border-[#F4A261]
+           transition-all;
+  }
+}

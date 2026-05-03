@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(node *)",
+      "Bash(npx tsx --eval ' *)",
+      "Bash(npx tsx *)"
+    ]
+  }
+}
