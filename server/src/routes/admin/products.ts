@@ -75,9 +75,17 @@ router.get('/:id', asyncHandler(async (req, res) => {
 
 router.patch('/:id', validate({ body: updateSchema }), asyncHandler(async (req, res) => {
   const update: Record<string, unknown> = { ...req.body };
+
   if (typeof update['name'] === 'string') {
-    update['slug'] = slugify(update['name'], { lower: true, strict: true });
+    // Only regenerate slug when name actually changed to avoid duplicate-key 409
+    const current = await Product.findById(req.params['id']).select('name').lean();
+    if (current && current.name !== update['name']) {
+      update['slug'] = slugify(update['name'] as string, { lower: true, strict: true });
+    } else {
+      delete update['slug'];
+    }
   }
+
   const product = await Product.findByIdAndUpdate(req.params['id'], update, { new: true, runValidators: true });
   if (!product) throw new AppError(404, 'Product not found');
   res.json(product);

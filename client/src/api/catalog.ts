@@ -16,6 +16,7 @@ export const getProducts = (params?: {
   sort?: string;
   page?: number;
   limit?: number;
+  featured?: boolean;
 }) => api.get<PaginatedProducts>('/products', { params }).then((r) => r.data);
 
 export const getProductBySlug = (slug: string) =>

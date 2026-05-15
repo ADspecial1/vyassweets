@@ -51,12 +51,12 @@ export default function AdminProductsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-[#2C1810]">Products</h1>
+          <h1 className="text-2xl font-bold text-[#1A0808]">Products</h1>
           <p className="text-sm text-stone-400 mt-0.5">{total} products total</p>
         </div>
         <Link
           to="/admin/products/new"
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#C0392B] to-[#E8891A] text-white rounded-xl text-sm font-bold hover:shadow-lg transition-all"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#C41230] to-[#9B0E25] text-white rounded-xl text-sm font-bold hover:shadow-lg transition-all"
         >
           <Plus size={16} /> Add Product
         </Link>
@@ -70,13 +70,13 @@ export default function AdminProductsPage() {
             value={search}
             onChange={(e) => { setSearch(e.target.value); fetchProducts(e.target.value, catFilter); }}
             placeholder="Search products..."
-            className="pl-9 pr-4 py-2.5 border border-orange-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#E8891A]/30 w-52"
+            className="pl-9 pr-4 py-2.5 border border-red-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#C41230]/20 w-52"
           />
         </div>
         <select
           value={catFilter}
           onChange={(e) => { setCatFilter(e.target.value); fetchProducts(search, e.target.value); }}
-          className="px-4 py-2.5 border border-orange-200 rounded-xl text-sm bg-white focus:outline-none"
+          className="px-4 py-2.5 border border-red-200 rounded-xl text-sm bg-white focus:outline-none"
         >
           <option value="">All Categories</option>
           {categories.map((c) => <option key={c._id} value={c._id}>{c.name}</option>)}
@@ -84,19 +84,19 @@ export default function AdminProductsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-orange-100 overflow-hidden">
+      <div className="bg-white rounded-2xl border border-red-100 overflow-hidden">
         {products.length === 0 ? (
           <div className="text-center py-20">
             <Package size={40} className="text-stone-200 mx-auto mb-3" />
             <p className="text-stone-400 font-medium">No products yet</p>
-            <Link to="/admin/products/new" className="mt-4 inline-flex items-center gap-1.5 text-sm text-[#C0392B] font-semibold hover:underline">
+            <Link to="/admin/products/new" className="mt-4 inline-flex items-center gap-1.5 text-sm text-[#C41230] font-semibold hover:underline">
               <Plus size={14} /> Add your first product
             </Link>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-orange-50/60 border-b border-orange-100">
+              <thead className="bg-red-50 border-b border-red-100">
                 <tr className="text-left text-stone-500">
                   <th className="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Product</th>
                   <th className="px-4 py-3.5 font-semibold text-xs uppercase tracking-wide">Category</th>
@@ -106,12 +106,12 @@ export default function AdminProductsPage() {
                   <th className="px-4 py-3.5 font-semibold text-xs uppercase tracking-wide">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-orange-50">
+              <tbody className="divide-y divide-red-50">
                 {products.map((p) => (
-                  <tr key={p._id} className="hover:bg-orange-50/30 transition-colors">
+                  <tr key={p._id} className="hover:bg-red-50/30 transition-colors">
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl overflow-hidden bg-orange-50 shrink-0">
+                        <div className="w-12 h-12 rounded-xl overflow-hidden bg-red-50 shrink-0">
                           {p.images?.[0] ? (
                             <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                           ) : (
@@ -119,18 +119,18 @@ export default function AdminProductsPage() {
                           )}
                         </div>
                         <div>
-                          <p className="font-semibold text-[#2C1810]">{p.name}</p>
+                          <p className="font-semibold text-[#1A0808]">{p.name}</p>
                           <p className="text-xs text-stone-400 font-mono">{p.sku}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <span className="text-xs font-medium bg-orange-50 text-orange-700 px-2.5 py-1 rounded-full">
+                      <span className="text-xs font-medium bg-red-50 text-[#C41230] px-2.5 py-1 rounded-full">
                         {catName(p.categoryId)}
                       </span>
                     </td>
                     <td className="px-4 py-4">
-                      <p className="font-bold text-[#2C1810]">{formatINR(p.price)}</p>
+                      <p className="font-bold text-[#1A0808]">{formatINR(p.price)}</p>
                       {p.mrp > p.price && <p className="text-xs text-stone-400 line-through">{formatINR(p.mrp)}</p>}
                     </td>
                     <td className="px-4 py-4">
@@ -151,7 +151,7 @@ export default function AdminProductsPage() {
                       <div className="flex items-center gap-1.5">
                         <Link
                           to={`/admin/products/${p._id}/edit`}
-                          className="p-2 hover:bg-orange-50 rounded-lg text-stone-400 hover:text-[#E8891A] transition-colors"
+                          className="p-2 hover:bg-red-50 rounded-lg text-stone-400 hover:text-[#C41230] transition-colors"
                         >
                           <Pencil size={15} />
                         </Link>

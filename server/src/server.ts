@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import { mongoSanitizeMiddleware } from './middleware/sanitize.js';
 import { pinoHttp } from 'pino-http';
 import mongoose from 'mongoose';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { logger } from './lib/logger.js';
 import authRouter from './routes/auth.js';
 import adminCategoriesRouter from './routes/admin/categories.js';
@@ -23,9 +25,17 @@ import couponsRouter from './routes/coupons.js';
 import webhooksRouter from './routes/webhooks.js';
 import { errorMiddleware } from './middleware/error.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 app.use(helmet());
+// Serve uploaded product/category images (cross-origin allowed so client on :5173 can load them)
+app.use('/uploads', (_req, res, next) => {
+  res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+}, express.static(path.join(__dirname, '..', 'public', 'uploads')));
 app.use(
   cors({
     origin: env.CLIENT_ORIGIN,

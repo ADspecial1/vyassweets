@@ -21,13 +21,15 @@ router.get('/categories/:slug', asyncHandler(async (req, res) => {
 }));
 
 router.get('/products', asyncHandler(async (req, res) => {
-  const { category, search, sort, page = '1', limit = '12' } = req.query as Record<string, string>;
+  const { category, search, sort, featured, page = '1', limit = '12' } = req.query as Record<string, string>;
 
   const pageNum = Math.max(1, parseInt(page, 10) || 1);
   const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 12));
   const skip = (pageNum - 1) * limitNum;
 
   const filter: Record<string, unknown> = { active: true };
+
+  if (featured === 'true') filter['featured'] = true;
 
   if (category) {
     const cat = await Category.findOne({ slug: category, active: true }).select('_id');

@@ -16,12 +16,70 @@ const TICKER_ITEMS = [
   { icon: <Sparkles size={11} />, text: '★ 4.3 Rated · 1,172+ Delivery Reviews' },
 ];
 
+function VyasLogo({ size = 72 }: { size?: number }) {
+  const h = Math.round(size * 0.65);
+  return (
+    <svg
+      viewBox="0 0 120 78"
+      width={size}
+      height={h}
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Vyas Sweets logo"
+    >
+      <defs>
+        <linearGradient id="hdr-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stopColor="#F0CE6A" />
+          <stop offset="45%"  stopColor="#D4AF37" />
+          <stop offset="100%" stopColor="#B8962A" />
+        </linearGradient>
+      </defs>
+      {/* outer gold ring */}
+      <ellipse cx="60" cy="39" rx="58" ry="37" fill="#C41230" />
+      <ellipse cx="60" cy="39" rx="58" ry="37" fill="none" stroke="url(#hdr-gold)" strokeWidth="3.5" />
+      {/* Since 1951 */}
+      <text
+        x="60" y="22"
+        textAnchor="middle"
+        fill="#F0CE6A"
+        fontFamily="Playfair Display, Georgia, serif"
+        fontSize="9"
+        fontStyle="italic"
+        letterSpacing="0.8"
+      >
+        Since 1951
+      </text>
+      {/* VYAS */}
+      <text
+        x="60" y="52"
+        textAnchor="middle"
+        fill="white"
+        fontFamily="Playfair Display, Georgia, serif"
+        fontSize="30"
+        fontWeight="900"
+        letterSpacing="4"
+      >
+        VYAS
+      </text>
+      {/* ® */}
+      <text
+        x="102" y="29"
+        textAnchor="middle"
+        fill="#F0CE6A"
+        fontFamily="Arial, sans-serif"
+        fontSize="9"
+      >
+        ®
+      </text>
+    </svg>
+  );
+}
+
 function TopTicker() {
   const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS];
   return (
     <div
       className="overflow-hidden text-[11px] font-semibold py-2"
-      style={{ background: 'linear-gradient(90deg, #F4A261, #E8762A)', color: '#fff' }}
+      style={{ background: 'linear-gradient(90deg, #C41230, #9B0E25)', color: '#fff' }}
     >
       <div className="animate-marquee whitespace-nowrap flex" style={{ animationDuration: '32s' }}>
         {doubled.map((item, i) => (
@@ -66,9 +124,9 @@ export default function Header() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-lg shadow-md shadow-amber-100/60'
-          : 'bg-[#FFF3E0]'
-      } border-b border-amber-100`}
+          ? 'bg-white/95 backdrop-blur-lg shadow-md shadow-red-100/60'
+          : 'bg-[#FFF8F0]'
+      } border-b border-red-100`}
     >
       <TopTicker />
 
@@ -76,31 +134,17 @@ export default function Header() {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 shrink-0 group" onClick={() => setMenuOpen(false)}>
-          <div className="relative">
-            <div
-              className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200"
-              style={{ background: 'linear-gradient(135deg, #F4A261, #E8762A)' }}
-            >
-              <span
-                className="text-white font-black text-base tracking-tight leading-none"
-                style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
-              >
-                VS
-              </span>
-            </div>
-            <div
-              className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-[#FFF3E0]"
-              style={{ background: 'linear-gradient(135deg, #A8D5BA, #7DC49A)' }}
-            />
+          <div className="group-hover:scale-105 transition-transform duration-200 drop-shadow-md">
+            <VyasLogo size={72} />
           </div>
-          <div className="leading-tight">
+          <div className="leading-tight hidden sm:block">
             <div
-              className="font-black text-[#4A2C2A] text-[15px] tracking-tight"
+              className="font-black text-[#1A0808] text-[15px] tracking-tight"
               style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
             >
               Vyas Sweets
             </div>
-            <div className="text-[9px] font-bold tracking-[0.12em] uppercase text-[#F4A261]">
+            <div className="text-[9px] font-bold tracking-[0.12em] uppercase text-[#C41230]">
               &amp; Dryfruits · Mumbai
             </div>
           </div>
@@ -117,13 +161,13 @@ export default function Header() {
               to={to}
               className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive(to)
-                  ? 'text-[#E8762A] bg-orange-50'
-                  : 'text-[#7A5C5A] hover:text-[#E8762A] hover:bg-orange-50/70'
+                  ? 'text-[#C41230] bg-red-50'
+                  : 'text-[#5C1818] hover:text-[#C41230] hover:bg-red-50/70'
               }`}
             >
               {label}
               {isActive(to) && (
-                <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-[#F4A261]" />
+                <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-[#C41230]" />
               )}
             </Link>
           ))}
@@ -135,20 +179,20 @@ export default function Header() {
           {/* Cart */}
           <Link
             to="/cart"
-            className="relative flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors group"
+            className="relative flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-50 transition-colors group"
           >
             <div className="relative">
-              <ShoppingBag size={20} className="text-[#7A5C5A] group-hover:text-[#E8762A] transition-colors" />
+              <ShoppingBag size={20} className="text-[#5C1818] group-hover:text-[#C41230] transition-colors" />
               {cartCount > 0 && (
                 <span
                   className="animate-pulse-ring-red absolute -top-1.5 -right-1.5 text-white text-[9px] rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-black shadow-sm"
-                  style={{ background: 'linear-gradient(135deg, #F4A261, #E8762A)' }}
+                  style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
                 >
                   {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
             </div>
-            <span className="hidden sm:inline text-sm font-semibold text-[#7A5C5A] group-hover:text-[#E8762A] transition-colors">
+            <span className="hidden sm:inline text-sm font-semibold text-[#5C1818] group-hover:text-[#C41230] transition-colors">
               Cart
             </span>
           </Link>
@@ -158,39 +202,39 @@ export default function Header() {
             <div className="hidden md:block relative">
               <button
                 onClick={() => setDropOpen(!dropOpen)}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-50 transition-colors"
               >
                 <div
                   className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-black shadow-sm"
-                  style={{ background: 'linear-gradient(135deg, #F4A261, #E8762A)' }}
+                  style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
                 >
                   {user.name.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm font-semibold text-[#4A2C2A]">{user.name.split(' ')[0]}</span>
-                <ChevronDown size={13} className={`text-[#7A5C5A] transition-transform duration-200 ${dropOpen ? 'rotate-180' : ''}`} />
+                <span className="text-sm font-semibold text-[#1A0808]">{user.name.split(' ')[0]}</span>
+                <ChevronDown size={13} className={`text-[#5C1818] transition-transform duration-200 ${dropOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {dropOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setDropOpen(false)} />
-                  <div className="absolute right-0 top-[calc(100%+8px)] w-52 bg-white border border-orange-100 rounded-2xl shadow-2xl shadow-amber-100/40 py-2 z-20 overflow-hidden animate-scale-in">
-                    <div className="px-4 py-3 border-b border-orange-50">
-                      <p className="text-sm font-bold text-[#4A2C2A]">{user.name}</p>
-                      <p className="text-xs text-[#7A5C5A] truncate">{user.email}</p>
+                  <div className="absolute right-0 top-[calc(100%+8px)] w-52 bg-white border border-red-100 rounded-2xl shadow-2xl shadow-red-100/40 py-2 z-20 overflow-hidden animate-scale-in">
+                    <div className="px-4 py-3 border-b border-red-50">
+                      <p className="text-sm font-bold text-[#1A0808]">{user.name}</p>
+                      <p className="text-xs text-[#5C1818] truncate">{user.email}</p>
                     </div>
                     {user.role === 'admin' && (
-                      <Link to="/admin" onClick={() => setDropOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#7A5C5A] hover:bg-orange-50 hover:text-[#E8762A] transition-colors font-medium">
+                      <Link to="/admin" onClick={() => setDropOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#5C1818] hover:bg-red-50 hover:text-[#C41230] transition-colors font-medium">
                         <LayoutDashboard size={14} /> Admin Panel
                       </Link>
                     )}
-                    <Link to="/profile" onClick={() => setDropOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#7A5C5A] hover:bg-orange-50 hover:text-[#E8762A] transition-colors font-medium">
+                    <Link to="/profile" onClick={() => setDropOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#5C1818] hover:bg-red-50 hover:text-[#C41230] transition-colors font-medium">
                       <User size={14} /> My Profile
                     </Link>
-                    <Link to="/orders" onClick={() => setDropOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#7A5C5A] hover:bg-orange-50 hover:text-[#E8762A] transition-colors font-medium">
+                    <Link to="/orders" onClick={() => setDropOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#5C1818] hover:bg-red-50 hover:text-[#C41230] transition-colors font-medium">
                       <Package size={14} /> My Orders
                     </Link>
-                    <div className="border-t border-orange-50 mt-1 pt-1">
-                      <button onClick={handleLogout} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#E8762A] hover:bg-orange-50 w-full transition-colors font-medium">
+                    <div className="border-t border-red-50 mt-1 pt-1">
+                      <button onClick={handleLogout} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#C41230] hover:bg-red-50 w-full transition-colors font-medium">
                         <LogOut size={14} /> Sign Out
                       </button>
                     </div>
@@ -202,14 +246,14 @@ export default function Header() {
             <div className="hidden md:flex items-center gap-2">
               <Link
                 to="/login"
-                className="text-sm font-semibold text-[#7A5C5A] hover:text-[#E8762A] px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors"
+                className="text-sm font-semibold text-[#5C1818] hover:text-[#C41230] px-3 py-2 rounded-xl hover:bg-red-50 transition-colors"
               >
                 Login
               </Link>
               <Link
                 to="/register"
                 className="btn-shine text-white text-sm font-black px-5 py-2.5 rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
-                style={{ background: 'linear-gradient(135deg, #F4A261, #E8762A)' }}
+                style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
               >
                 Register
               </Link>
@@ -218,19 +262,19 @@ export default function Header() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2.5 rounded-xl hover:bg-orange-50 transition-colors"
+            className="md:hidden p-2.5 rounded-xl hover:bg-red-50 transition-colors"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen
-              ? <X    size={21} className="text-[#4A2C2A]" />
-              : <Menu size={21} className="text-[#4A2C2A]" />}
+              ? <X    size={21} className="text-[#1A0808]" />
+              : <Menu size={21} className="text-[#1A0808]" />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-[#FFF3E0] border-t border-amber-100 px-4 py-4 space-y-1 animate-fade-up">
+        <div className="md:hidden bg-[#FFF8F0] border-t border-red-100 px-4 py-4 space-y-1 animate-fade-up">
           {[
             { to: '/',             label: 'Home' },
             { to: '/category/all', label: 'Shop All' },
@@ -241,40 +285,40 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
               className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
                 isActive(to)
-                  ? 'bg-orange-50 text-[#E8762A]'
-                  : 'text-[#4A2C2A] hover:bg-orange-50'
+                  ? 'bg-red-50 text-[#C41230]'
+                  : 'text-[#1A0808] hover:bg-red-50'
               }`}
             >
               {label}
             </Link>
           ))}
-          <div className="border-t border-amber-100 pt-3 mt-3">
+          <div className="border-t border-red-100 pt-3 mt-3">
             {user ? (
               <>
                 <div className="flex items-center gap-3 px-4 py-2 mb-1">
                   <div
                     className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-black shadow-sm"
-                    style={{ background: 'linear-gradient(135deg, #F4A261, #E8762A)' }}
+                    style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
                   >
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-[#4A2C2A]">{user.name}</p>
-                    <p className="text-xs text-[#7A5C5A]">{user.email}</p>
+                    <p className="text-sm font-bold text-[#1A0808]">{user.name}</p>
+                    <p className="text-xs text-[#5C1818]">{user.email}</p>
                   </div>
                 </div>
                 {user.role === 'admin' && (
-                  <Link to="/admin" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#4A2C2A] hover:bg-orange-50">
+                  <Link to="/admin" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#1A0808] hover:bg-red-50">
                     <LayoutDashboard size={14} /> Admin Panel
                   </Link>
                 )}
-                <Link to="/profile" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#4A2C2A] hover:bg-orange-50">
+                <Link to="/profile" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#1A0808] hover:bg-red-50">
                   <User size={14} /> My Profile
                 </Link>
-                <Link to="/orders" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#4A2C2A] hover:bg-orange-50">
+                <Link to="/orders" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#1A0808] hover:bg-red-50">
                   <Package size={14} /> My Orders
                 </Link>
-                <button onClick={handleLogout} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#E8762A] hover:bg-orange-50 w-full mt-1">
+                <button onClick={handleLogout} className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#C41230] hover:bg-red-50 w-full mt-1">
                   <LogOut size={14} /> Sign Out
                 </button>
               </>
@@ -283,7 +327,7 @@ export default function Header() {
                 <Link
                   to="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="flex-1 text-center py-3 border-2 border-[#F4A261] text-[#E8762A] rounded-xl text-sm font-bold hover:bg-orange-50 transition-colors"
+                  className="flex-1 text-center py-3 border-2 border-[#C41230] text-[#C41230] rounded-xl text-sm font-bold hover:bg-red-50 transition-colors"
                 >
                   Login
                 </Link>
@@ -291,7 +335,7 @@ export default function Header() {
                   to="/register"
                   onClick={() => setMenuOpen(false)}
                   className="flex-1 text-center py-3 text-white rounded-xl text-sm font-black hover:opacity-90 transition-opacity"
-                  style={{ background: 'linear-gradient(135deg, #F4A261, #E8762A)' }}
+                  style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
                 >
                   Register
                 </Link>

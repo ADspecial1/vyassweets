@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ChevronLeft, Plus, X, Save, Package } from 'lucide-react';
+import { ChevronLeft, Plus, X, Save, Package, Upload } from 'lucide-react';
 import api from '../../api/client';
 import type { Category } from '../../types';
 import Spinner from '../../components/Spinner';
+
+const SERVER_BASE = (import.meta.env.VITE_API_BASE as string).replace(/\/api$/, '');
 
 const schema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -39,9 +41,11 @@ export default function ProductFormPage() {
   const [subcategories, setSubcategories] = useState<Category[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [imageInput, setImageInput] = useState('');
+  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { register, handleSubmit, watch, control, setValue, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -157,6 +161,24 @@ export default function ProductFormPage() {
     }
   };
 
+  const handleFileUpload = async (file: File) => {
+    if (images.length >= 5) return;
+    setUploading(true);
+    setError('');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const { data } = await api.post<{ fileUrl: string; fullUrl: string }>('/admin/upload', formData);
+      const url = data.fullUrl ?? `${SERVER_BASE}${data.fileUrl}`;
+      setImages((prev) => [...prev, url]);
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message;
+      setError(msg ?? 'Image upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   if (loading) return <div className="flex justify-center py-24"><Spinner className="w-10 h-10" /></div>;
 
   return (
@@ -167,7 +189,7 @@ export default function ProductFormPage() {
           <ChevronLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-[#2C1810]">
+          <h1 className="text-2xl font-bold text-[#1A0808]">
             {isEdit ? 'Edit Product' : 'Add New Product'}
           </h1>
           <p className="text-sm text-stone-400 mt-0.5">
@@ -189,9 +211,9 @@ export default function ProductFormPage() {
           <div className="lg:col-span-2 space-y-5">
 
             {/* Basic Info */}
-            <div className="bg-white rounded-2xl border border-orange-100 p-6">
-              <h2 className="font-bold text-[#2C1810] mb-5 flex items-center gap-2">
-                <Package size={17} className="text-[#E8891A]" /> Basic Information
+            <div className="bg-white rounded-2xl border border-red-100 p-6">
+              <h2 className="font-bold text-[#1A0808] mb-5 flex items-center gap-2">
+                <Package size={17} className="text-[#C41230]" /> Basic Information
               </h2>
               <div className="space-y-4">
                 <div>
@@ -241,9 +263,9 @@ export default function ProductFormPage() {
             </div>
 
             {/* Pricing */}
-            <div className="bg-white rounded-2xl border border-orange-100 p-6">
-              <h2 className="font-bold text-[#2C1810] mb-5 flex items-center gap-2">
-                <span className="text-[#E8891A]">₹</span> Pricing & Stock
+            <div className="bg-white rounded-2xl border border-red-100 p-6">
+              <h2 className="font-bold text-[#1A0808] mb-5 flex items-center gap-2">
+                <span className="text-[#C41230]">₹</span> Pricing & Stock
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -311,9 +333,9 @@ export default function ProductFormPage() {
             </div>
 
             {/* Discount */}
-            <div className="bg-white rounded-2xl border border-orange-100 p-6">
+            <div className="bg-white rounded-2xl border border-red-100 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-[#2C1810]">Discount</h2>
+                <h2 className="font-bold text-[#1A0808]">Discount</h2>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <Controller
                     name="discountActive"
@@ -355,8 +377,8 @@ export default function ProductFormPage() {
           <div className="space-y-5">
 
             {/* Status */}
-            <div className="bg-white rounded-2xl border border-orange-100 p-5">
-              <h3 className="font-bold text-[#2C1810] mb-4">Status & Visibility</h3>
+            <div className="bg-white rounded-2xl border border-red-100 p-5">
+              <h3 className="font-bold text-[#1A0808] mb-4">Status & Visibility</h3>
               <div className="space-y-3">
                 <label className="flex items-center justify-between cursor-pointer">
                   <span className="text-sm font-medium text-stone-700">Active (visible in store)</span>
@@ -376,7 +398,7 @@ export default function ProductFormPage() {
                     name="featured"
                     control={control}
                     render={({ field }) => (
-                      <div onClick={() => field.onChange(!field.value)} className={`w-11 h-6 rounded-full transition-colors cursor-pointer relative ${field.value ? 'bg-[#E8891A]' : 'bg-stone-200'}`}>
+                      <div onClick={() => field.onChange(!field.value)} className={`w-11 h-6 rounded-full transition-colors cursor-pointer relative ${field.value ? 'bg-[#C41230]' : 'bg-stone-200'}`}>
                         <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all shadow-sm ${field.value ? 'left-5' : 'left-0.5'}`} />
                       </div>
                     )}
@@ -386,14 +408,27 @@ export default function ProductFormPage() {
             </div>
 
             {/* Images */}
-            <div className="bg-white rounded-2xl border border-orange-100 p-5">
-              <h3 className="font-bold text-[#2C1810] mb-1">Product Images</h3>
-              <p className="text-xs text-stone-400 mb-4">Add image URLs (up to 5)</p>
+            <div className="bg-white rounded-2xl border border-red-100 p-5">
+              <h3 className="font-bold text-[#1A0808] mb-1">Product Images</h3>
+              <p className="text-xs text-stone-400 mb-4">Upload from device or paste a URL (up to 5)</p>
+
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleFileUpload(file);
+                  e.target.value = '';
+                }}
+              />
 
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {images.map((img, i) => (
                   <div key={i} className="relative group">
-                    <img src={img} alt="" className="w-full h-20 object-cover rounded-xl border border-orange-100" />
+                    <img src={img} alt="" className="w-full h-20 object-cover rounded-xl border border-red-100" />
                     <button
                       type="button"
                       onClick={() => setImages(images.filter((_, idx) => idx !== i))}
@@ -405,9 +440,20 @@ export default function ProductFormPage() {
                   </div>
                 ))}
                 {images.length < 5 && (
-                  <div className="h-20 border-2 border-dashed border-orange-200 rounded-xl flex items-center justify-center text-orange-200">
-                    <Plus size={20} />
-                  </div>
+                  <button
+                    type="button"
+                    disabled={uploading}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="h-20 border-2 border-dashed border-red-200 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-[#C41230] hover:bg-red-50 transition-all disabled:opacity-60 disabled:cursor-not-allowed group"
+                  >
+                    {uploading
+                      ? <Spinner className="w-5 h-5" />
+                      : <>
+                          <Upload size={18} className="text-red-300 group-hover:text-[#C41230] transition-colors" />
+                          <span className="text-[9px] text-red-300 group-hover:text-[#C41230] font-medium transition-colors">Upload</span>
+                        </>
+                    }
+                  </button>
                 )}
               </div>
 
@@ -417,19 +463,19 @@ export default function ProductFormPage() {
                     value={imageInput}
                     onChange={(e) => setImageInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addImage())}
-                    placeholder="Paste image URL..."
-                    className="flex-1 px-3 py-2 border border-orange-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#E8891A]/30"
+                    placeholder="Or paste image URL..."
+                    className="flex-1 px-3 py-2 border border-red-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#C41230]/20"
                   />
-                  <button type="button" onClick={addImage} className="px-3 py-2 bg-orange-50 border border-orange-200 rounded-lg hover:bg-orange-100 transition-colors">
-                    <Plus size={14} className="text-[#E8891A]" />
+                  <button type="button" onClick={addImage} className="px-3 py-2 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors">
+                    <Plus size={14} className="text-[#C41230]" />
                   </button>
                 </div>
               )}
             </div>
 
             {/* Tags */}
-            <div className="bg-white rounded-2xl border border-orange-100 p-5">
-              <h3 className="font-bold text-[#2C1810] mb-1">Tags</h3>
+            <div className="bg-white rounded-2xl border border-red-100 p-5">
+              <h3 className="font-bold text-[#1A0808] mb-1">Tags</h3>
               <p className="text-xs text-stone-400 mb-3">Comma-separated tags for search</p>
               <input
                 {...register('tags')}
@@ -445,7 +491,7 @@ export default function ProductFormPage() {
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-[#C0392B] to-[#E8891A] text-white font-bold rounded-xl hover:shadow-lg transition-all disabled:opacity-60"
+            className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-[#C41230] to-[#9B0E25] text-white font-bold rounded-xl hover:shadow-lg transition-all disabled:opacity-60"
           >
             <Save size={17} />
             {saving ? 'Saving...' : isEdit ? 'Update Product' : 'Add Product'}

@@ -58,10 +58,10 @@ export default function CartPage() {
 
   if (items.length === 0) return (
     <div className="max-w-xl mx-auto px-4 py-24 text-center">
-      <div className="w-24 h-24 bg-orange-50 rounded-3xl flex items-center justify-center text-5xl mx-auto mb-5">🛒</div>
-      <h2 className="text-2xl font-bold text-[#2C1810] mb-2">Your cart is empty</h2>
-      <p className="text-stone-500 mb-8">Looks like you haven't added any sweets yet!</p>
-      <Link to="/" className="inline-flex items-center gap-2 bg-gradient-to-r from-[#C0392B] to-[#E8891A] text-white px-8 py-3.5 rounded-full font-bold hover:shadow-lg transition-all">
+      <div className="w-24 h-24 bg-red-50 rounded-3xl flex items-center justify-center text-5xl mx-auto mb-5">🛒</div>
+      <h2 className="text-2xl font-bold text-[#1A0808] mb-2">Your cart is empty</h2>
+      <p className="text-[#5C1818] mb-8">Looks like you haven't added any sweets yet!</p>
+      <Link to="/" className="inline-flex items-center gap-2 text-white px-8 py-3.5 rounded-full font-bold hover:shadow-lg transition-all" style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}>
         <ShoppingBag size={18} /> Shop Now
       </Link>
     </div>
@@ -69,8 +69,8 @@ export default function CartPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-[#2C1810] mb-2">Your Cart</h1>
-      <p className="text-stone-400 text-sm mb-7">{items.length} item{items.length !== 1 ? 's' : ''} in your cart</p>
+      <h1 className="text-2xl font-bold text-[#1A0808] mb-2">Your Cart</h1>
+      <p className="text-[#5C1818] text-sm mb-7">{items.length} item{items.length !== 1 ? 's' : ''} in your cart</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Items */}
@@ -78,8 +78,8 @@ export default function CartPage() {
           {items.map((item) => {
             const p = products[item.productId];
             return (
-              <div key={item.productId} className="bg-white rounded-2xl border border-orange-100 p-4 flex gap-4 hover:shadow-sm transition-shadow">
-                <Link to={p ? `/product/${p.slug}` : '#'} className="w-20 h-20 bg-orange-50 rounded-xl overflow-hidden shrink-0">
+              <div key={item.productId} className="bg-white rounded-2xl border border-red-100 p-4 flex gap-4 hover:shadow-sm transition-shadow">
+                <Link to={p ? `/product/${p.slug}` : '#'} className="w-20 h-20 bg-red-50 rounded-xl overflow-hidden shrink-0">
                   {p?.images?.[0] ? (
                     <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                   ) : (
@@ -89,24 +89,24 @@ export default function CartPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-semibold text-[#2C1810] text-sm truncate">{p?.name ?? 'Loading...'}</h3>
-                      {p && <p className="text-xs text-stone-400 mt-0.5">{p.weight}{p.unit}</p>}
+                      <h3 className="font-semibold text-[#1A0808] text-sm truncate">{p?.name ?? 'Loading...'}</h3>
+                      {p && <p className="text-xs text-[#5C1818] mt-0.5">{p.weight}{p.unit}</p>}
                     </div>
-                    <button onClick={() => removeItem(item.productId)} className="p-1.5 text-stone-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all shrink-0">
+                    <button onClick={() => removeItem(item.productId)} className="p-1.5 text-[#5C1818]/40 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all shrink-0">
                       <X size={15} />
                     </button>
                   </div>
                   <div className="flex items-center justify-between mt-3">
-                    <div className="flex items-center border border-orange-200 rounded-xl overflow-hidden bg-orange-50/50">
-                      <button onClick={() => updateQty(item.productId, item.qty - 1)} className="px-2.5 py-1.5 hover:bg-orange-100 transition-colors text-stone-600">
+                    <div className="flex items-center border border-red-200 rounded-xl overflow-hidden bg-red-50/50">
+                      <button onClick={() => updateQty(item.productId, item.qty - 1)} className="px-2.5 py-1.5 hover:bg-red-100 transition-colors text-[#1A0808]">
                         <Minus size={13} />
                       </button>
-                      <span className="px-3 py-1.5 text-sm font-bold text-[#2C1810] min-w-[2rem] text-center">{item.qty}</span>
-                      <button onClick={() => updateQty(item.productId, item.qty + 1)} className="px-2.5 py-1.5 hover:bg-orange-100 transition-colors text-stone-600">
+                      <span className="px-3 py-1.5 text-sm font-bold text-[#1A0808] min-w-[2rem] text-center">{item.qty}</span>
+                      <button onClick={() => updateQty(item.productId, item.qty + 1)} className="px-2.5 py-1.5 hover:bg-red-100 transition-colors text-[#1A0808]">
                         <Plus size={13} />
                       </button>
                     </div>
-                    {p && <span className="font-bold text-[#2C1810]">{formatINR(p.price * item.qty)}</span>}
+                    {p && <span className="font-bold text-[#1A0808]">{formatINR(p.price * item.qty)}</span>}
                   </div>
                 </div>
               </div>
@@ -116,10 +116,10 @@ export default function CartPage() {
 
         {/* Summary */}
         <div className="space-y-4">
-          <div className="bg-white rounded-2xl border border-orange-100 p-5">
-            <h3 className="font-bold text-[#2C1810] mb-4 text-base">Order Summary</h3>
+          <div className="bg-white rounded-2xl border border-red-100 p-5">
+            <h3 className="font-bold text-[#1A0808] mb-4 text-base">Order Summary</h3>
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between text-stone-600">
+              <div className="flex justify-between text-[#5C1818]">
                 <span>Subtotal ({items.reduce((s, i) => s + i.qty, 0)} items)</span>
                 <span className="font-medium">{formatINR(subtotal)}</span>
               </div>
@@ -129,18 +129,18 @@ export default function CartPage() {
                   <span className="font-semibold">-{formatINR(couponDiscount)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-stone-600">
+              <div className="flex justify-between text-[#5C1818]">
                 <span>Delivery</span>
                 <span className={shipping === 0 ? 'text-green-600 font-semibold' : 'font-medium'}>
                   {shipping === 0 ? 'FREE' : formatINR(shipping)}
                 </span>
               </div>
               {shipping > 0 && (
-                <p className="text-xs text-orange-500 bg-orange-50 px-3 py-2 rounded-lg">
+                <p className="text-xs text-[#C41230] bg-red-50 px-3 py-2 rounded-lg">
                   Add {formatINR(FREE_SHIPPING - subtotal)} more for free delivery!
                 </p>
               )}
-              <div className="border-t border-orange-100 pt-3 flex justify-between font-bold text-base text-[#2C1810]">
+              <div className="border-t border-red-100 pt-3 flex justify-between font-bold text-base text-[#1A0808]">
                 <span>Total</span>
                 <span>{formatINR(total)}</span>
               </div>
@@ -148,21 +148,22 @@ export default function CartPage() {
           </div>
 
           {/* Coupon */}
-          <div className="bg-white rounded-2xl border border-orange-100 p-4">
-            <p className="text-sm font-semibold text-[#2C1810] mb-3 flex items-center gap-2">
-              <Tag size={14} className="text-[#E8891A]" /> Apply Coupon
+          <div className="bg-white rounded-2xl border border-red-100 p-4">
+            <p className="text-sm font-semibold text-[#1A0808] mb-3 flex items-center gap-2">
+              <Tag size={14} className="text-[#C41230]" /> Apply Coupon
             </p>
             <div className="flex gap-2">
               <input
                 value={couponInput}
                 onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); setCouponMsg(''); }}
                 placeholder="Enter coupon code"
-                className="flex-1 px-3 py-2.5 border border-orange-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E8891A]/30 focus:border-[#E8891A] bg-orange-50/30"
+                className="flex-1 px-3 py-2.5 border border-red-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C41230]/20 focus:border-[#C41230] bg-red-50/30"
               />
               <button
                 onClick={applyCoupon}
                 disabled={couponLoading || !couponInput.trim()}
-                className="px-4 py-2.5 bg-[#2C1810] text-white rounded-xl text-sm font-semibold hover:bg-[#3d2118] transition-colors disabled:opacity-50"
+                className="px-4 py-2.5 text-white rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 hover:opacity-90"
+                style={{ background: '#1A0808' }}
               >
                 Apply
               </button>
@@ -176,13 +177,14 @@ export default function CartPage() {
 
           <button
             onClick={() => user ? navigate('/checkout') : navigate('/login?redirect=/checkout')}
-            className="w-full py-4 bg-gradient-to-r from-[#C0392B] to-[#E8891A] text-white font-bold rounded-2xl hover:shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-base"
+            className="w-full py-4 text-white font-bold rounded-2xl hover:shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-base"
+            style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
           >
             {user ? 'Proceed to Checkout' : 'Login to Checkout'}
             <ArrowRight size={18} />
           </button>
 
-          <Link to="/" className="flex items-center justify-center gap-1.5 text-sm text-stone-400 hover:text-[#C0392B] transition-colors py-1">
+          <Link to="/" className="flex items-center justify-center gap-1.5 text-sm text-[#5C1818] hover:text-[#C41230] transition-colors py-1">
             ← Continue Shopping
           </Link>
         </div>

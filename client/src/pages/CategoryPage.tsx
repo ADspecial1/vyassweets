@@ -64,41 +64,41 @@ export default function CategoryPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-sm text-stone-400 mb-5">
-        <Link to="/" className="hover:text-[#C0392B]">Home</Link>
+      <nav className="flex items-center gap-2 text-sm text-[#5C1818]/60 mb-5">
+        <Link to="/" className="hover:text-[#C41230]">Home</Link>
         <span>/</span>
-        <span className="text-[#2C1810] font-medium">{category?.name ?? (slug === 'all' ? 'All Products' : 'Products')}</span>
+        <span className="text-[#1A0808] font-medium">{category?.name ?? (slug === 'all' ? 'All Products' : 'Products')}</span>
       </nav>
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-7">
         <div>
-          <h1 className="text-2xl font-bold text-[#2C1810]">
+          <h1 className="text-2xl font-bold text-[#1A0808]">
             {category?.name ?? (slug === 'all' ? 'All Products' : 'Products')}
           </h1>
-          {category?.description && <p className="text-stone-500 mt-1 text-sm">{category.description}</p>}
-          <p className="text-sm text-stone-400 mt-1.5">{total} product{total !== 1 ? 's' : ''} found</p>
+          {category?.description && <p className="text-[#5C1818] mt-1 text-sm">{category.description}</p>}
+          <p className="text-sm text-[#5C1818]/60 mt-1.5">{total} product{total !== 1 ? 's' : ''} found</p>
         </div>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-7">
         <form onSubmit={handleSearch} className="relative">
-          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5C1818]/40" />
           <input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search sweets..."
-            className="pl-9 pr-4 py-2.5 border border-orange-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#E8891A]/30 focus:border-[#E8891A] w-52"
+            className="pl-9 pr-4 py-2.5 border border-red-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#C41230]/20 focus:border-[#C41230] w-52"
           />
         </form>
 
-        <div className="flex items-center gap-2 bg-white border border-orange-200 rounded-xl px-3 py-2">
-          <SlidersHorizontal size={15} className="text-stone-400" />
+        <div className="flex items-center gap-2 bg-white border border-red-200 rounded-xl px-3 py-2">
+          <SlidersHorizontal size={15} className="text-[#5C1818]/40" />
           <select
             value={sort}
             onChange={(e) => setParam('sort', e.target.value)}
-            className="text-sm focus:outline-none bg-transparent text-stone-700 cursor-pointer"
+            className="text-sm focus:outline-none bg-transparent text-[#1A0808] cursor-pointer"
           >
             {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
@@ -107,7 +107,7 @@ export default function CategoryPage() {
         {(search || sort) && (
           <button
             onClick={() => { setSearchParams({}); setSearchInput(''); }}
-            className="px-4 py-2.5 text-sm text-stone-500 border border-stone-200 rounded-xl hover:bg-stone-50 transition-colors"
+            className="px-4 py-2.5 text-sm text-[#5C1818] border border-red-100 rounded-xl hover:bg-red-50 transition-colors"
           >
             Clear filters
           </button>
@@ -117,15 +117,15 @@ export default function CategoryPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3">
           <Spinner className="w-10 h-10" />
-          <p className="text-sm text-stone-400">Loading products...</p>
+          <p className="text-sm text-[#5C1818]">Loading products...</p>
         </div>
       ) : products.length === 0 ? (
         <div className="text-center py-24">
           <div className="text-6xl mb-4">🔍</div>
-          <h3 className="text-lg font-bold text-[#2C1810] mb-2">No products found</h3>
-          <p className="text-stone-400 mb-6">Try adjusting your search or filters</p>
+          <h3 className="text-lg font-bold text-[#1A0808] mb-2">No products found</h3>
+          <p className="text-[#5C1818] mb-6">Try adjusting your search or filters</p>
           <button onClick={() => { setSearchParams({}); setSearchInput(''); }} className="btn-primary">
-            Clear & Browse All
+            Clear &amp; Browse All
           </button>
         </div>
       ) : (
@@ -139,7 +139,7 @@ export default function CategoryPage() {
               <button
                 disabled={page <= 1}
                 onClick={() => setParam('page', String(page - 1))}
-                className="w-10 h-10 rounded-xl border border-orange-200 flex items-center justify-center hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="w-10 h-10 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft size={18} />
               </button>
@@ -150,7 +150,8 @@ export default function CategoryPage() {
                     <button
                       key={p}
                       onClick={() => setParam('page', String(p))}
-                      className={`w-10 h-10 rounded-xl text-sm font-semibold transition-colors ${p === page ? 'bg-[#C0392B] text-white' : 'border border-orange-200 hover:bg-orange-50 text-stone-600'}`}
+                      className={`w-10 h-10 rounded-xl text-sm font-semibold transition-colors ${p === page ? 'text-white' : 'border border-red-200 hover:bg-red-50 text-[#1A0808]'}`}
+                      style={p === page ? { background: '#C41230' } : undefined}
                     >
                       {p}
                     </button>
@@ -160,7 +161,7 @@ export default function CategoryPage() {
               <button
                 disabled={page >= pages}
                 onClick={() => setParam('page', String(page + 1))}
-                className="w-10 h-10 rounded-xl border border-orange-200 flex items-center justify-center hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="w-10 h-10 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronRight size={18} />
               </button>
