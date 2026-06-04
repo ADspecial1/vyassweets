@@ -12,7 +12,15 @@ import { AppError } from '../lib/AppError.js';
 
 const router = Router();
 
-const authLimiter = rateLimit({
+const loginLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  message: { error: { message: 'Too many login attempts, try again in a minute', code: 'RATE_LIMITED' } },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const registerLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 5,
   message: { error: { message: 'Too many requests, try again in a minute', code: 'RATE_LIMITED' } },
@@ -34,7 +42,7 @@ const loginSchema = z.object({
 
 router.post(
   '/register',
-  authLimiter,
+  registerLimiter,
   validate({ body: registerSchema }),
   asyncHandler(async (req, res) => {
     const { name, email, phone, password } = req.body as z.infer<typeof registerSchema>;
@@ -56,7 +64,7 @@ router.post(
 
 router.post(
   '/login',
-  authLimiter,
+  loginLimiter,
   validate({ body: loginSchema }),
   asyncHandler(async (req, res) => {
     const { email, password } = req.body as z.infer<typeof loginSchema>;

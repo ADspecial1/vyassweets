@@ -8,7 +8,7 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRES_IN: z.string().default('7d'),
   COOKIE_DOMAIN: z.string().default('localhost'),
-  CLIENT_ORIGIN: z.string().url(),
+  CLIENT_ORIGIN: z.string().min(1),
   RAZORPAY_KEY_ID: z.string().min(1),
   RAZORPAY_KEY_SECRET: z.string().min(1),
   RAZORPAY_WEBHOOK_SECRET: z.string().min(1),
