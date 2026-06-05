@@ -1,5 +1,22 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 import { z } from 'zod';
+
+const envCandidates = [
+  process.env.NODE_ENV === 'production'
+    ? '/etc/sweets-app/.env'
+    : path.resolve(process.cwd(), '.env'),
+  path.resolve(process.cwd(), '.env'),
+  path.resolve(process.cwd(), '.env.local'),
+];
+
+for (const envPath of envCandidates) {
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+    break;
+  }
+}
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),

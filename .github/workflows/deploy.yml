@@ -18,27 +18,4 @@ jobs:
           script: |
             set -e
             cd /home/ubuntu/sweets-app
-
-            echo "--- Pulling latest code ---"
-            git pull origin main
-
-            echo "--- Building server ---"
-            cd server
-            npm ci --omit=dev
-            npm run build
-
-            echo "--- Building client ---"
-            cd ../client
-            npm ci
-            npm run build
-
-            echo "--- Restarting server ---"
-            cd ../server
-            if pm2 list | grep -q "vyas-sweets-api"; then
-              pm2 restart vyas-sweets-api
-            else
-              pm2 start ecosystem.config.cjs --env production
-            fi
-            pm2 save
-
-            echo "--- Done ---"
+            bash deploy/deploy.sh
