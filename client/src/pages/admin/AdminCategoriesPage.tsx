@@ -12,8 +12,8 @@ const schema = z.object({
   description: z.string().optional(),
   image: z.string().optional().or(z.literal('')),
   parentId: z.string().nullable().optional(),
-  displayOrder: z.coerce.number().default(0),
-  active: z.boolean().default(true),
+  displayOrder: z.number(),
+  active: z.boolean(),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -108,7 +108,7 @@ function CategoryModal({ category, parentCategories, onClose, onSaved }: {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-stone-700 mb-1.5">Display Order</label>
-              <input {...register('displayOrder')} type="number" className="input-field" />
+              <input {...register('displayOrder', { valueAsNumber: true })} type="number" className="input-field" />
             </div>
             <div className="flex flex-col justify-end pb-1">
               <label className="flex items-center gap-2 cursor-pointer">

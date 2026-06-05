@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Minus, Plus, Trash2, Tag, ShoppingBag, ArrowRight, X } from 'lucide-react';
+import { Minus, Plus, Tag, ShoppingBag, ArrowRight, X } from 'lucide-react';
 import { useCartStore } from '../store/cart';
 import { useAuthStore } from '../store/auth';
 import { validateCoupon, getProducts } from '../api/catalog';

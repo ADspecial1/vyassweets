@@ -14,20 +14,20 @@ const schema = z.object({
   name: z.string().min(1, 'Product name is required'),
   categoryId: z.string().min(1, 'Category is required'),
   subcategoryId: z.string().optional().nullable(),
-  description: z.string().default(''),
+  description: z.string(),
   shortDescription: z.string().optional(),
   sku: z.string().min(1, 'SKU is required'),
-  price: z.coerce.number().int().positive('Price required (in paise)'),
-  mrp: z.coerce.number().int().positive('MRP required (in paise)'),
-  weight: z.coerce.number().positive('Weight required'),
+  price: z.number().int().positive('Price required (in paise)'),
+  mrp: z.number().int().positive('MRP required (in paise)'),
+  weight: z.number().positive('Weight required'),
   unit: z.enum(['g', 'kg', 'pcs']),
-  stock: z.coerce.number().int().min(0).default(0),
+  stock: z.number().int().min(0),
   tags: z.string().optional(),
-  featured: z.boolean().default(false),
-  active: z.boolean().default(true),
-  discountActive: z.boolean().default(false),
-  discountType: z.enum(['flat', 'percent']).default('percent'),
-  discountValue: z.coerce.number().min(0).default(0),
+  featured: z.boolean(),
+  active: z.boolean(),
+  discountActive: z.boolean(),
+  discountType: z.enum(['flat', 'percent']),
+  discountValue: z.number().min(0),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -49,7 +49,7 @@ export default function ProductFormPage() {
 
   const { register, handleSubmit, watch, control, setValue, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { unit: 'g', active: true, featured: false, discountType: 'percent', discountActive: false },
+    defaultValues: { unit: 'g', active: true, featured: false, discountType: 'percent' as const, discountActive: false, description: '', stock: 0, discountValue: 0 },
   });
 
   const selectedCategoryId = watch('categoryId');
@@ -305,7 +305,7 @@ export default function ProductFormPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-stone-700 mb-1.5">Stock Quantity <span className="text-red-500">*</span></label>
-                  <input {...register('stock')} type="number" min="0" placeholder="0" className="input-field" />
+                  <input {...register('stock', { valueAsNumber: true })} type="number" min="0" placeholder="0" className="input-field" />
                   {errors.stock && <p className="text-red-500 text-xs mt-1">{errors.stock.message}</p>}
                 </div>
 
@@ -317,7 +317,7 @@ export default function ProductFormPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-stone-700 mb-1.5">Weight / Quantity <span className="text-red-500">*</span></label>
-                  <input {...register('weight')} type="number" step="0.1" placeholder="250" className="input-field" />
+                  <input {...register('weight', { valueAsNumber: true })} type="number" step="0.1" placeholder="250" className="input-field" />
                   {errors.weight && <p className="text-red-500 text-xs mt-1">{errors.weight.message}</p>}
                 </div>
 
@@ -366,7 +366,7 @@ export default function ProductFormPage() {
                     <label className="block text-sm font-semibold text-stone-700 mb-1.5">
                       Value ({watch('discountType') === 'percent' ? '%' : '₹'})
                     </label>
-                    <input {...register('discountValue')} type="number" step="0.01" min="0" placeholder="10" className="input-field" />
+                    <input {...register('discountValue', { valueAsNumber: true })} type="number" step="0.01" min="0" placeholder="10" className="input-field" />
                   </div>
                 </div>
               )}

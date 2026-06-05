@@ -989,31 +989,6 @@ function EmptyState() {
    LOADING SPINNER
 ══════════════════════════════════════ */
 
-function PageLoader() {
-  return (
-    <div className="flex flex-col items-center justify-center py-36 gap-5">
-      <div className="relative w-20 h-20">
-        <div className="absolute inset-0 rounded-full border-4 border-red-100 border-t-[#C41230] animate-spin" />
-        <div className="absolute inset-0 rounded-full border-4 border-transparent border-b-[#D4AF37] animate-spin-slow-rev" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="w-8 h-8 rounded-full animate-pulse-ring"
-            style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
-          />
-        </div>
-      </div>
-      <div className="text-center">
-        <p
-          className="font-black text-[#1A0808]"
-          style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
-        >
-          Vyas Sweets
-        </p>
-        <p className="text-[#5C1818] text-sm mt-0.5">Loading fresh goodness…</p>
-      </div>
-    </div>
-  );
-}
 
 /* ══════════════════════════════════════
    MAIN PAGE
