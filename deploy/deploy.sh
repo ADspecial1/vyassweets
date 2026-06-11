@@ -14,7 +14,7 @@ git pull origin main
 
 echo "--- Building server ---"
 cd "$SERVER_DIR"
-npm ci --omit=dev
+npm ci
 npm run build
 
 echo "--- Building client ---"
