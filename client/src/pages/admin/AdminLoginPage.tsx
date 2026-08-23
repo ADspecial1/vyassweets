@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Lock, ShieldCheck } from 'lucide-react';
-import { login } from '../../api/auth';
-import { useAuthStore } from '../../store/auth';
-
-const STATIC_HINT_EMAIL = 'admin@sweetsapp.com';
+import { Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { adminLogin } from '../../api/auth';
+import { useAdminAuthStore } from '../../store/adminAuth';
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
-  const setUser = useAuthStore((s) => s.setUser);
-  const [email, setEmail] = useState(STATIC_HINT_EMAIL);
+  const setUser = useAdminAuthStore((s) => s.setUser);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');
@@ -20,11 +18,7 @@ export default function AdminLoginPage() {
     setError('');
     setLoading(true);
     try {
-      const { user } = await login({ email, password });
-      if (user.role !== 'admin') {
-        setError('This account does not have admin access.');
-        return;
-      }
+      const { user } = await adminLogin({ email, password });
       setUser(user);
       navigate('/admin');
     } catch {
@@ -70,16 +64,7 @@ export default function AdminLoginPage() {
             </div>
           )}
 
-          {/* Credentials hint box */}
-          <div className="bg-[#E8891A]/10 border border-[#E8891A]/30 rounded-xl px-4 py-3 mb-5">
-            <p className="text-[#E8891A] text-xs font-semibold mb-1.5 flex items-center gap-1.5">
-              <Lock size={11} /> Default credentials
-            </p>
-            <p className="text-stone-300 text-xs">Email: <span className="font-mono text-white">{STATIC_HINT_EMAIL}</span></p>
-            <p className="text-stone-300 text-xs mt-0.5">Password: <span className="font-mono text-white">Admin@12345</span></p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
             <div>
               <label className="block text-stone-300 text-xs font-semibold mb-2 uppercase tracking-wider">Email</label>
               <input
@@ -87,6 +72,7 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="off"
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-[#E8891A]/40 focus:border-[#E8891A]/50 transition-all"
               />
             </div>
@@ -99,6 +85,7 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  autoComplete="new-password"
                   placeholder="••••••••"
                   className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-stone-600 focus:outline-none focus:ring-2 focus:ring-[#E8891A]/40 focus:border-[#E8891A]/50 transition-all pr-11"
                 />

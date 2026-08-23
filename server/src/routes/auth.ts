@@ -4,10 +4,10 @@ import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import User from '../models/User.js';
 import { signToken } from '../lib/jwt.js';
-import { setAuthCookie, clearAuthCookie } from '../lib/cookies.js';
+import { setAuthCookie, clearAuthCookie, setAdminAuthCookie, clearAdminAuthCookie } from '../lib/cookies.js';
 import { asyncHandler } from '../lib/asyncHandler.js';
 import { validate } from '../middleware/validate.js';
-import { requireAuth } from '../middleware/auth.js';
+import { requireAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../lib/AppError.js';
 
 const router = Router();
@@ -97,6 +97,49 @@ router.get(
     if (!user) throw new AppError(404, 'User not found', 'NOT_FOUND');
     res.json({
       user: { id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role, addresses: user.addresses },
+    });
+  }),
+);
+
+// Admin auth — separate cookie ('admin_token') from customer sessions so
+// logging into one doesn't log the other out.
+router.post(
+  '/admin-login',
+  loginLimiter,
+  validate({ body: loginSchema }),
+  asyncHandler(async (req, res) => {
+    const { email, password } = req.body as z.infer<typeof loginSchema>;
+
+    const user = await User.findOne({ email }).select('+passwordHash');
+    if (!user) throw new AppError(401, 'Invalid email or password', 'INVALID_CREDENTIALS');
+
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) throw new AppError(401, 'Invalid email or password', 'INVALID_CREDENTIALS');
+
+    if (user.role !== 'admin') throw new AppError(403, 'Admin access required', 'FORBIDDEN');
+
+    const token = signToken({ userId: String(user._id), role: user.role });
+    setAdminAuthCookie(res, token);
+
+    res.json({
+      user: { id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role },
+    });
+  }),
+);
+
+router.post('/admin-logout', (_req, res) => {
+  clearAdminAuthCookie(res);
+  res.json({ ok: true });
+});
+
+router.get(
+  '/admin-me',
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user!.userId);
+    if (!user) throw new AppError(404, 'User not found', 'NOT_FOUND');
+    res.json({
+      user: { id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role },
     });
   }),
 );

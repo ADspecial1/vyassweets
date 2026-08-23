@@ -5,7 +5,9 @@
       "Bash(npm run *)",
       "Bash(node *)",
       "Bash(npx tsx --eval ' *)",
-      "Bash(npx tsx *)"
+      "Bash(npx tsx *)",
+      "Bash(cat server/.gitignore)",
+      "Bash(cat .gitignore)"
     ]
   }
 }

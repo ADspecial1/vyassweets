@@ -23,3 +23,24 @@ export function clearAuthCookie(res: Response): void {
     ...(isProd && { domain: env.COOKIE_DOMAIN }),
   });
 }
+
+// Separate cookie name so an admin login in one tab never clears a customer
+// session (or vice versa) — they're independent cookies on the same domain.
+export function setAdminAuthCookie(res: Response, token: string): void {
+  res.cookie('admin_token', token, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: 'lax',
+    ...(isProd && { domain: env.COOKIE_DOMAIN }),
+    maxAge: SEVEN_DAYS,
+  });
+}
+
+export function clearAdminAuthCookie(res: Response): void {
+  res.clearCookie('admin_token', {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: 'lax',
+    ...(isProd && { domain: env.COOKIE_DOMAIN }),
+  });
+}

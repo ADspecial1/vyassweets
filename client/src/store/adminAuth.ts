@@ -1,18 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User } from '../types';
-import { getMe } from '../api/auth';
+import { getAdminMe } from '../api/auth';
 
-interface AuthState {
+interface AdminAuthState {
   user: User | null;
   loading: boolean;
   setUser: (user: User | null) => void;
   hydrate: () => Promise<void>;
 }
 
-function readCachedUser(): User | null {
+function readCachedAdmin(): User | null {
   try {
-    const raw = localStorage.getItem('vyas-auth');
+    const raw = localStorage.getItem('vyas-admin-auth');
     if (!raw) return null;
     return JSON.parse(raw)?.state?.user ?? null;
   } catch {
@@ -20,21 +20,19 @@ function readCachedUser(): User | null {
   }
 }
 
-export const useAuthStore = create<AuthState>()(
+export const useAdminAuthStore = create<AdminAuthState>()(
   persist(
     (set) => {
-      // Read the cache synchronously (before zustand's own async persist
-      // rehydration lands) so `user` and `loading` never disagree on first
-      // paint — otherwise a route guard can see loading:false + user:null
-      // for one tick and bounce a logged-in user to /login on every refresh.
-      const cachedUser = readCachedUser();
+      // See useAuthStore for why this reads the cache synchronously instead
+      // of relying on zustand's async persist rehydration.
+      const cachedUser = readCachedAdmin();
       return {
         user: cachedUser,
         loading: !cachedUser,
         setUser: (user) => set({ user }),
         hydrate: async () => {
           try {
-            const { user } = await getMe();
+            const { user } = await getAdminMe();
             set({ user, loading: false });
           } catch {
             set({ user: null, loading: false });
@@ -43,7 +41,7 @@ export const useAuthStore = create<AuthState>()(
       };
     },
     {
-      name: 'vyas-auth',
+      name: 'vyas-admin-auth',
       partialize: (state) => ({ user: state.user }),
     },
   ),

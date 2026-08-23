@@ -4,8 +4,8 @@ import {
   ShoppingBag, Users, LogOut, ChevronRight, Menu, X
 } from 'lucide-react';
 import { useState } from 'react';
-import { useAuthStore } from '../../store/auth';
-import { logout } from '../../api/auth';
+import { useAdminAuthStore } from '../../store/adminAuth';
+import { adminLogout } from '../../api/auth';
 
 const NAV = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
@@ -19,13 +19,13 @@ const NAV = [
 
 function Sidebar({ onClose }: { onClose?: () => void }) {
   const { pathname } = useLocation();
-  const { user, setUser } = useAuthStore();
+  const { user, setUser } = useAdminAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout();
+    await adminLogout();
     setUser(null);
-    navigate('/login');
+    navigate('/admin/login');
   };
 
   return (

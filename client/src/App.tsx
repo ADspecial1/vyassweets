@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuthStore } from './store/auth';
+import { useAdminAuthStore } from './store/adminAuth';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { RequireAuth, RequireAdmin } from './components/RequireAuth';
@@ -25,6 +26,7 @@ import AdminProductsPage from './pages/admin/AdminProductsPage';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
+import AdminCouponsPage from './pages/admin/AdminCouponsPage';
 import ProductFormPage from './pages/admin/ProductFormPage';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
@@ -39,7 +41,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const hydrate = useAuthStore((s) => s.hydrate);
+  const hydrateAdmin = useAdminAuthStore((s) => s.hydrate);
   useEffect(() => { hydrate(); }, [hydrate]);
+  useEffect(() => { hydrateAdmin(); }, [hydrateAdmin]);
 
   return (
     <BrowserRouter>
@@ -69,7 +73,7 @@ export default function App() {
           <Route path="categories" element={<AdminCategoriesPage />} />
           <Route path="orders" element={<AdminOrdersPage />} />
           <Route path="banners" element={<div className="p-8 text-stone-400">Banners coming soon</div>} />
-          <Route path="coupons" element={<div className="p-8 text-stone-400">Coupons coming soon</div>} />
+          <Route path="coupons" element={<AdminCouponsPage />} />
           <Route path="users" element={<AdminUsersPage />} />
         </Route>
 

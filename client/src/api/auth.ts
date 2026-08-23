@@ -13,6 +13,15 @@ export const logout = () =>
 export const getMe = () =>
   api.get<{ user: User }>('/auth/me').then((r) => r.data);
 
+export const adminLogin = (data: { email: string; password: string }) =>
+  api.post<{ user: User }>('/auth/admin-login', data).then((r) => r.data);
+
+export const adminLogout = () =>
+  api.post('/auth/admin-logout').then((r) => r.data);
+
+export const getAdminMe = () =>
+  api.get<{ user: User }>('/auth/admin-me').then((r) => r.data);
+
 export const updateMe = (data: { name?: string; phone?: string }) =>
   api.patch<{ user: User }>('/user/me', data).then((r) => r.data);
 

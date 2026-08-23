@@ -24,3 +24,16 @@ export const getProductBySlug = (slug: string) =>
 
 export const validateCoupon = (code: string, subtotal: number) =>
   api.post<{ valid: boolean; discount: number; message: string }>('/coupons/validate', { code, subtotal }).then((r) => r.data);
+
+export interface ActiveCoupon {
+  _id: string;
+  code: string;
+  type: 'flat' | 'percent';
+  value: number;
+  minOrderAmount: number;
+  maxDiscount?: number;
+  validTill: string;
+}
+
+export const getActiveCoupons = () =>
+  api.get<ActiveCoupon[]>('/coupons/active').then((r) => r.data);

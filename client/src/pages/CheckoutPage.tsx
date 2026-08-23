@@ -1,13 +1,37 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, ShoppingBag, Tag, Truck, Receipt } from 'lucide-react';
+import { MapPin, ShoppingBag, Tag, Truck, Receipt, Plus } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { useCartStore } from '../store/cart';
 import { useAuthStore } from '../store/auth';
 import { getProducts } from '../api/catalog';
 import { createOrder, verifyOrder } from '../api/orders';
+import { addAddress } from '../api/auth';
 import type { Product, Address } from '../types';
 import { formatINR } from '../lib/format';
 import Spinner from '../components/Spinner';
+
+const addressSchema = z.object({
+  label: z.string().min(1, 'Required'),
+  line1: z.string().min(3, 'Required'),
+  line2: z.string().optional(),
+  city: z.string().min(1, 'Required'),
+  state: z.string().min(1, 'Required'),
+  pincode: z.string().regex(/^\d{6}$/, '6 digits'),
+  isDefault: z.boolean(),
+});
+type AddressForm = z.infer<typeof addressSchema>;
+
+const INDIAN_STATES = [
+  'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat',
+  'Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh',
+  'Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan',
+  'Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal',
+  'Andaman and Nicobar Islands','Chandigarh','Dadra and Nagar Haveli and Daman and Diu',
+  'Delhi','Jammu and Kashmir','Ladakh','Lakshadweep','Puducherry',
+];
 
 declare global {
   interface Window {
@@ -23,13 +47,27 @@ const GST_RATE = 5;
 export default function CheckoutPage() {
   const navigate = useNavigate();
   const { items, couponCode, couponDiscount, clearCart } = useCartStore();
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
 
   const [products, setProducts] = useState<Record<string, Product>>({});
   const [loading, setLoading] = useState(true);
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState('');
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
+  const addrForm = useForm<AddressForm>({
+    resolver: zodResolver(addressSchema),
+    defaultValues: { label: 'Home', line1: '', line2: '', city: 'Mumbai', state: 'Maharashtra', pincode: '', isDefault: true },
+  });
+
+  const onAddAddress = async (data: AddressForm) => {
+    const { user: updated } = await addAddress(data);
+    setUser(updated);
+    const newAddr = updated.addresses[updated.addresses.length - 1];
+    setSelectedAddressId(newAddr._id ?? '');
+    setShowAddressForm(false);
+  };
 
   useEffect(() => {
     if (items.length === 0) { navigate('/cart'); return; }
@@ -109,19 +147,69 @@ export default function CheckoutPage() {
 
   if (loading) return <div className="flex justify-center py-24"><Spinner className="w-10 h-10" /></div>;
 
-  if (!user?.addresses?.length) {
+  if (!user?.addresses?.length && !showAddressForm) {
     return (
       <div className="max-w-lg mx-auto px-4 py-16 text-center">
-        <MapPin size={48} className="mx-auto text-[#5C1818]/30 mb-4" />
+        <MapPin size={48} className="mx-auto text-[#C41230]/30 mb-4" />
         <h2 className="text-xl font-bold text-[#1A0808] mb-2">No delivery address</h2>
-        <p className="text-[#5C1818] mb-6">Add an address in your profile to continue.</p>
+        <p className="text-[#5C1818] mb-6">Add an address to continue with checkout.</p>
         <button
-          onClick={() => navigate('/profile')}
-          className="text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
-          style={{ background: '#C41230' }}
+          onClick={() => setShowAddressForm(true)}
+          className="text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition flex items-center gap-2 mx-auto"
+          style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
         >
-          Go to Profile
+          <Plus size={18} /> Add Delivery Address
         </button>
+      </div>
+    );
+  }
+
+  if (!user?.addresses?.length && showAddressForm) {
+    return (
+      <div className="max-w-lg mx-auto px-4 py-10">
+        <h1 className="text-2xl font-bold text-[#1A0808] mb-6">Add Delivery Address</h1>
+        <form onSubmit={addrForm.handleSubmit(onAddAddress)} className="bg-white rounded-2xl border border-red-100 p-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-[#5C1818] mb-1.5">Label</label>
+              <input {...addrForm.register('label')} placeholder="Home / Office" className="w-full px-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C41230]/30 focus:border-[#C41230]" />
+              {addrForm.formState.errors.label && <p className="text-red-500 text-xs mt-1">{addrForm.formState.errors.label.message}</p>}
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-[#5C1818] mb-1.5">Address Line 1</label>
+              <input {...addrForm.register('line1')} placeholder="Flat/House no., Building, Street" className="w-full px-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C41230]/30 focus:border-[#C41230]" />
+              {addrForm.formState.errors.line1 && <p className="text-red-500 text-xs mt-1">{addrForm.formState.errors.line1.message}</p>}
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-[#5C1818] mb-1.5">Address Line 2 <span className="text-stone-400 font-normal">(optional)</span></label>
+              <input {...addrForm.register('line2')} placeholder="Landmark, Area" className="w-full px-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C41230]/30 focus:border-[#C41230]" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[#5C1818] mb-1.5">City</label>
+              <input {...addrForm.register('city')} placeholder="Mumbai" className="w-full px-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C41230]/30 focus:border-[#C41230]" />
+              {addrForm.formState.errors.city && <p className="text-red-500 text-xs mt-1">{addrForm.formState.errors.city.message}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[#5C1818] mb-1.5">Pincode</label>
+              <input {...addrForm.register('pincode')} placeholder="400104" maxLength={6} className="w-full px-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C41230]/30 focus:border-[#C41230]" />
+              {addrForm.formState.errors.pincode && <p className="text-red-500 text-xs mt-1">{addrForm.formState.errors.pincode.message}</p>}
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-[#5C1818] mb-1.5">State</label>
+              <select {...addrForm.register('state')} className="w-full px-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C41230]/30 focus:border-[#C41230] bg-white">
+                {INDIAN_STATES.map((s) => <option key={s}>{s}</option>)}
+              </select>
+            </div>
+          </div>
+          <button
+            type="submit"
+            disabled={addrForm.formState.isSubmitting}
+            className="w-full py-3.5 text-white font-bold rounded-2xl disabled:opacity-60 transition"
+            style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
+          >
+            {addrForm.formState.isSubmitting ? 'Saving...' : 'Save & Continue to Payment'}
+          </button>
+        </form>
       </div>
     );
   }
@@ -138,7 +226,7 @@ export default function CheckoutPage() {
               <MapPin size={18} className="text-[#C41230]" /> Delivery Address
             </h2>
             <div className="space-y-3">
-              {user.addresses.map((addr: Address) => (
+              {user!.addresses.map((addr: Address) => (
                 <label
                   key={addr._id}
                   className={`block rounded-xl border-2 p-4 cursor-pointer transition-all ${
@@ -165,8 +253,8 @@ export default function CheckoutPage() {
                 </label>
               ))}
             </div>
-            <button onClick={() => navigate('/profile')} className="mt-3 text-sm text-[#C41230] hover:underline">
-              + Add new address
+            <button onClick={() => navigate('/profile')} className="mt-3 text-sm text-[#C41230] hover:underline flex items-center gap-1">
+              <Plus size={13} /> Add new address
             </button>
           </div>
 

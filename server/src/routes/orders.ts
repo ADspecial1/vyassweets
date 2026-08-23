@@ -5,13 +5,10 @@ import { validate } from '../middleware/validate.js';
 import { asyncHandler } from '../lib/asyncHandler.js';
 import { AppError } from '../lib/AppError.js';
 import Order from '../models/Order.js';
-import User from '../models/User.js';
 import Product from '../models/Product.js';
 import Coupon from '../models/Coupon.js';
-import { calculateOrder } from '../services/pricing.js';
-import { createRazorpayOrder, verifyPaymentSignature } from '../services/razorpay.js';
-import { generateOrderNumber } from '../services/orderNumber.js';
-import { env } from '../config/env.js';
+import { verifyPaymentSignature } from '../services/razorpay.js';
+import { orderService } from '../lib/serviceClient.js';
 
 const router = Router();
 
@@ -29,45 +26,15 @@ const verifySchema = z.object({
 });
 
 // POST /api/orders/create
+// Monolith handles auth + validation, then delegates order creation to order-service.
+// order-service recomputes all prices from DB — client-side prices are never trusted.
 router.post(
   '/create',
   requireAuth,
   validate({ body: createSchema }),
   asyncHandler(async (req, res) => {
-    const { items, couponCode, addressId } = req.body as z.infer<typeof createSchema>;
-
-    const user = await User.findById(req.user!.userId).lean();
-    if (!user) throw new AppError(401, 'User not found');
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const address = (user.addresses as any[]).find((a) => a._id?.toString() === addressId);
-    if (!address) throw new AppError(400, 'Address not found');
-
-    const pricing = await calculateOrder({ items, couponCode });
-
-    const orderNumber = await generateOrderNumber();
-    const rpOrder = await createRazorpayOrder(pricing.total, orderNumber);
-
-    const order = await Order.create({
-      userId: req.user!.userId,
-      orderNumber,
-      items: pricing.items,
-      subtotal: pricing.subtotal,
-      couponCode: pricing.couponCode,
-      couponDiscount: pricing.couponDiscount,
-      shippingFee: pricing.shippingFee,
-      gst: pricing.gst,
-      total: pricing.total,
-      address,
-      status: 'pending',
-      payment: {
-        provider: 'razorpay',
-        razorpayOrderId: rpOrder.id,
-        status: 'created',
-      },
-    });
-
-    res.json({ order, razorpayOrderId: rpOrder.id, key: env.RAZORPAY_KEY_ID, amount: pricing.total });
+    const result = await orderService.create(req.user!.userId, req.body);
+    res.status(201).json(result);
   }),
 );
 
@@ -127,7 +94,11 @@ router.get(
   '/',
   requireAuth,
   asyncHandler(async (req, res) => {
-    const orders = await Order.find({ userId: req.user!.userId }).sort({ createdAt: -1 }).lean();
+    // Pending orders are abandoned/incomplete checkouts (Razorpay never confirmed) —
+    // don't clutter the customer's list with them.
+    const orders = await Order.find({ userId: req.user!.userId, status: { $ne: 'pending' } })
+      .sort({ createdAt: -1 })
+      .lean();
     res.json(orders);
   }),
 );

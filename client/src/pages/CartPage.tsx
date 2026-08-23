@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Minus, Plus, Tag, ShoppingBag, ArrowRight, X } from 'lucide-react';
 import { useCartStore } from '../store/cart';
 import { useAuthStore } from '../store/auth';
-import { validateCoupon, getProducts } from '../api/catalog';
+import { validateCoupon, getProducts, getActiveCoupons, type ActiveCoupon } from '../api/catalog';
 import type { Product } from '../types';
 import { formatINR } from '../lib/format';
 import Spinner from '../components/Spinner';
@@ -20,6 +20,7 @@ export default function CartPage() {
   const [couponInput, setCouponInput] = useState(couponCode);
   const [couponMsg, setCouponMsg] = useState('');
   const [couponLoading, setCouponLoading] = useState(false);
+  const [activeCoupons, setActiveCoupons] = useState<ActiveCoupon[]>([]);
 
   useEffect(() => {
     if (items.length === 0) { setLoading(false); return; }
@@ -31,17 +32,21 @@ export default function CartPage() {
     }).finally(() => setLoading(false));
   }, [items.length]);
 
+  useEffect(() => {
+    getActiveCoupons().then(setActiveCoupons).catch(() => setActiveCoupons([]));
+  }, []);
+
   const subtotal = items.reduce((sum, item) => sum + ((products[item.productId]?.price ?? 0) * item.qty), 0);
   const shipping = subtotal >= FREE_SHIPPING ? 0 : (subtotal > 0 ? FLAT_SHIPPING : 0);
   const total = subtotal - couponDiscount + shipping;
 
-  const applyCoupon = async () => {
-    if (!couponInput.trim()) return;
+  const applyCoupon = async (code: string = couponInput) => {
+    if (!code.trim()) return;
     setCouponLoading(true);
     try {
-      const res = await validateCoupon(couponInput.trim().toUpperCase(), subtotal);
+      const res = await validateCoupon(code.trim().toUpperCase(), subtotal);
       if (res.valid) {
-        setCoupon(couponInput.trim().toUpperCase(), res.discount);
+        setCoupon(code.trim().toUpperCase(), res.discount);
         setCouponMsg(`✓ ${res.message}`);
       } else {
         clearCoupon();
@@ -52,6 +57,12 @@ export default function CartPage() {
     } finally {
       setCouponLoading(false);
     }
+  };
+
+  const describeOffer = (c: ActiveCoupon): string => {
+    const amount = c.type === 'flat' ? formatINR(c.value) : `${c.value}%`;
+    const min = c.minOrderAmount > 0 ? ` above ${formatINR(c.minOrderAmount)}` : '';
+    return `${amount} off${min}`;
   };
 
   if (loading) return <div className="flex justify-center py-24"><Spinner className="w-10 h-10" /></div>;
@@ -147,6 +158,31 @@ export default function CartPage() {
             </div>
           </div>
 
+          {/* Available offers */}
+          {activeCoupons.length > 0 && (
+            <div className="bg-white rounded-2xl border border-red-100 p-4">
+              <p className="text-sm font-semibold text-[#1A0808] mb-3 flex items-center gap-2">
+                <Tag size={14} className="text-[#C41230]" /> Available Offers
+              </p>
+              <div className="space-y-2">
+                {activeCoupons.map((c) => (
+                  <button
+                    key={c._id}
+                    onClick={() => { setCouponInput(c.code); setCouponMsg(''); applyCoupon(c.code); }}
+                    disabled={couponLoading}
+                    className="w-full flex items-center justify-between gap-3 px-3 py-2.5 border border-dashed border-red-200 rounded-xl bg-red-50/40 hover:bg-red-50 transition-colors text-left disabled:opacity-50"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-mono font-bold text-[#C41230] text-sm">{c.code}</p>
+                      <p className="text-xs text-[#5C1818] truncate">{describeOffer(c)}</p>
+                    </div>
+                    <span className="text-xs font-semibold text-[#C41230] shrink-0">Apply</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Coupon */}
           <div className="bg-white rounded-2xl border border-red-100 p-4">
             <p className="text-sm font-semibold text-[#1A0808] mb-3 flex items-center gap-2">
@@ -160,7 +196,7 @@ export default function CartPage() {
                 className="flex-1 px-3 py-2.5 border border-red-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C41230]/20 focus:border-[#C41230] bg-red-50/30"
               />
               <button
-                onClick={applyCoupon}
+                onClick={() => applyCoupon()}
                 disabled={couponLoading || !couponInput.trim()}
                 className="px-4 py-2.5 text-white rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 hover:opacity-90"
                 style={{ background: '#1A0808' }}

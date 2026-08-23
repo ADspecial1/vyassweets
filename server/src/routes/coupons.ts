@@ -6,6 +6,26 @@ import Coupon from '../models/Coupon.js';
 
 const router = Router();
 
+// GET /api/coupons/active — public list of currently-usable coupons for storefront display.
+// Only safe, non-sensitive fields are returned (no usedCount internals).
+router.get(
+  '/active',
+  asyncHandler(async (_req, res) => {
+    const now = new Date();
+    const coupons = await Coupon.find({
+      active: true,
+      validFrom: { $lte: now },
+      validTill: { $gte: now },
+      $or: [{ usageLimit: { $exists: false } }, { $expr: { $lt: ['$usedCount', '$usageLimit'] } }],
+    })
+      .select('code type value minOrderAmount maxDiscount validTill')
+      .sort({ minOrderAmount: 1 })
+      .lean();
+
+    res.json(coupons);
+  }),
+);
+
 const validateSchema = z.object({
   code: z.string().min(1),
   subtotal: z.number().int().nonnegative(),

@@ -10,9 +10,11 @@ api.interceptors.response.use(
   (err) => {
     if (err.response?.status === 401) {
       const requestUrl: string = err.config?.url ?? '';
-      // /auth/me is the session hydration check — a 401 just means "not logged in",
-      // which is expected for guests browsing public pages. Never redirect for this.
-      if (requestUrl.includes('/auth/me')) return Promise.reject(err);
+      // /auth/me and /auth/admin-me are session hydration checks — a 401 just means
+      // "not logged in", which is expected for guests. Never redirect for these.
+      if (requestUrl.endsWith('/auth/me') || requestUrl.endsWith('/auth/admin-me')) {
+        return Promise.reject(err);
+      }
 
       const path = window.location.pathname;
       const excluded = ['/login', '/register', '/admin/login'];

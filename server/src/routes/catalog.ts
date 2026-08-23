@@ -4,6 +4,7 @@ import Product from '../models/Product.js';
 import Banner from '../models/Banner.js';
 import { asyncHandler } from '../lib/asyncHandler.js';
 import { AppError } from '../lib/AppError.js';
+import { searchService } from '../lib/serviceClient.js';
 
 const router = Router();
 
@@ -25,8 +26,16 @@ router.get('/products', asyncHandler(async (req, res) => {
 
   const pageNum = Math.max(1, parseInt(page, 10) || 1);
   const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 12));
-  const skip = (pageNum - 1) * limitNum;
 
+  // Search queries are handled by search-service (text index + relevance ranking).
+  // Browsing (category/featured/sort) stays in the monolith.
+  if (search) {
+    const result = await searchService.search({ q: search, page: pageNum, limit: limitNum, category });
+    res.json(result);
+    return;
+  }
+
+  const skip = (pageNum - 1) * limitNum;
   const filter: Record<string, unknown> = { active: true };
 
   if (featured === 'true') filter['featured'] = true;
@@ -40,15 +49,9 @@ router.get('/products', asyncHandler(async (req, res) => {
     filter['categoryId'] = cat._id;
   }
 
-  if (search) {
-    filter['$text'] = { $search: search };
-  }
-
-  let sortObj: Record<string, 1 | -1 | { $meta: string }> = { createdAt: -1 };
+  let sortObj: Record<string, 1 | -1> = { createdAt: -1 };
   if (sort === 'price-asc') sortObj = { price: 1 };
   else if (sort === 'price-desc') sortObj = { price: -1 };
-  else if (sort === 'newest') sortObj = { createdAt: -1 };
-  else if (search) sortObj = { score: { $meta: 'textScore' } };
 
   const [products, total] = await Promise.all([
     Product.find(filter)
@@ -59,7 +62,6 @@ router.get('/products', asyncHandler(async (req, res) => {
     Product.countDocuments(filter),
   ]);
 
-  // Map categoryId to category for frontend
   const items = products.map((p) => {
     const obj = p.toObject() as unknown as Record<string, unknown>;
     obj['category'] = obj['categoryId'];
