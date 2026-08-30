@@ -2,6 +2,9 @@ import mongoose, { Schema, type Document } from 'mongoose';
 
 export interface IBanner extends Document {
   image: string;
+  mediaType: 'image' | 'video';
+  videoUrl?: string;
+  posterUrl?: string;
   title?: string;
   subtitle?: string;
   ctaText?: string;
@@ -14,7 +17,16 @@ export interface IBanner extends Document {
 
 const bannerSchema = new Schema<IBanner>(
   {
-    image: { type: String, required: true },
+    // Required for image banners; video banners rely on videoUrl (+ optional posterUrl).
+    image: {
+      type: String,
+      required: function (this: IBanner) {
+        return this.mediaType !== 'video';
+      },
+    },
+    mediaType: { type: String, enum: ['image', 'video'], default: 'image' },
+    videoUrl: String,
+    posterUrl: String,
     title: String,
     subtitle: String,
     ctaText: String,

@@ -39,6 +39,9 @@ export interface Product {
 export interface Banner {
   _id: string;
   image: string;
+  mediaType?: 'image' | 'video';
+  videoUrl?: string;
+  posterUrl?: string;
   title?: string;
   subtitle?: string;
   ctaText?: string;

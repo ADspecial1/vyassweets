@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ChevronLeft, ChevronRight, ArrowRight,
-  Truck, ChefHat, Leaf, ShieldCheck,
+  ArrowRight,
+  ChefHat, Leaf,
   Star, MapPin, Phone, Clock, Gift,
-  ShoppingBag, Sparkles, Users, Award, Quote,
+  ShoppingBag, Award, Quote,
 } from 'lucide-react';
-import { getBanners, getCategories, getProducts } from '../api/catalog';
-import type { Banner, Category, Product } from '../types';
+import { getCategories, getProducts } from '../api/catalog';
+import type { Category, Product } from '../types';
+import { formatINR } from '../lib/format';
+import { useCartStore } from '../store/cart';
 import ProductCard from '../components/ProductCard';
+import Reveal from '../components/Reveal';
+import Tilt from '../components/Tilt';
+import { ReelsShowcase } from '../components/VideoShowcase';
+import { VyasHeroCarousel, VyasWideBanner, VyasRibbonBanner, OrnamentStrip } from '../components/VyasBanners';
+import CinematicHero from '../components/CinematicHero';
 
 /* ══════════════════════════════════════
    STATIC DATA
@@ -126,230 +133,6 @@ function catInitials(name: string) {
 }
 
 /* ══════════════════════════════════════
-   HERO — SIMPLE FOOD IMAGE GRID
-══════════════════════════════════════ */
-
-const HERO_FOOD_IMAGES = [
-  { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Kaju_Katri.jpg/280px-Kaju_Katri.jpg', alt: 'Kaju Katli' },
-  { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Besan_laddu.jpg/280px-Besan_laddu.jpg', alt: 'Besan Ladoo' },
-  { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Burfi.jpg/280px-Burfi.jpg', alt: 'Kesar Barfi' },
-  { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Gulab_jamun_%28culture%29.jpg/280px-Gulab_jamun_%28culture%29.jpg', alt: 'Gulab Jamun' },
-];
-
-function HeroFoodGrid() {
-  return (
-    <div className="grid grid-cols-2 gap-3 w-72 lg:w-80 xl:w-96 shrink-0">
-      {HERO_FOOD_IMAGES.map((img) => (
-        <div
-          key={img.alt}
-          className="rounded-2xl overflow-hidden shadow-lg aspect-square bg-[#FFF8F0]"
-        >
-          <img
-            src={img.src}
-            alt={img.alt}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-            onError={(e) => {
-              const el = e.target as HTMLImageElement;
-              el.style.display = 'none';
-              const parent = el.parentElement;
-              if (parent) {
-                parent.style.background = 'linear-gradient(135deg, #FFF8F0, #FFEEDD)';
-              }
-            }}
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function DefaultHero() {
-  return (
-    <section
-      className="relative overflow-hidden rounded-3xl"
-      style={{
-        background: 'linear-gradient(135deg, #FFF8F0 0%, #FFEEDD 50%, #FFE0CC 100%)',
-        minHeight: 520,
-      }}
-    >
-      {/* Indian pattern overlay */}
-      <div className="absolute inset-0 indian-pattern opacity-100 pointer-events-none" />
-
-      {/* Content */}
-      <div
-        className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 px-8 md:px-14 py-14"
-        style={{ minHeight: 520 }}
-      >
-        {/* Left: text */}
-        <div className="flex-1 max-w-xl text-center lg:text-left">
-          {/* Badge */}
-          <div className="animate-fade-up d-0 inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full" style={{ background: 'rgba(196,18,48,0.08)', border: '1px solid rgba(196,18,48,0.2)' }}>
-            <Sparkles size={12} style={{ color: '#C41230' }} className="animate-glow-pulse" />
-            <span className="text-xs font-bold tracking-wide" style={{ color: '#C41230' }}>
-              Premium Indian Sweets · Since 1951
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1
-            className="animate-fade-up d-1 leading-[1.1] mb-4"
-            style={{ fontFamily: 'Playfair Display, Georgia, serif', color: '#1A0808' }}
-          >
-            <span className="block text-5xl md:text-6xl xl:text-7xl font-bold">Taste the</span>
-            <span
-              className="block text-5xl md:text-6xl xl:text-7xl font-black italic mt-1"
-              style={{
-                background: 'linear-gradient(135deg, #C41230, #9B0E25)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Tradition
-            </span>
-          </h1>
-
-          {/* Hindi tagline */}
-          <p
-            className="animate-fade-up d-1 text-lg mb-3 font-medium tracking-wide"
-            style={{ color: 'rgba(26,8,8,0.45)', fontFamily: 'serif' }}
-          >
-            मिठाई · नमकीन · ड्राईफ्रूट्स
-          </p>
-
-          {/* Subtext */}
-          <p className="animate-fade-up d-2 text-base md:text-lg max-w-md mb-8 leading-relaxed" style={{ color: '#5C1818' }}>
-            Handcrafted with pure desi ghee and ancestral recipes —
-            fresh every morning at Station Road, Goregaon.
-          </p>
-
-          {/* CTAs */}
-          <div className="animate-fade-up d-3 flex flex-wrap gap-3 justify-center lg:justify-start mb-10">
-            <Link
-              to="/category/all"
-              className="btn-shine inline-flex items-center gap-2.5 text-white font-black px-8 py-4 rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.03] transition-all duration-200 active:scale-95"
-              style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
-            >
-              <ShoppingBag size={17} /> Explore Menu
-            </Link>
-            <a
-              href="tel:+919869313539"
-              className="inline-flex items-center gap-2.5 font-bold px-7 py-4 rounded-full transition-all duration-200 hover:-translate-y-0.5"
-              style={{
-                background: 'rgba(255,255,255,0.7)',
-                border: '1.5px solid rgba(196,18,48,0.25)',
-                color: '#1A0808',
-              }}
-            >
-              <Phone size={15} style={{ color: '#C41230' }} /> +91 98693 13539
-            </a>
-          </div>
-
-          {/* Stats */}
-          <div className="animate-fade-up d-4 flex flex-wrap gap-3 justify-center lg:justify-start">
-            {[
-              { icon: <Award size={14} style={{ color: '#C41230' }} />,                                   value: '70+',     label: 'Years' },
-              { icon: <Star  size={14} style={{ fill: '#D4AF37', color: '#D4AF37' }} />,                  value: '4.3★',   label: 'Rating' },
-              { icon: <Users size={14} style={{ color: '#D4AF37' }} />,                                   value: '1,172',  label: 'Reviews' },
-              { icon: <Clock size={14} style={{ color: '#F0CE6A' }} />,                                   value: '8:15 AM', label: 'Daily Fresh' },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="flex items-center gap-2.5 rounded-2xl px-4 py-2.5"
-                style={{ background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(196,18,48,0.12)' }}
-              >
-                {s.icon}
-                <div>
-                  <p className="font-black text-sm leading-tight" style={{ color: '#1A0808' }}>{s.value}</p>
-                  <p className="text-[10px] leading-tight" style={{ color: '#5C1818' }}>{s.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: food image grid */}
-        <div className="animate-fade-up d-5 hidden lg:block">
-          <HeroFoodGrid />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════
-   BANNER CAROUSEL
-══════════════════════════════════════ */
-
-function BannerCarousel({ banners }: { banners: Banner[] }) {
-  const [idx, setIdx] = useState(0);
-
-  useEffect(() => {
-    if (banners.length < 2) return;
-    const t = setInterval(() => setIdx((i) => (i + 1) % banners.length), 5000);
-    return () => clearInterval(t);
-  }, [banners.length]);
-
-  if (!banners.length) return <DefaultHero />;
-
-  return (
-    <div className="relative rounded-3xl overflow-hidden" style={{ minHeight: 320 }}>
-      {banners.map((ban, i) => (
-        <div
-          key={ban._id ?? i}
-          className="absolute inset-0 transition-all duration-700"
-          style={{ opacity: i === idx ? 1 : 0, transform: i === idx ? 'scale(1)' : 'scale(1.04)', zIndex: i === idx ? 2 : 1 }}
-        >
-          <img src={ban.image} alt={ban.title ?? ''} className="w-full h-full object-cover" style={{ minHeight: 320 }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1A0808]/60 via-[#1A0808]/20 to-transparent flex items-center px-8 md:px-16">
-            <div style={{ opacity: i === idx ? 1 : 0, transition: 'opacity 0.5s 0.2s' }}>
-              {ban.title && (
-                <h2
-                  className="text-white text-2xl md:text-4xl font-black mb-2"
-                  style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
-                >
-                  {ban.title}
-                </h2>
-              )}
-              {ban.subtitle && <p className="text-white/85 text-base md:text-lg mb-5">{ban.subtitle}</p>}
-              {ban.ctaText && ban.ctaLink && (
-                <a
-                  href={ban.ctaLink}
-                  className="btn-shine inline-flex items-center gap-2 text-white font-black px-7 py-3 rounded-full hover:shadow-xl hover:-translate-y-0.5 transition-all"
-                  style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
-                >
-                  {ban.ctaText} <ArrowRight size={15} />
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      ))}
-      {banners.length > 1 && (
-        <>
-          <button onClick={() => setIdx((i) => (i - 1 + banners.length) % banners.length)} className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2.5 shadow-lg hover:scale-110 transition-all">
-            <ChevronLeft size={17} style={{ color: '#1A0808' }} />
-          </button>
-          <button onClick={() => setIdx((i) => (i + 1) % banners.length)} className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2.5 shadow-lg hover:scale-110 transition-all">
-            <ChevronRight size={17} style={{ color: '#1A0808' }} />
-          </button>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-            {banners.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setIdx(i)}
-                className="rounded-full transition-all duration-300"
-                style={{ background: i === idx ? '#C41230' : 'rgba(255,255,255,0.5)', width: i === idx ? '2rem' : '0.625rem', height: '0.625rem' }}
-              />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-/* ══════════════════════════════════════
    MARQUEE TICKER
 ══════════════════════════════════════ */
 
@@ -364,10 +147,10 @@ function MarqueeTicker() {
   return (
     <div
       className="overflow-hidden rounded-2xl relative"
-      style={{ background: 'linear-gradient(90deg, #FFF8F0, #FFEEDD 50%, #FFF8F0)' }}
+      style={{ background: 'linear-gradient(90deg, #FBF4E9, #F5E7D0 50%, #FBF4E9)' }}
     >
-      <div className="absolute left-0 inset-y-0 w-16 z-10" style={{ background: 'linear-gradient(90deg, #FFF8F0, transparent)' }} />
-      <div className="absolute right-0 inset-y-0 w-16 z-10" style={{ background: 'linear-gradient(270deg, #FFF8F0, transparent)' }} />
+      <div className="absolute left-0 inset-y-0 w-16 z-10" style={{ background: 'linear-gradient(90deg, #FBF4E9, transparent)' }} />
+      <div className="absolute right-0 inset-y-0 w-16 z-10" style={{ background: 'linear-gradient(270deg, #FBF4E9, transparent)' }} />
       <div className="py-3.5 flex animate-marquee whitespace-nowrap" style={{ animationDuration: '32s' }}>
         {doubled.map((item, i) => (
           <span key={i} className="inline-flex items-center mx-5 text-sm font-bold" style={{ color: '#5C1818' }}>
@@ -438,86 +221,147 @@ function StoreInfoBar() {
    falls back to static cards when none exist.
 ══════════════════════════════════════ */
 
-function FeaturedSweetsSection({ featured }: { featured: Product[] }) {
-  if (featured.length > 0) {
-    return (
-      <section>
-        <SectionHead
-          title="Our Signature Sweets"
-          titleHindi="हमारी खास मिठाइयाँ"
-          sub="Timeless classics crafted with generations of expertise"
-          to="/category/all"
-        />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {featured.map((p, i) => (
-            <div
-              key={p._id}
-              className="product-card-hover animate-fade-up"
-              style={{ animationDelay: `${i * 0.07}s` }}
-            >
-              <ProductCard product={p} />
-            </div>
-          ))}
-        </div>
-      </section>
-    );
-  }
+/* One editorial tile — full-bleed photo, serif name laid over it like a
+   display-case card. `large` gets the confident type. No two the same size. */
+type MosaicItem = {
+  key: string;
+  to: string;
+  img?: string;
+  name: string;
+  sub?: string;
+  price?: number;
+  onAdd?: () => void;
+};
 
-  // Static fallback while no products are marked featured in admin
+function MosaicCard({ item }: { item: MosaicItem }) {
+  return (
+    <Link
+      to={item.to}
+      className="group relative block w-full overflow-hidden rounded-3xl"
+      style={{ aspectRatio: '4 / 5', border: '1px solid rgba(26,8,8,0.06)' }}
+    >
+      {item.img ? (
+        <img
+          src={item.img}
+          alt={item.name}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.05]"
+          onError={(e) => { e.currentTarget.style.opacity = '0'; }}
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(150deg,#FBF4E9,#F5E7D0)' }}>
+          <div className="absolute inset-0 indian-pattern opacity-60" />
+          <span
+            className="font-display leading-none select-none"
+            style={{ fontSize: '6rem', color: 'rgba(196,18,48,0.14)' }}
+            aria-hidden="true"
+          >
+            {item.name.charAt(0).toUpperCase()}
+          </span>
+        </div>
+      )}
+
+      {/* readability wash rising from the base */}
+      <div className="absolute inset-0" style={{
+        background: item.img
+          ? 'linear-gradient(0deg, rgba(26,8,8,0.84) 0%, rgba(26,8,8,0.22) 46%, transparent 70%)'
+          : 'linear-gradient(0deg, rgba(126,10,29,0.10), transparent 60%)',
+      }} />
+
+      {/* Signature badge, top-left */}
+      <span className="absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm text-white tracking-wide"
+        style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}>
+        Signature
+      </span>
+
+      {/* Add button, top-right (live products only) */}
+      {item.onAdd && (
+        <button
+          onClick={(e) => { e.preventDefault(); item.onAdd?.(); }}
+          aria-label={`Add ${item.name} to cart`}
+          className="btn-shine absolute top-2.5 right-2.5 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white shadow-md transition-all active:scale-95 hover:-translate-y-0.5 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+          style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
+        >
+          <ShoppingBag size={13} /> Add
+        </button>
+      )}
+
+      {/* Name + meta, laid over the base of the photo */}
+      <div className="absolute inset-x-0 bottom-0 flex flex-col p-4">
+        {item.sub && (
+          <p className="tnum uppercase tracking-wide text-white/70 mb-1 text-[10px]">
+            {item.sub}
+          </p>
+        )}
+        <h3 className={`font-display font-semibold text-white leading-tight text-lg ${item.img ? '' : '!text-[#7E0A1D]'}`}>
+          {item.name}
+        </h3>
+        <div className="flex items-center justify-between gap-2 mt-2">
+          {item.price != null ? (
+            <span className="tnum font-display font-semibold text-white text-sm">
+              {formatINR(item.price)}
+            </span>
+          ) : <span />}
+          <span className="inline-flex items-center gap-1 font-semibold text-white/90 group-hover:gap-2 transition-all text-xs">
+            {item.price != null ? 'View' : 'Order now'} <ArrowRight size={12} />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+/* A clean four-up showcase — each card self-sizes via aspect-ratio so it can
+   never collapse, and tilts on hover. */
+function FeaturedMosaic({ items }: { items: MosaicItem[] }) {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {items.map((it, i) => (
+        <div key={it.key} className="animate-fade-up" style={{ animationDelay: `${i * 0.07}s` }}>
+          <Tilt max={7} lift={10} className="h-full rounded-3xl">
+            <MosaicCard item={it} />
+          </Tilt>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FeaturedSweetsSection({ featured }: { featured: Product[] }) {
+  const addItem = useCartStore((s) => s.addItem);
+
+  // surface products that actually have a photo first, so the showcase leads
+  // with imagery when any exists in the catalogue
+  const ordered = [...featured].sort(
+    (a, b) => (b.images?.[0] ? 1 : 0) - (a.images?.[0] ? 1 : 0),
+  );
+
+  const items: MosaicItem[] = featured.length > 0
+    ? ordered.slice(0, 4).map((p) => ({
+        key: p._id,
+        to: `/product/${p.slug}`,
+        img: p.images[0],
+        name: p.name,
+        sub: `Net ${p.weight}${p.unit}`,
+        price: p.price,
+        onAdd: p.stock === 0 ? undefined : () => addItem(p._id),
+      }))
+    : FEATURED_SWEETS.slice(0, 4).map((s) => ({
+        key: String(s.id),
+        to: '/category/all',
+        img: s.image,
+        name: s.name,
+        sub: s.hindi,
+      }));
+
   return (
     <section>
       <SectionHead
         title="Our Signature Sweets"
         titleHindi="हमारी खास मिठाइयाँ"
         sub="Timeless classics crafted with generations of expertise"
+        to="/category/all"
       />
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {FEATURED_SWEETS.map((sweet, i) => (
-          <Link
-            key={sweet.id}
-            to="/category/all"
-            className="sweet-card-hover animate-fade-up group rounded-3xl overflow-hidden flex flex-col bg-white"
-            style={{
-              border: '1.5px solid rgba(26,8,8,0.07)',
-              animationDelay: `${i * 0.07}s`,
-            }}
-          >
-            <div className="relative w-full h-36 overflow-hidden">
-              <img
-                src={sweet.image}
-                alt={sweet.name}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                  const sib = (e.target as HTMLImageElement).nextElementSibling;
-                  if (sib) sib.classList.remove('hidden');
-                }}
-              />
-              <div className="hidden absolute inset-0 flex items-center justify-center text-4xl bg-gradient-to-br from-[#FFF8F0] to-[#FFEEDD]">
-                {sweet.emoji}
-              </div>
-            </div>
-            <div className="px-4 pb-5 pt-3 flex-1 flex flex-col">
-              <p className="text-[10px] font-semibold mb-0.5 tracking-wide" style={{ color: sweet.accent }}>
-                {sweet.hindi}
-              </p>
-              <h3
-                className="font-bold text-sm leading-snug text-[#1A0808] mb-1.5"
-                style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
-              >
-                {sweet.name}
-              </h3>
-              <p className="text-[11px] text-[#5C1818] leading-relaxed flex-1">{sweet.desc}</p>
-              <div
-                className="mt-3 flex items-center gap-1 text-[11px] font-bold group-hover:gap-2 transition-all"
-                style={{ color: sweet.accent }}
-              >
-                Order Now <ArrowRight size={11} />
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <FeaturedMosaic items={items} />
     </section>
   );
 }
@@ -565,7 +409,7 @@ function AboutSection() {
 
           <h2
             className="text-3xl md:text-4xl font-black text-white mb-2 leading-tight"
-            style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
+            style={{ fontFamily: 'Fraunces, Georgia, serif' }}
           >
             A Legacy of<br />
             <span
@@ -598,70 +442,29 @@ function AboutSection() {
           </p>
         </div>
 
-        {/* Right: Pillars */}
-        <div className="flex flex-col justify-center gap-4">
+        {/* Right: what we promise — a quiet ledger, hairline-ruled, not boxed */}
+        <div className="flex flex-col justify-center">
           {[
-            { icon: <ChefHat size={18} />, title: 'Pure Desi Ghee',     desc: 'Every sweet crafted with 100% authentic desi ghee — no substitutes, no shortcuts.',   color: '#C41230' },
-            { icon: <Leaf    size={18} />, title: 'No Preservatives',    desc: 'Fresh daily. No artificial colours, flavours, or preservatives. Ever.',               color: '#D4AF37' },
-            { icon: <Award   size={18} />, title: 'Traditional Recipes', desc: 'Ancestral recipes refined over 70+ years, preserving the authentic taste of India.',   color: '#F0CE6A' },
-            { icon: <Gift    size={18} />, title: 'Gift Packaging',      desc: 'Elegant presentation for every occasion — Diwali, weddings, birthdays & more.',       color: '#D4AF37' },
-          ].map((pillar) => (
+            { icon: <ChefHat size={16} />, title: 'Pure Desi Ghee',     desc: 'Every sweet crafted with 100% authentic desi ghee — no substitutes, no shortcuts.',   color: '#C41230' },
+            { icon: <Leaf    size={16} />, title: 'No Preservatives',    desc: 'Fresh daily. No artificial colours, flavours, or preservatives. Ever.',               color: '#D4AF37' },
+            { icon: <Award   size={16} />, title: 'Traditional Recipes', desc: 'Ancestral recipes refined over 70+ years, preserving the authentic taste of India.',   color: '#F0CE6A' },
+            { icon: <Gift    size={16} />, title: 'Gift Packaging',      desc: 'Elegant presentation for every occasion — Diwali, weddings, birthdays & more.',       color: '#D4AF37' },
+          ].map((pillar, i) => (
             <div
               key={pillar.title}
-              className="flex items-start gap-4 rounded-2xl p-4"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)' }}
+              className="flex items-start gap-4 py-4"
+              style={i > 0 ? { borderTop: '1px solid rgba(255,255,255,0.09)' } : undefined}
             >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
-                style={{ background: `${pillar.color}20`, color: pillar.color }}
-              >
-                {pillar.icon}
-              </div>
+              <span className="shrink-0 mt-1" style={{ color: pillar.color }}>{pillar.icon}</span>
               <div>
-                <h4 className="font-bold text-white text-sm mb-1">{pillar.title}</h4>
-                <p className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,248,240,0.5)' }}>{pillar.desc}</p>
+                <h4 className="font-display font-semibold text-white text-base mb-1">{pillar.title}</h4>
+                <p className="text-[12.5px] leading-relaxed" style={{ color: 'rgba(255,248,240,0.5)' }}>{pillar.desc}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
     </section>
-  );
-}
-
-/* ══════════════════════════════════════
-   FEATURES STRIP
-══════════════════════════════════════ */
-
-const FEATURES = [
-  { icon: Truck,       title: 'Free Delivery',  desc: 'Orders above ₹500',      from: '#C41230', to: '#9B0E25' },
-  { icon: ChefHat,     title: 'Made Fresh',     desc: 'Every morning at 8:15',  from: '#D4AF37', to: '#B8962A' },
-  { icon: Leaf,        title: '100% Pure',      desc: 'No preservatives',       from: '#F0CE6A', to: '#D4AF37' },
-  { icon: ShieldCheck, title: '4.3 ★ Rated',    desc: '1,172 delivery reviews', from: '#D4AF37', to: '#B8962A' },
-];
-
-function FeatureStrip() {
-  return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-      {FEATURES.map(({ icon: Icon, title, desc, from, to }, i) => (
-        <div
-          key={title}
-          className="animate-fade-up bg-white rounded-2xl p-4 flex items-center gap-3.5 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-default group"
-          style={{ border: '1px solid rgba(196,18,48,0.12)', animationDelay: `${i * 0.08}s` }}
-        >
-          <div
-            className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform duration-300"
-            style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
-          >
-            <Icon size={19} className="text-white" />
-          </div>
-          <div>
-            <p className="text-sm font-black text-[#1A0808]">{title}</p>
-            <p className="text-xs text-[#5C1818] mt-0.5">{desc}</p>
-          </div>
-        </div>
-      ))}
-    </div>
   );
 }
 
@@ -678,25 +481,23 @@ function SectionHead({
   to?: string;
 }) {
   return (
-    <div className="flex items-end justify-between mb-6">
+    <div className="flex items-end justify-between gap-4 mb-7">
       <div>
-        <h2
-          className="text-2xl md:text-3xl font-black text-[#1A0808] leading-tight"
-          style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
-        >
-          {title}
-        </h2>
         {titleHindi && (
-          <p className="text-sm font-medium mt-0.5" style={{ color: 'rgba(26,8,8,0.35)', fontFamily: 'serif' }}>
+          <p className="eyebrow mb-2" style={{ fontFamily: 'serif', letterSpacing: '0.05em', textTransform: 'none', color: 'rgba(196,18,48,0.75)', fontSize: '0.9rem' }}>
             {titleHindi}
           </p>
         )}
-        <p className="text-sm text-[#5C1818] mt-1">{sub}</p>
+        <h2 className="font-display text-3xl md:text-[2.5rem] font-semibold text-[#1A0808] leading-[1.05]">
+          {title}
+        </h2>
+        <div className="rule-draw w-14 mt-3 mb-2.5" />
+        <p className="text-sm text-[#5C1818]">{sub}</p>
       </div>
       {to && (
         <Link
           to={to}
-          className="group flex items-center gap-1.5 text-sm font-bold px-4 py-2 rounded-full transition-all"
+          className="group shrink-0 flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full transition-all hover:gap-2.5"
           style={{ color: '#C41230', background: 'rgba(196,18,48,0.08)' }}
         >
           View all
@@ -717,13 +518,14 @@ function CatCard({ cat, index }: { cat: Category; index: number }) {
   const imageSrc = cat.image || CATEGORY_IMAGES[cat.slug];
 
   return (
+    <div className="animate-fade-up" style={{ animationDelay: `${index * 0.055}s` }}>
+    <Tilt max={9} lift={10} className="rounded-2xl h-full">
     <Link
       to={`/category/${cat.slug}`}
-      className="cat-card animate-fade-up group flex flex-col items-center gap-3 p-4 rounded-2xl"
+      className="group flex flex-col items-center gap-3 p-4 rounded-2xl h-full"
       style={{
         background: '#fff',
         border: '1.5px solid rgba(196,18,48,0.12)',
-        animationDelay: `${index * 0.055}s`,
       }}
     >
       <div className="relative w-16 h-16 rounded-2xl overflow-hidden shrink-0">
@@ -753,6 +555,8 @@ function CatCard({ cat, index }: { cat: Category; index: number }) {
         {cat.name}
       </span>
     </Link>
+    </Tilt>
+    </div>
   );
 }
 
@@ -771,14 +575,15 @@ function TestimonialsSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {TESTIMONIALS.map((t, i) => (
-          <div
-            key={t.name}
-            className="animate-fade-up rounded-3xl p-6 flex flex-col gap-4 hover:-translate-y-1 transition-transform duration-300"
+          <div key={t.name} className="animate-fade-up" style={{ animationDelay: `${i * 0.1}s` }}>
+          <Tilt
+            max={7}
+            lift={10}
+            className="rounded-3xl p-6 flex flex-col gap-4 h-full"
             style={{
               background: '#fff',
               border: '1.5px solid rgba(196,18,48,0.12)',
               boxShadow: '0 4px 24px rgba(26,8,8,0.05)',
-              animationDelay: `${i * 0.1}s`,
             }}
           >
             {/* Quote icon */}
@@ -811,6 +616,7 @@ function TestimonialsSection() {
                 </p>
               </div>
             </div>
+          </Tilt>
           </div>
         ))}
       </div>
@@ -827,11 +633,12 @@ function GiftCTA() {
     <div
       className="relative overflow-hidden rounded-3xl"
       style={{
-        background: 'linear-gradient(135deg, #FFF8F0 0%, #FFEEDD 50%, #FFF8F0 100%)',
+        background: 'linear-gradient(135deg, #FBF4E9 0%, #F5E7D0 50%, #FBF4E9 100%)',
         border: '1.5px solid rgba(196,18,48,0.15)',
       }}
     >
       <div className="absolute inset-0 indian-pattern opacity-50 pointer-events-none" />
+      <div className="absolute inset-0 paper-grain pointer-events-none" />
 
       {/* Soft orbs */}
       <div className="absolute right-0 top-0 w-64 h-64 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(196,18,48,0.1) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
@@ -847,7 +654,7 @@ function GiftCTA() {
           </div>
           <h3
             className="text-[#1A0808] font-black text-3xl md:text-4xl leading-tight mb-3"
-            style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
+            style={{ fontFamily: 'Fraunces, Georgia, serif' }}
           >
             Gift Your<br />
             <span style={{ background: 'linear-gradient(135deg, #C41230, #D4AF37)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
@@ -920,9 +727,11 @@ function ContactSection() {
             bg: '#FFFBF0',
           },
         ].map((item) => (
-          <div
+          <Tilt
             key={item.title}
-            className="rounded-3xl p-6 flex flex-col gap-4 hover:-translate-y-1 transition-transform duration-300"
+            max={7}
+            lift={10}
+            className="rounded-3xl p-6 flex flex-col gap-4 h-full"
             style={{ background: item.bg, border: `1.5px solid ${item.color}30` }}
           >
             <div
@@ -934,7 +743,7 @@ function ContactSection() {
             <div>
               <h4
                 className="font-bold text-[#1A0808] mb-1.5"
-                style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
+                style={{ fontFamily: 'Fraunces, Georgia, serif' }}
               >
                 {item.title}
               </h4>
@@ -947,7 +756,7 @@ function ContactSection() {
             >
               {item.action.label} <ArrowRight size={13} />
             </a>
-          </div>
+          </Tilt>
         ))}
       </div>
     </section>
@@ -969,7 +778,7 @@ function EmptyState() {
       </div>
       <h2
         className="text-2xl font-black text-[#1A0808] mb-2"
-        style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
+        style={{ fontFamily: 'Fraunces, Georgia, serif' }}
       >
         Coming Soon!
       </h2>
@@ -1004,7 +813,6 @@ function withTimeout<T>(p: Promise<T>, ms = 8000): Promise<T> {
 }
 
 export default function HomePage() {
-  const [banners,          setBanners]          = useState<Banner[]>([]);
   const [categories,       setCategories]       = useState<Category[]>([]);
   const [newArrivals,      setNewArrivals]      = useState<Product[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -1014,13 +822,11 @@ export default function HomePage() {
     let alive = true;
 
     Promise.allSettled([
-      withTimeout(getBanners()),
       withTimeout(getCategories()),
       withTimeout(getProducts({ limit: 8, sort: 'newest' })),
       withTimeout(getProducts({ limit: 8, featured: true })),
-    ]).then(([b, c, p, f]) => {
+    ]).then(([c, p, f]) => {
       if (!alive) return;
-      if (b.status === 'fulfilled') setBanners(b.value);
       if (c.status === 'fulfilled') setCategories(c.value);
       if (p.status === 'fulfilled') setNewArrivals(p.value.items.slice(0, 8));
       if (f.status === 'fulfilled') setFeaturedProducts(f.value.items.slice(0, 8));
@@ -1032,30 +838,36 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 space-y-12 overflow-x-hidden">
+    <>
+      {/* Full-viewport cinematic video hero */}
+      <CinematicHero />
 
-      {/* 1. Hero */}
-      <BannerCarousel banners={banners} />
+      <div className="max-w-6xl mx-auto px-4 py-6 space-y-12">
+
+      {/* Designed Vyas banner carousel (1a ⇄ 1b) */}
+      <Reveal variant="up"><VyasHeroCarousel /></Reveal>
 
       {/* Ticker */}
-      <MarqueeTicker />
+      <Reveal variant="fade"><MarqueeTicker /></Reveal>
 
       {/* Store info */}
-      <StoreInfoBar />
+      <Reveal variant="up"><StoreInfoBar /></Reveal>
 
       {/* 2. Featured Sweets showcase */}
-      <FeaturedSweetsSection featured={featuredProducts} />
+      <Reveal variant="up"><FeaturedSweetsSection featured={featuredProducts.length ? featuredProducts : newArrivals} /></Reveal>
 
-      {/* Warm divider */}
-      <div className="divider-warm" />
+      {/* Ornament divider */}
+      <Reveal variant="fade"><OrnamentStrip variant="gold" /></Reveal>
 
       {/* 3. About / Heritage */}
-      <AboutSection />
+      <Reveal variant="scale"><AboutSection /></Reveal>
 
-      {/* 4. Features */}
-      <FeatureStrip />
+      {/* Wide designed banner (1d) — full-bleed background band */}
+      <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
+        <Reveal variant="fade"><VyasWideBanner bleed /></Reveal>
+      </div>
 
-      {/* 5. Categories + 6. Products — skeleton while API loads */}
+      {/* 4. Categories + 5. Products — skeleton while API loads */}
       {!apiReady ? (
         <div className="flex flex-col items-center gap-3 py-10">
           <div className="relative w-12 h-12">
@@ -1068,7 +880,7 @@ export default function HomePage() {
         <>
           {/* 5. Categories */}
           {categories.length > 0 && (
-            <section>
+            <Reveal as="section" variant="up">
               <SectionHead
                 title="Shop by Category"
                 titleHindi="श्रेणी के अनुसार"
@@ -1080,12 +892,12 @@ export default function HomePage() {
                   <CatCard key={cat._id} cat={cat} index={i} />
                 ))}
               </div>
-            </section>
+            </Reveal>
           )}
 
           {/* 6. Menu / Products */}
           {newArrivals.length > 0 && (
-            <section>
+            <Reveal as="section" variant="up">
               <SectionHead
                 title="New Arrivals"
                 titleHindi="नए उत्पाद"
@@ -1096,37 +908,51 @@ export default function HomePage() {
                 {newArrivals.map((p, i) => (
                   <div
                     key={p._id}
-                    className="product-card-hover animate-fade-up"
+                    className="animate-fade-up"
                     style={{ animationDelay: `${i * 0.065}s` }}
                   >
-                    <ProductCard product={p} />
+                    <Tilt className="h-full rounded-3xl">
+                      <ProductCard product={p} />
+                    </Tilt>
                   </div>
                 ))}
               </div>
-            </section>
+            </Reveal>
           )}
 
           {categories.length === 0 && newArrivals.length === 0 && <EmptyState />}
         </>
       )}
 
+      {/* Full-catalogue ribbon banner (1c) — full-bleed background band */}
+      <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
+        <Reveal variant="fade"><VyasRibbonBanner bleed /></Reveal>
+      </div>
+
+      {/* Divider */}
+      <div className="divider-warm" />
+
+      {/* Vertical reels showcase */}
+      <Reveal variant="up"><ReelsShowcase /></Reveal>
+
       {/* Divider */}
       <div className="divider-warm" />
 
       {/* 7. Testimonials */}
-      <TestimonialsSection />
+      <Reveal variant="up"><TestimonialsSection /></Reveal>
 
       {/* 8. Gift CTA */}
-      <GiftCTA />
+      <Reveal variant="scale"><GiftCTA /></Reveal>
 
       {/* 9. Contact */}
-      <ContactSection />
+      <Reveal variant="up"><ContactSection /></Reveal>
 
       {/* Bottom strip */}
       <div className="flex items-center justify-center gap-2 text-xs pb-2" style={{ color: 'rgba(26,8,8,0.4)' }}>
         <MapPin size={11} style={{ color: '#C41230' }} />
         Serving Mumbai since 1951 · Station Road, Goregaon West · Open 8:15 AM daily
       </div>
-    </div>
+      </div>
+    </>
   );
 }

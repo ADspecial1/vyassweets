@@ -29,14 +29,14 @@ export default function Footer() {
                   </defs>
                   <ellipse cx="60" cy="39" rx="58" ry="37" fill="#C41230" />
                   <ellipse cx="60" cy="39" rx="58" ry="37" fill="none" stroke="url(#ftr-gold)" strokeWidth="3.5" />
-                  <text x="60" y="22" textAnchor="middle" fill="#F0CE6A" fontFamily="Playfair Display, Georgia, serif" fontSize="9" fontStyle="italic" letterSpacing="0.8">Since 1951</text>
-                  <text x="60" y="52" textAnchor="middle" fill="white" fontFamily="Playfair Display, Georgia, serif" fontSize="30" fontWeight="900" letterSpacing="4">VYAS</text>
+                  <text x="60" y="22" textAnchor="middle" fill="#F0CE6A" fontFamily="Fraunces, Georgia, serif" fontSize="9" fontStyle="italic" letterSpacing="0.8">Since 1951</text>
+                  <text x="60" y="52" textAnchor="middle" fill="white" fontFamily="Fraunces, Georgia, serif" fontSize="30" fontWeight="900" letterSpacing="4">VYAS</text>
                   <text x="102" y="29" textAnchor="middle" fill="#F0CE6A" fontFamily="Arial, sans-serif" fontSize="9">®</text>
                 </svg>
                 <div>
                   <div
                     className="font-black text-white text-base leading-tight"
-                    style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
+                    style={{ fontFamily: 'Fraunces, Georgia, serif' }}
                   >
                     Vyas Sweets
                   </div>

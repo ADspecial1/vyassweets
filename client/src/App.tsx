@@ -27,13 +27,14 @@ import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import AdminCouponsPage from './pages/admin/AdminCouponsPage';
+import AdminBannersPage from './pages/admin/AdminBannersPage';
 import ProductFormPage from './pages/admin/ProductFormPage';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1" style={{ overflowX: 'clip' }}>{children}</main>
       <Footer />
     </div>
   );
@@ -72,7 +73,7 @@ export default function App() {
           <Route path="products/:id/edit" element={<ProductFormPage />} />
           <Route path="categories" element={<AdminCategoriesPage />} />
           <Route path="orders" element={<AdminOrdersPage />} />
-          <Route path="banners" element={<div className="p-8 text-stone-400">Banners coming soon</div>} />
+          <Route path="banners" element={<AdminBannersPage />} />
           <Route path="coupons" element={<AdminCouponsPage />} />
           <Route path="users" element={<AdminUsersPage />} />
         </Route>

@@ -9,17 +9,38 @@ import { AppError } from '../../lib/AppError.js';
 const router = Router();
 router.use(requireAdmin);
 
-const createSchema = z.object({
-  image: z.string().min(1),
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-  ctaText: z.string().optional(),
-  ctaLink: z.string().optional(),
-  displayOrder: z.number().int().default(0),
-  active: z.boolean().default(true),
-});
+const createSchema = z
+  .object({
+    mediaType: z.enum(['image', 'video']).default('image'),
+    image: z.string().optional(),
+    videoUrl: z.string().optional(),
+    posterUrl: z.string().optional(),
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+    ctaText: z.string().optional(),
+    ctaLink: z.string().optional(),
+    displayOrder: z.number().int().default(0),
+    active: z.boolean().default(true),
+  })
+  .refine((d) => (d.mediaType === 'video' ? !!d.videoUrl : !!d.image), {
+    message: 'Image banners need an image; video banners need a videoUrl',
+    path: ['image'],
+  });
 
-const updateSchema = createSchema.partial();
+const updateSchema = z
+  .object({
+    mediaType: z.enum(['image', 'video']).optional(),
+    image: z.string().optional(),
+    videoUrl: z.string().optional(),
+    posterUrl: z.string().optional(),
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+    ctaText: z.string().optional(),
+    ctaLink: z.string().optional(),
+    displayOrder: z.number().int().optional(),
+    active: z.boolean().optional(),
+  })
+  .partial();
 
 router.get(
   '/',

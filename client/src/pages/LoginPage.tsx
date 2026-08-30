@@ -36,7 +36,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-[#FBF4E9] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-[420px]">
 
         {/* Brand */}
@@ -53,11 +53,11 @@ export default function LoginPage() {
               </defs>
               <ellipse cx="60" cy="39" rx="58" ry="37" fill="#C41230" />
               <ellipse cx="60" cy="39" rx="58" ry="37" fill="none" stroke="url(#lg-gold)" strokeWidth="3.5" />
-              <text x="60" y="22" textAnchor="middle" fill="#F0CE6A" fontFamily="Playfair Display, Georgia, serif" fontSize="9" fontStyle="italic" letterSpacing="0.8">Since 1951</text>
-              <text x="60" y="52" textAnchor="middle" fill="white" fontFamily="Playfair Display, Georgia, serif" fontSize="30" fontWeight="900" letterSpacing="4">VYAS</text>
+              <text x="60" y="22" textAnchor="middle" fill="#F0CE6A" fontFamily="Fraunces, Georgia, serif" fontSize="9" fontStyle="italic" letterSpacing="0.8">Since 1951</text>
+              <text x="60" y="52" textAnchor="middle" fill="white" fontFamily="Fraunces, Georgia, serif" fontSize="30" fontWeight="900" letterSpacing="4">VYAS</text>
               <text x="102" y="29" textAnchor="middle" fill="#F0CE6A" fontFamily="Arial, sans-serif" fontSize="9">®</text>
             </svg>
-            <div className="font-bold text-[#1A0808] text-xl" style={{ fontFamily: 'Playfair Display, Georgia, serif' }}>
+            <div className="font-bold text-[#1A0808] text-xl" style={{ fontFamily: 'Fraunces, Georgia, serif' }}>
               Vyas Sweets
             </div>
           </Link>

@@ -41,7 +41,7 @@ function VyasLogo({ size = 72 }: { size?: number }) {
         x="60" y="22"
         textAnchor="middle"
         fill="#F0CE6A"
-        fontFamily="Playfair Display, Georgia, serif"
+        fontFamily="Fraunces, Georgia, serif"
         fontSize="9"
         fontStyle="italic"
         letterSpacing="0.8"
@@ -53,7 +53,7 @@ function VyasLogo({ size = 72 }: { size?: number }) {
         x="60" y="52"
         textAnchor="middle"
         fill="white"
-        fontFamily="Playfair Display, Georgia, serif"
+        fontFamily="Fraunces, Georgia, serif"
         fontSize="30"
         fontWeight="900"
         letterSpacing="4"
@@ -125,7 +125,7 @@ export default function Header() {
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-white/95 backdrop-blur-lg shadow-md shadow-red-100/60'
-          : 'bg-[#FFF8F0]'
+          : 'bg-[#FBF4E9]'
       } border-b border-red-100`}
     >
       <TopTicker />
@@ -140,7 +140,7 @@ export default function Header() {
           <div className="leading-tight hidden sm:block">
             <div
               className="font-black text-[#1A0808] text-[15px] tracking-tight"
-              style={{ fontFamily: 'Playfair Display, Georgia, serif' }}
+              style={{ fontFamily: 'Fraunces, Georgia, serif' }}
             >
               Vyas Sweets
             </div>
@@ -274,7 +274,7 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-[#FFF8F0] border-t border-red-100 px-4 py-4 space-y-1 animate-fade-up">
+        <div className="md:hidden bg-[#FBF4E9] border-t border-red-100 px-4 py-4 space-y-1 animate-fade-up">
           {[
             { to: '/',             label: 'Home' },
             { to: '/category/all', label: 'Shop All' },

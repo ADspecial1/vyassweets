@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Hanken+Grotesk:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=DM+Sans:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,22 +7,27 @@
 
 @layer base {
   :root {
-    /* VYAS brand palette — matches the shop logo */
+    /* ── VYAS brand palette — locked to the shop logo ── */
     --crimson:        #C41230;
     --crimson-dark:   #9B0E25;
-    --cream:          #FFF8F0;
-    --cream-dark:     #FFEEDD;
+    --crimson-deep:   #7E0A1D;
+    --cream:          #FBF4E9;   /* warm mithai-paper ivory */
+    --cream-dark:     #F5E7D0;
     --gold:           #D4AF37;
     --gold-dark:      #B8962A;
     --gold-light:     #F0CE6A;
     --dark:           #1A0808;
     --dark-light:     #5C1818;
 
+    /* ── the one disciplined accent: pistachio (barfi garnish / veg dot) ── */
+    --pista:          #3E6B4F;
+    --pista-soft:     #5C8A6C;
+
     /* Legacy aliases kept for backward compat */
     --saffron:        #C41230;
     --saffron-dark:   #9B0E25;
-    --ivory:          #FFF8F0;
-    --ivory-dark:     #FFEEDD;
+    --ivory:          #FBF4E9;
+    --ivory-dark:     #F5E7D0;
     --pistachio:      #D4AF37;
     --pistachio-dark: #B8962A;
     --rose:           #F0CE6A;
@@ -36,39 +42,24 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background-color: #FFF8F0;
+    font-family: 'Hanken Grotesk', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #FBF4E9;
     color: #1A0808;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'ss01' on;
   }
+
+  /* Prices, weights, order numbers — read like a weighed counter tag */
+  .tnum { font-variant-numeric: tabular-nums lining-nums; }
 }
 
 /* ══════════════════════════════════════
    KEYFRAMES
 ══════════════════════════════════════ */
 
-@keyframes orb-drift {
-  0%,100% { transform: translate(0,0) scale(1); }
-  25%      { transform: translate(40px,-50px) scale(1.1); }
-  50%      { transform: translate(-25px,30px) scale(0.92); }
-  75%      { transform: translate(20px,45px) scale(1.06); }
-}
-
-@keyframes orb-drift-2 {
-  0%,100% { transform: translate(0,0) scale(1); }
-  33%      { transform: translate(-50px,30px) scale(1.12); }
-  66%      { transform: translate(35px,-40px) scale(0.9); }
-}
-
-@keyframes orb-drift-3 {
-  0%,100% { transform: translate(0,0) scale(1); }
-  40%      { transform: translate(20px,-60px) scale(1.08); }
-  80%      { transform: translate(-30px,20px) scale(0.95); }
-}
-
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(32px); }
+  from { opacity: 0; transform: translateY(26px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -78,7 +69,7 @@
 }
 
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.88); }
+  from { opacity: 0; transform: scale(0.92); }
   to   { opacity: 1; transform: scale(1); }
 }
 
@@ -87,20 +78,9 @@
   to   { left: 150%; }
 }
 
-@keyframes shimmer-gold {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
-}
-
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
 }
 
 @keyframes spin-slow-rev {
@@ -110,84 +90,83 @@
 
 @keyframes bounce-soft {
   0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
-}
-
-@keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(196,18,48,0.4); }
-  70%  { box-shadow: 0 0 0 14px rgba(196,18,48,0); }
-  100% { box-shadow: 0 0 0 0 rgba(196,18,48,0); }
+  50%      { transform: translateY(-7px); }
 }
 
 @keyframes pulse-ring-red {
   0%   { box-shadow: 0 0 0 0 rgba(196,18,48,0.35); }
-  70%  { box-shadow: 0 0 0 12px rgba(196,18,48,0); }
+  70%  { box-shadow: 0 0 0 10px rgba(196,18,48,0); }
   100% { box-shadow: 0 0 0 0 rgba(196,18,48,0); }
 }
 
-@keyframes float-soft {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-14px) rotate(4deg); }
-}
-
-@keyframes gradient-border {
-  0%,100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
-}
-
-@keyframes glow-pulse {
-  0%,100% { opacity: 0.5; }
-  50%      { opacity: 1; }
-}
-
-@keyframes float-badge {
-  0%,100% { transform: translateY(0px); }
-  50%      { transform: translateY(-6px); }
+/* signature: a slow brass sheen drawn once across the hero rule */
+@keyframes counter-draw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 
 /* ══════════════════════════════════════
-   ANIMATION UTILITIES
+   ANIMATION UTILITIES  (disciplined set)
 ══════════════════════════════════════ */
 
-.animate-fade-up        { animation: fade-up 0.65s cubic-bezier(0.22,1,0.36,1) both; }
+.animate-fade-up        { animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) both; }
 .animate-fade-in        { animation: fade-in 0.5s ease both; }
-.animate-scale-in       { animation: scale-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+.animate-scale-in       { animation: scale-in 0.4s cubic-bezier(0.22,1,0.36,1) both; }
 .animate-marquee        { animation: marquee linear infinite; }
-.animate-spin-slow      { animation: spin-slow 24s linear infinite; }
 .animate-spin-slow-rev  { animation: spin-slow-rev 18s linear infinite; }
-.animate-bounce-soft    { animation: bounce-soft 2.5s ease-in-out infinite; }
-.animate-pulse-ring     { animation: pulse-ring 2.2s ease-out infinite; }
-.animate-pulse-ring-red { animation: pulse-ring-red 2.2s ease-out infinite; }
-.animate-float-soft     { animation: float-soft 4s ease-in-out infinite; }
-.animate-glow-pulse     { animation: glow-pulse 2s ease-in-out infinite; }
-.animate-float-badge    { animation: float-badge 3s ease-in-out infinite; }
+.animate-bounce-soft    { animation: bounce-soft 2.6s ease-in-out infinite; }
+.animate-pulse-ring-red { animation: pulse-ring-red 2.4s ease-out infinite; }
+.animate-counter-draw   { animation: counter-draw 0.9s cubic-bezier(0.65,0,0.35,1) 0.25s both; transform-origin: left; }
+
+/* Legacy aliases — kept so existing markup keeps working, but quieted.
+   The old ambient noise (orb drift, gold shimmer, glow pulse, float) is
+   deliberately reduced to a single calm gesture or a no-op. */
+.animate-spin-slow      { animation: spin-slow-rev 24s linear infinite; }
+.animate-glow-pulse     { animation: none; }
+.animate-float-soft     { animation: none; }
+.animate-float-badge    { animation: none; }
+.animate-pulse-ring     { animation: pulse-ring-red 2.4s ease-out infinite; }
 
 /* Stagger delays */
 .d-0  { animation-delay: 0s; }
-.d-1  { animation-delay: 0.08s; }
-.d-2  { animation-delay: 0.16s; }
-.d-3  { animation-delay: 0.24s; }
-.d-4  { animation-delay: 0.32s; }
-.d-5  { animation-delay: 0.40s; }
-.d-6  { animation-delay: 0.50s; }
-.d-7  { animation-delay: 0.60s; }
-.d-8  { animation-delay: 0.72s; }
+.d-1  { animation-delay: 0.07s; }
+.d-2  { animation-delay: 0.14s; }
+.d-3  { animation-delay: 0.21s; }
+.d-4  { animation-delay: 0.28s; }
+.d-5  { animation-delay: 0.36s; }
+.d-6  { animation-delay: 0.44s; }
+.d-7  { animation-delay: 0.54s; }
+.d-8  { animation-delay: 0.64s; }
 
 /* ══════════════════════════════════════
    TYPOGRAPHY UTILITIES
 ══════════════════════════════════════ */
 
 .font-serif-display {
-  font-family: 'Playfair Display', Georgia, Cambria, serif;
+  font-family: 'Fraunces', Georgia, Cambria, serif;
+  font-optical-sizing: auto;
+}
+.font-display {
+  font-family: 'Fraunces', Georgia, Cambria, serif;
+  font-optical-sizing: auto;
 }
 
+/* Eyebrow / kicker — the small structural label above a heading */
+.eyebrow {
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--crimson);
+}
+
+/* Static brass gradient — no infinite shimmer (that reads AI-generated) */
 .gold-text {
-  background: linear-gradient(135deg, #D4AF37 0%, #F0CE6A 40%, #B8962A 70%, #D4AF37 100%);
-  background-size: 200% 200%;
+  background: linear-gradient(100deg, #B8962A 0%, #F0CE6A 45%, #D4AF37 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shimmer-gold 4s ease infinite;
 }
 
 .crimson-text {
@@ -211,28 +190,42 @@
   -webkit-text-fill-color: transparent;
 }
 
+.text-pista   { color: var(--pista); }
+
+/* veg dot — the little green square from every Indian food label */
+.veg-dot {
+  width: 0.85rem; height: 0.85rem;
+  border: 1.5px solid var(--pista);
+  border-radius: 3px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.veg-dot::after {
+  content: ''; width: 0.4rem; height: 0.4rem;
+  border-radius: 999px; background: var(--pista);
+}
+
 /* ══════════════════════════════════════
-   GLASS MORPHISM (light theme)
+   GLASS / SURFACES
 ══════════════════════════════════════ */
 
 .glass {
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(196,18,48,0.12);
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(196,18,48,0.10);
 }
 
 .glass-warm {
-  background: rgba(255,248,240,0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(196,18,48,0.15);
+  background: rgba(251,244,233,0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(196,18,48,0.12);
 }
 
 .glass-dark {
   background: rgba(26,8,8,0.12);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(26,8,8,0.15);
 }
 
@@ -249,14 +242,14 @@
   position: absolute;
   top: 0;
   left: -120%;
-  width: 60%;
+  width: 55%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
   transform: skewX(-20deg);
   pointer-events: none;
 }
 .btn-shine:hover::after {
-  animation: shine-sweep 0.55s ease forwards;
+  animation: shine-sweep 0.6s ease forwards;
 }
 
 /* ══════════════════════════════════════
@@ -265,34 +258,35 @@
 
 .cat-card {
   transition:
-    transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
-    box-shadow 0.28s ease,
+    transform 0.32s cubic-bezier(0.22,1,0.36,1),
+    box-shadow 0.32s ease,
     border-color 0.2s ease;
   will-change: transform;
 }
 .cat-card:hover {
-  transform: translateY(-8px) scale(1.04);
-  box-shadow: 0 20px 48px rgba(196,18,48,0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(196,18,48,0.13);
+  border-color: rgba(196,18,48,0.28);
 }
 
 .product-card-hover {
   transition:
-    transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
-    box-shadow 0.3s ease;
+    transform 0.34s cubic-bezier(0.22,1,0.36,1),
+    box-shadow 0.34s ease;
   will-change: transform;
 }
 .product-card-hover:hover {
-  transform: translateY(-7px);
-  box-shadow: 0 24px 56px rgba(196,18,48,0.14);
+  transform: translateY(-6px);
+  box-shadow: 0 22px 50px rgba(126,10,29,0.14);
 }
 
 .sweet-card-hover {
-  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+  transition: transform 0.34s cubic-bezier(0.22,1,0.36,1), box-shadow 0.34s ease;
   will-change: transform;
 }
 .sweet-card-hover:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 48px rgba(26,8,8,0.10);
+  box-shadow: 0 20px 46px rgba(26,8,8,0.10);
 }
 
 /* ══════════════════════════════════════
@@ -321,8 +315,18 @@
   background-size: 64px 64px;
 }
 
+/* Fine paper grain — the warmth of a mithai-box lid. Applied as an
+   absolute overlay inside cream sections (same pattern as .indian-pattern),
+   so it never sits over live text. Kept whisper-quiet. */
+.paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.16'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+
 /* ══════════════════════════════════════
-   GRADIENT ANIMATED BORDER
+   GRADIENT BORDER (static — no infinite loop)
 ══════════════════════════════════════ */
 
 .gradient-border {
@@ -334,19 +338,115 @@
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  background: linear-gradient(90deg, #C41230, #D4AF37, #F0CE6A, #C41230);
-  background-size: 300% 300%;
-  animation: gradient-border 3s ease infinite;
+  background: linear-gradient(120deg, #C41230, #D4AF37, #F0CE6A, #C41230);
   z-index: -1;
 }
 
 /* ══════════════════════════════════════
-   SECTION DIVIDER
+   SECTION DIVIDER — a thin brass counter-rule
 ══════════════════════════════════════ */
 
 .divider-warm {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(196,18,48,0.25), rgba(212,175,55,0.25), transparent);
+  background: linear-gradient(90deg, transparent, rgba(196,18,48,0.22), rgba(212,175,55,0.32), transparent);
+}
+
+/* the signature rule that draws under section titles */
+.rule-draw {
+  height: 2px;
+  background: linear-gradient(90deg, var(--crimson), var(--gold));
+  border-radius: 999px;
+}
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL — sections ease in as they
+   enter the viewport (see components/Reveal.tsx)
+══════════════════════════════════════ */
+
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-up    { transform: translateY(34px); }
+.reveal-scale { transform: translateY(20px) scale(0.965); }
+.reveal-left  { transform: translateX(-38px); }
+.reveal-right { transform: translateX(38px); }
+.reveal-fade  { transform: none; }
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ══════════════════════════════════════
+   3D TILT — pointer-reactive card depth
+   (see components/Tilt.tsx)
+══════════════════════════════════════ */
+
+.tilt {
+  perspective: 900px;
+  --rx: 0deg;
+  --ry: 0deg;
+}
+.tilt-inner {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+  will-change: transform;
+  border-radius: inherit;
+}
+.tilt:hover .tilt-inner {
+  transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--lift, 14px));
+  box-shadow: 0 30px 60px -20px rgba(126, 10, 29, 0.35);
+}
+/* moving specular sheen that tracks the cursor */
+.tilt-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0) 45%
+  );
+  transition: opacity 0.4s ease;
+  z-index: 5;
+}
+.tilt:hover .tilt-sheen { opacity: 1; }
+
+/* Coarse pointers (touch) and reduced motion: no tilt, no perspective jump */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .tilt-inner {
+    transform: none !important;
+  }
+  .tilt-sheen { display: none; }
+}
+
+/* ══════════════════════════════════════
+   HERO PARALLAX DEPTH LAYERS
+══════════════════════════════════════ */
+
+.parallax-scene { perspective: 1000px; transform-style: preserve-3d; }
+.parallax-layer {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .parallax-layer { transform: none !important; }
+}
+
+/* WebGL hero canvas sits behind hero content but reacts to pointer */
+.hero-3d-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
 /* ══════════════════════════════════════
@@ -354,16 +454,43 @@
 ══════════════════════════════════════ */
 
 ::-webkit-scrollbar       { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #FFF8F0; }
+::-webkit-scrollbar-track { background: #FBF4E9; }
 ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #C41230, #9B0E25); border-radius: 999px; }
+
+/* ══════════════════════════════════════
+   FOCUS — visible keyboard ring (quality floor)
+══════════════════════════════════════ */
+
+:focus-visible {
+  outline: 2px solid var(--crimson);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ══════════════════════════════════════
+   REDUCED MOTION — honor the setting
+══════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* never leave reveal content stranded off-screen when motion is off */
+  .reveal { opacity: 1 !important; transform: none !important; }
+  /* the two brand tickers are ambient, continuous scroll — keep them running */
+  .animate-marquee { animation-duration: 32s !important; animation-iteration-count: infinite !important; }
+}
 
 /* ══════════════════════════════════════
    TAILWIND LAYER UTILITIES
 ══════════════════════════════════════ */
 
 @layer utilities {
-  .bg-ivory           { background-color: #FFF8F0; }
-  .bg-ivory-dark      { background-color: #FFEEDD; }
+  .bg-ivory           { background-color: #FBF4E9; }
+  .bg-ivory-dark      { background-color: #F5E7D0; }
   .text-cocoa         { color: #1A0808; }
   .text-cocoa-light   { color: #5C1818; }
   .text-saffron       { color: #C41230; }
@@ -374,7 +501,7 @@
            hover:bg-[#9B0E25] transition-all duration-200 active:scale-95;
   }
   .btn-gold {
-    @apply bg-gradient-to-r from-[#C41230] to-[#9B0E25] text-white font-black
+    @apply bg-gradient-to-r from-[#C41230] to-[#9B0E25] text-white font-bold
            px-7 py-3.5 rounded-full shadow-lg hover:shadow-xl
            transition-all duration-200 active:scale-95 hover:-translate-y-0.5;
   }
@@ -390,4 +517,181 @@
            focus:outline-none focus:ring-2 focus:ring-[#C41230]/20 focus:border-[#C41230]
            transition-all;
   }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   VYAS DESIGNED BANNERS  (see components/VyasBanners.tsx)
+   Faithful recreation of the client's banner artwork (1a–1f).
+   Everything inside a .vyas-stage is authored in the banner's own design
+   pixels and scaled to the container by a transform on .vyas-scale.
+══════════════════════════════════════════════════════════════════════ */
+
+.vyas-font-display { font-family: 'Marcellus', Georgia, Cambria, serif; }
+.vyas-font-ui      { font-family: 'DM Sans', 'Hanken Grotesk', system-ui, sans-serif; }
+
+/* The scaled stage: outer holds the aspect box, inner is scaled to fit width */
+.vyas-stage { position: relative; width: 100%; overflow: hidden; }
+.vyas-scale { position: absolute; top: 0; left: 0; transform-origin: top left; }
+
+/* ── The cartouche (scalloped / quatrefoil) photo frame ──
+   Four ellipse gradients intersected so each side bows inward. */
+.vyas-cartouche {
+  background: #fff;
+  border-radius: 26px;
+  padding: 17px;
+  -webkit-mask-image:
+    radial-gradient(50% 46px at 50% -20px,            #0000 99.5%, #000 100%),
+    radial-gradient(50% 46px at 50% calc(100% + 20px), #0000 99.5%, #000 100%),
+    radial-gradient(46px 50% at -20px 50%,            #0000 99.5%, #000 100%),
+    radial-gradient(46px 50% at calc(100% + 20px) 50%, #0000 99.5%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(50% 46px at 50% -20px,            #0000 99.5%, #000 100%),
+    radial-gradient(50% 46px at 50% calc(100% + 20px), #0000 99.5%, #000 100%),
+    radial-gradient(46px 50% at -20px 50%,            #0000 99.5%, #000 100%),
+    radial-gradient(46px 50% at calc(100% + 20px) 50%, #0000 99.5%, #000 100%);
+  mask-composite: intersect;
+}
+.vyas-cartouche-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  -webkit-mask-image:
+    radial-gradient(50% 40px at 50% -16px,            #0000 99.5%, #000 100%),
+    radial-gradient(50% 40px at 50% calc(100% + 16px), #0000 99.5%, #000 100%),
+    radial-gradient(40px 50% at -16px 50%,            #0000 99.5%, #000 100%),
+    radial-gradient(40px 50% at calc(100% + 16px) 50%, #0000 99.5%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(50% 40px at 50% -16px,            #0000 99.5%, #000 100%),
+    radial-gradient(50% 40px at 50% calc(100% + 16px), #0000 99.5%, #000 100%),
+    radial-gradient(40px 50% at -16px 50%,            #0000 99.5%, #000 100%),
+    radial-gradient(40px 50% at calc(100% + 16px) 50%, #0000 99.5%, #000 100%);
+  mask-composite: intersect;
+}
+.vyas-cartouche-inner img,
+.vyas-cartouche-inner-sm img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Small-tile variant — shallower bite so ~150px mobile tiles read as gently
+   scalloped squares, not four-pointed stars. */
+.vyas-cartouche-sm {
+  background: #fff;
+  border-radius: 15px;
+  padding: 9px;
+  -webkit-mask-image:
+    radial-gradient(50% 17px at 50% -8px,            #0000 99.5%, #000 100%),
+    radial-gradient(50% 17px at 50% calc(100% + 8px), #0000 99.5%, #000 100%),
+    radial-gradient(17px 50% at -8px 50%,            #0000 99.5%, #000 100%),
+    radial-gradient(17px 50% at calc(100% + 8px) 50%, #0000 99.5%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(50% 17px at 50% -8px,            #0000 99.5%, #000 100%),
+    radial-gradient(50% 17px at 50% calc(100% + 8px), #0000 99.5%, #000 100%),
+    radial-gradient(17px 50% at -8px 50%,            #0000 99.5%, #000 100%),
+    radial-gradient(17px 50% at calc(100% + 8px) 50%, #0000 99.5%, #000 100%);
+  mask-composite: intersect;
+}
+.vyas-cartouche-inner-sm {
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  overflow: hidden;
+  -webkit-mask-image:
+    radial-gradient(50% 14px at 50% -6px,            #0000 99.5%, #000 100%),
+    radial-gradient(50% 14px at 50% calc(100% + 6px), #0000 99.5%, #000 100%),
+    radial-gradient(14px 50% at -6px 50%,            #0000 99.5%, #000 100%),
+    radial-gradient(14px 50% at calc(100% + 6px) 50%, #0000 99.5%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(50% 14px at 50% -6px,            #0000 99.5%, #000 100%),
+    radial-gradient(50% 14px at 50% calc(100% + 6px), #0000 99.5%, #000 100%),
+    radial-gradient(14px 50% at -6px 50%,            #0000 99.5%, #000 100%),
+    radial-gradient(14px 50% at calc(100% + 6px) 50%, #0000 99.5%, #000 100%);
+  mask-composite: intersect;
+}
+
+/* ── Motion keyframes ── */
+@keyframes vyas-bowl-in   { from { opacity: 0; transform: translateY(40px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes vyas-float     { from { transform: translateY(-6px); } to { transform: translateY(6px); } }
+@keyframes vyas-tile-in   { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+@keyframes vyas-word-in   { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes vyas-rule-x    { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes vyas-arch      { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes vyas-shimmer   { 0% { transform: translateX(-100%); } 39% { transform: translateX(200%); } 100% { transform: translateX(200%); } }
+
+/* ── Pre-entrance hidden states (revealed once the banner enters) ── */
+.vyas-bowl-anim { opacity: 0; }
+.vyas-tile-anim { opacity: 0; }
+.vyas-word-anim { opacity: 0; }
+.vyas-rule-anim { transform: scaleX(0); }
+.vyas-arch-el   { clip-path: inset(100% 0 0 0); }
+
+/* ── Entered: run the entrance animations (delays set inline per element) ── */
+.vyas-in .vyas-bowl-anim { animation: vyas-bowl-in 0.7s cubic-bezier(0.22,0.7,0.28,1) both; }
+.vyas-in .vyas-tile-anim { animation: vyas-tile-in 0.48s cubic-bezier(0.22,0.7,0.28,1) both; }
+.vyas-in .vyas-word-anim { animation: vyas-word-in 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+.vyas-in .vyas-rule-anim { animation: vyas-rule-x 0.5s cubic-bezier(0.22,1,0.36,1) 0.2s both; transform-origin: center; }
+.vyas-in .vyas-arch-el   { animation: vyas-arch 0.9s ease-out both; }
+.vyas-in .vyas-float     { animation: vyas-float 6s ease-in-out infinite alternate; }
+.vyas-shimmer-el         { animation: vyas-shimmer 9s linear infinite; }
+
+/* ── Idle-float lift: the contact shadow shrinks/fades on the same cycle ── */
+@keyframes vyas-shadow { from { opacity: 0.55; transform: scaleX(1); } to { opacity: 0.4; transform: scaleX(0.95); } }
+.vyas-in .vyas-shadow-anim { animation: vyas-shadow 6s ease-in-out infinite alternate; }
+
+/* ── Tile hover (1b, 1c) ── */
+.vyas-tile { transition: transform 0.22s ease-out, box-shadow 0.22s ease-out, opacity 0.22s ease-out; }
+.vyas-ribbon:hover .vyas-tile,
+.vyas-mosaic:hover .vyas-tile { opacity: 0.82; }
+.vyas-ribbon .vyas-tile:hover,
+.vyas-mosaic .vyas-tile:hover {
+  opacity: 1;
+  transform: scale(1.04);
+  box-shadow: 0 18px 40px rgba(74,7,16,0.28);
+  z-index: 5;
+}
+
+/* ── Respect reduced motion: everything lands in its final resting state ── */
+@media (prefers-reduced-motion: reduce) {
+  .vyas-bowl-anim, .vyas-tile-anim, .vyas-word-anim { opacity: 1 !important; animation: none !important; transform: none !important; }
+  .vyas-rule-anim { transform: none !important; animation: none !important; }
+  .vyas-arch-el   { clip-path: inset(0 0 0 0) !important; animation: none !important; }
+  .vyas-float, .vyas-shimmer-el, .vyas-shadow-anim { animation: none !important; }
+  .vyas-tile { transition: none !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   VYAS CINEMATIC HERO  (see components/CinematicHero.tsx)
+   Full-viewport autoplay video background + layered motion.
+══════════════════════════════════════════════════════════════════════ */
+
+/* slow Ken-Burns push on the background footage */
+@keyframes vyas-kenburns { from { transform: scale(1.03); } to { transform: scale(1.15); } }
+.vyas-kenburns { animation: vyas-kenburns 16s ease-in-out infinite alternate; will-change: transform; }
+
+/* a brass sheen that drifts across the wordmark */
+@keyframes vyas-hero-shine { 0% { background-position: -140% 0; } 55%, 100% { background-position: 240% 0; } }
+.vyas-hero-word {
+  background: linear-gradient(100deg,
+    #FCF1E2 0%, #FCF1E2 38%, #FFF6DF 46%, #F0CE6A 50%, #FFF6DF 54%, #FCF1E2 62%, #FCF1E2 100%);
+  background-size: 240% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: vyas-hero-shine 7s ease-in-out 1.2s infinite;
+}
+
+/* floating scroll cue */
+@keyframes vyas-scroll-cue { 0%, 100% { transform: translateY(0); opacity: 0.55; } 50% { transform: translateY(9px); opacity: 1; } }
+.vyas-scroll-cue { animation: vyas-scroll-cue 1.9s ease-in-out infinite; }
+
+/* slow crimson glow drift behind the type */
+@keyframes vyas-glow-drift { from { transform: translate3d(-4%, -2%, 0) scale(1); } to { transform: translate3d(4%, 3%, 0) scale(1.12); } }
+.vyas-glow-drift { animation: vyas-glow-drift 12s ease-in-out infinite alternate; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vyas-kenburns, .vyas-scroll-cue, .vyas-glow-drift { animation: none !important; }
+  .vyas-hero-word { animation: none !important; }
 }

@@ -19,8 +19,12 @@ fs.mkdirSync(uploadsDir, { recursive: true });
 const ALLOWED_MIME = new Set([
   'image/jpeg', 'image/jpg', 'image/png', 'image/webp',
   'image/gif', 'image/bmp', 'image/tiff', 'image/avif',
+  'video/mp4', 'video/webm',
 ]);
-const ALLOWED_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp', '.tiff', '.avif']);
+const ALLOWED_EXT = new Set([
+  '.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp', '.tiff', '.avif',
+  '.mp4', '.webm',
+]);
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadsDir),
@@ -32,13 +36,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 80 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
     if (ALLOWED_MIME.has(file.mimetype) || ALLOWED_EXT.has(ext)) {
       cb(null, true);
     } else {
-      cb(new Error(`Unsupported file type: ${file.mimetype}. Use JPEG, PNG, or WebP.`));
+      cb(new Error(`Unsupported file type: ${file.mimetype}. Use JPEG, PNG, WebP, MP4, or WebM.`));
     }
   },
 });
