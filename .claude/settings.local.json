@@ -35,7 +35,23 @@
       "Bash(node shot.js \"http://localhost:4332/\")",
       "Bash(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 full.png)",
       "Bash(ffmpeg -y -i full.png -vf \"crop=1440:1100:0:2050\" sig.png)",
-      "Bash(node check.js)"
+      "Bash(node check.js)",
+      "Bash(git fetch *)",
+      "Bash(git rev-list *)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(curl -s -o /dev/null -w \"status=%{http_code} time=%{time_total}s\\\\n\" https://vyassweets.duckdns.org/)",
+      "Bash(curl -s https://vyassweets.duckdns.org/)",
+      "Bash(curl -s -o /dev/null -w \"api status=%{http_code}\\\\n\" https://vyassweets.duckdns.org/api/health)",
+      "Bash(curl -s https://vyassweets.duckdns.org/api/categories)",
+      "Bash(curl -s -o /dev/null -w \"github=%{http_code} %{time_total}s\\\\n\" --max-time 12 https://github.com)",
+      "Bash(nslookup vyassweets.duckdns.org)",
+      "Bash(getent hosts *)",
+      "Bash(curl -s -o /dev/null -w \"http80=%{http_code} %{time_total}s\\\\n\" --max-time 12 http://vyassweets.duckdns.org/)",
+      "Bash(curl -sv --max-time 12 https://vyassweets.duckdns.org/)",
+      "Bash(curl -s --max-time 15 \"https://api.github.com/repos/ADspecial1/vyassweets/actions/runs?per_page=5\")",
+      "Bash(npx tsc *)",
+      "Bash(node -e \"const s=require\\('./package.json'\\).scripts; console.log\\('build:', s.build\\); console.log\\('outDir in tsconfig:', \\(require\\('./tsconfig.json'\\).compilerOptions||{}\\).outDir\\)\")"
     ]
   }
 }

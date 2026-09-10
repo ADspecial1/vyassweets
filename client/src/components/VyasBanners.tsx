@@ -699,16 +699,16 @@ export function VyasWideBanner({ bleed = false }: { bleed?: boolean } = {}) {
    PUBLIC: FULL-CATALOGUE RIBBON (1c), full-bleed
 ══════════════════════════════════════ */
 
-export function VyasRibbonBanner({ bleed = false }: { bleed?: boolean } = {}) {
-  const { ref, entered } = useEntered();
-  return (
-    <div ref={ref}>
-      <div className="hidden sm:block">
-        <Banner1c entered={entered} rounded={!bleed} />
-      </div>
-      <div className="sm:hidden">
-        <MobileRibbon />
-      </div>
-    </div>
-  );
-}
+// export function VyasRibbonBanner({ bleed = false }: { bleed?: boolean } = {}) {
+//   const { ref, entered } = useEntered();
+//   return (
+//     <div ref={ref}>
+//       <div className="hidden sm:block">
+//         <Banner1c entered={entered} rounded={!bleed} />
+//       </div>
+//       <div className="sm:hidden">
+//         <MobileRibbon />
+//       </div>
+//     </div>
+//   );
+// }

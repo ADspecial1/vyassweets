@@ -70,7 +70,7 @@ router.post(
     const { email, password } = req.body as z.infer<typeof loginSchema>;
 
     const user = await User.findOne({ email }).select('+passwordHash');
-    if (!user) throw new AppError(401, 'Invalid email or password', 'INVALID_CREDENTIALS');
+    if (!user || !user.passwordHash) throw new AppError(401, 'Invalid email or password', 'INVALID_CREDENTIALS');
 
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) throw new AppError(401, 'Invalid email or password', 'INVALID_CREDENTIALS');
@@ -111,7 +111,7 @@ router.post(
     const { email, password } = req.body as z.infer<typeof loginSchema>;
 
     const user = await User.findOne({ email }).select('+passwordHash');
-    if (!user) throw new AppError(401, 'Invalid email or password', 'INVALID_CREDENTIALS');
+    if (!user || !user.passwordHash) throw new AppError(401, 'Invalid email or password', 'INVALID_CREDENTIALS');
 
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) throw new AppError(401, 'Invalid email or password', 'INVALID_CREDENTIALS');

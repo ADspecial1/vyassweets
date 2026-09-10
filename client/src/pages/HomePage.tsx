@@ -14,7 +14,8 @@ import ProductCard from '../components/ProductCard';
 import Reveal from '../components/Reveal';
 import Tilt from '../components/Tilt';
 import { ReelsShowcase } from '../components/VideoShowcase';
-import { VyasHeroCarousel, VyasWideBanner, VyasRibbonBanner, OrnamentStrip } from '../components/VyasBanners';
+import { VyasHeroCarousel, VyasWideBanner
+  , OrnamentStrip } from '../components/VyasBanners';
 import CinematicHero from '../components/CinematicHero';
 
 /* ══════════════════════════════════════
@@ -844,8 +845,12 @@ export default function HomePage() {
 
       <div className="max-w-6xl mx-auto px-4 py-6 space-y-12">
 
-      {/* Designed Vyas banner carousel (1a ⇄ 1b) */}
-      <Reveal variant="up"><VyasHeroCarousel /></Reveal>
+      {/* Designed Vyas banner carousel (1a ⇄ 1b) — pulled wider than the content column so it reads as a hero */}
+      <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }} className="px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] mx-auto">
+          <Reveal variant="up"><VyasHeroCarousel /></Reveal>
+        </div>
+      </div>
 
       {/* Ticker */}
       <Reveal variant="fade"><MarqueeTicker /></Reveal>
@@ -925,9 +930,9 @@ export default function HomePage() {
       )}
 
       {/* Full-catalogue ribbon banner (1c) — full-bleed background band */}
-      <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
+      {/* <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
         <Reveal variant="fade"><VyasRibbonBanner bleed /></Reveal>
-      </div>
+      </div> */}
 
       {/* Divider */}
       <div className="divider-warm" />
