@@ -25,6 +25,7 @@ import ordersRouter from './routes/orders.js';
 import couponsRouter from './routes/coupons.js';
 import webhooksRouter from './routes/webhooks.js';
 import { errorMiddleware } from './middleware/error.js';
+import { AppError } from './lib/AppError.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -49,7 +50,9 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error(`Origin ${origin} blocked by CORS`));
+        // 403, not an unhandled 500 — a misconfigured CLIENT_ORIGIN should be
+        // obvious in the response/logs, not masked as a server crash.
+        callback(new AppError(403, `Origin ${origin} not allowed`, 'CORS_BLOCKED'));
       }
     },
     credentials: true,
