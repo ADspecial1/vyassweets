@@ -2,7 +2,13 @@ import { Link } from 'react-router-dom';
 import { ShoppingBag, Check } from 'lucide-react';
 import type { Product } from '../types';
 import { formatINR, discountPercent } from '../lib/format';
+import { sweetImage } from '../lib/sweetImage';
 import { useCartStore } from '../store/cart';
+
+/* Storefront product card — "The Counter" redesign.
+   A modern mithai-counter ticket: photo up top, a perforated spec line, then
+   name + weigh-scale (mono) price. Shared across Home / Category / Product /
+   Cart, so it stays self-contained. */
 
 export default function ProductCard({ product }: { product: Product }) {
   const addItem = useCartStore((s) => s.addItem);
@@ -11,79 +17,61 @@ export default function ProductCard({ product }: { product: Product }) {
   const inCart  = items.some((i) => i.productId === product._id);
 
   return (
-    <div className="product-card-hover bg-white rounded-2xl overflow-hidden border border-red-100/70 group flex flex-col shadow-sm">
+    <div className="sf-card sf-hover overflow-hidden group flex flex-col h-full">
       {/* Image / placeholder */}
       <Link to={`/product/${product.slug}`} className="relative overflow-hidden block">
-        {product.images[0] ? (
-          <img
-            src={product.images[0]}
-            alt={product.name}
-            className="w-full h-44 object-cover group-hover:scale-[1.07] transition-transform duration-[600ms] ease-out"
-          />
-        ) : (
-          /* No photo yet — a hand-lettered counter tag, not an icon box */
-          <div
-            className="relative w-full h-44 flex flex-col items-center justify-center gap-2.5 px-4 overflow-hidden"
-            style={{ background: 'linear-gradient(150deg, #FBF4E9, #F5E7D0)' }}
-          >
-            <div className="absolute inset-0 indian-pattern opacity-60 pointer-events-none" />
-            <h3 className="relative font-display italic text-center leading-tight text-[#7E0A1D]/45 text-lg group-hover:text-[#7E0A1D]/60 transition-colors line-clamp-2">
-              {product.name}
-            </h3>
-            <span className="relative w-8 h-px bg-[#C41230]/25" />
-            <span className="relative tnum text-[11px] text-[#5C1818] font-semibold tracking-wide uppercase">
-              Net {product.weight}{product.unit}
-            </span>
-          </div>
-        )}
+        <img
+          src={product.images[0] || sweetImage(product.name)}
+          alt={product.name}
+          loading="lazy"
+          className="w-full h-44 object-cover group-hover:scale-[1.06] transition-transform duration-[600ms] ease-out"
+        />
 
         {/* Badges */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
           {pct >= 5 && (
-            <span className="tnum text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm tracking-wide"
-              style={{ background: 'linear-gradient(135deg, #B8962A, #D4AF37)' }}>
+            <span className="sf-num text-[10px] font-medium px-2 py-0.5 rounded-md shadow-sm text-white" style={{ background: 'var(--sf-marigold)' }}>
               {pct}% OFF
             </span>
           )}
           {product.featured && (
-            <span
-              className="text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm text-white tracking-wide"
-              style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
-            >
+            <span className="sf-tag text-[10px] px-2 py-0.5 rounded-md shadow-sm text-white" style={{ background: 'var(--sf-crimson)', letterSpacing: '0.08em' }}>
               Signature
             </span>
           )}
         </div>
 
         {product.stock === 0 && (
-          <div className="absolute inset-0 bg-[#1A0808]/45 backdrop-blur-[1px] flex items-center justify-center">
-            <span className="text-white text-xs font-bold px-4 py-2 rounded-full tracking-wide"
-              style={{ background: '#1A0808' }}>
+          <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'rgba(26,8,8,0.5)', backdropFilter: 'blur(1px)' }}>
+            <span className="sf-tag text-white px-4 py-2 rounded-full" style={{ background: 'var(--sf-dark)', letterSpacing: '0.1em' }}>
               Sold out
             </span>
           </div>
         )}
       </Link>
 
-      {/* Info — laid out like a counter label */}
-      <div className="p-3.5 flex flex-col flex-1">
+      {/* Perforated ticket edge */}
+      <div className="sf-perf" style={{ color: 'var(--sf-paper-2)' }} />
+
+      {/* Info — laid out like a counter ticket */}
+      <div className="p-3.5 pt-2.5 flex flex-col flex-1">
         <Link to={`/product/${product.slug}`} className="flex-1 mb-3">
           <div className="flex items-start gap-2">
             <span className="veg-dot mt-1 shrink-0" aria-label="Vegetarian" title="Pure veg" />
-            <h3 className="font-display font-semibold text-[#1A0808] text-[15px] leading-snug line-clamp-2 group-hover:text-[#C41230] transition-colors">
+            <h3 className="sf-display font-semibold text-[15px] leading-snug line-clamp-2 transition-colors group-hover:text-[var(--sf-crimson)]" style={{ color: 'var(--sf-ink)' }}>
               {product.name}
             </h3>
           </div>
-          <p className="tnum text-[11px] text-[#5C1818] mt-1 font-medium tracking-wide uppercase">
+          <p className="sf-tag mt-1.5" style={{ color: 'var(--sf-ink-soft)' }}>
             Net {product.weight}{product.unit}
           </p>
         </Link>
 
         <div className="flex items-end justify-between gap-2">
           <div className="leading-none">
-            <span className="tnum font-display font-semibold text-[#1A0808] text-[19px]">{formatINR(product.price)}</span>
+            <span className="sf-num font-medium text-[19px]" style={{ color: 'var(--sf-ink)' }}>{formatINR(product.price)}</span>
             {product.mrp > product.price && (
-              <span className="tnum block text-[11px] text-[#5C1818]/70 line-through mt-1">{formatINR(product.mrp)}</span>
+              <span className="sf-num block text-[11px] line-through mt-1" style={{ color: 'rgba(107,91,82,0.7)' }}>{formatINR(product.mrp)}</span>
             )}
           </div>
 
@@ -91,12 +79,10 @@ export default function ProductCard({ product }: { product: Product }) {
             onClick={(e) => { e.preventDefault(); addItem(product._id); }}
             disabled={product.stock === 0}
             aria-label={inCart ? 'Added to cart' : `Add ${product.name} to cart`}
-            className={`btn-shine flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ${
-              inCart
-                ? 'bg-[#3E6B4F]/12 text-[#3E6B4F] border border-[#3E6B4F]/40'
-                : 'text-white hover:shadow-md hover:-translate-y-0.5'
+            className={`sf-btn flex items-center gap-1.5 px-3 py-2 text-xs disabled:opacity-40 disabled:cursor-not-allowed ${
+              inCart ? '' : 'sf-btn-primary'
             }`}
-            style={!inCart ? { background: 'linear-gradient(135deg, #C41230, #9B0E25)' } : undefined}
+            style={inCart ? { background: 'var(--sf-pista-tint)', color: 'var(--sf-pista-dk)', border: '1px solid rgba(62,107,79,0.4)' } : undefined}
           >
             {inCart
               ? <><Check size={13} /> Added</>

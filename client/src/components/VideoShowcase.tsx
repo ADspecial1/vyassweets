@@ -145,21 +145,21 @@ export function KitchenFilm() {
 
       {/* content */}
       <div className="relative z-10 flex flex-col justify-center px-7 md:px-14 py-14 md:py-20 max-w-2xl">
-        <p className="eyebrow mb-5 flex items-center gap-2.5" style={{ color: 'rgba(255,248,240,0.65)' }}>
+        <p className="sf-eyebrow mb-5 flex items-center gap-2.5" style={{ color: 'rgba(255,248,240,0.7)' }}>
           <span className="inline-flex items-center justify-center w-6 h-6 rounded-full" style={{ background: 'rgba(196,18,48,0.22)', color: '#F0CE6A' }}>
             <Film size={12} />
           </span>
           Inside the kitchen
         </p>
 
-        <h2 className="font-display text-white leading-[0.98] mb-5">
+        <h2 className="sf-display text-white leading-[0.98] mb-5">
           <span className="block text-4xl md:text-6xl font-light tracking-[-0.02em]">Made by hand,</span>
           <span className="block text-4xl md:text-6xl font-semibold tracking-[-0.02em]">
-            fresh <span className="italic font-medium" style={{ color: '#F0CE6A' }}>every morning</span>.
+            fresh <span style={{ color: '#F0CE6A' }}>every morning</span>.
           </span>
         </h2>
 
-        <div className="rule-draw w-40 mb-6" />
+        <div className="sf-rule w-40 mb-6" />
 
         <p className="text-base md:text-lg leading-relaxed mb-8 max-w-md" style={{ color: 'rgba(255,248,240,0.78)' }}>
           Ghee-roasted, slow-set and cut to order on Station Road — the way
@@ -169,8 +169,7 @@ export function KitchenFilm() {
         <div className="flex flex-wrap gap-3">
           <Link
             to="/category/all"
-            className="btn-shine inline-flex items-center gap-2.5 text-white font-bold px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 active:scale-95"
-            style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
+            className="sf-btn sf-btn-primary text-base px-8 py-4 shadow-lg"
           >
             <ShoppingBag size={17} /> Browse the counter
           </Link>
@@ -248,12 +247,12 @@ function ReelCard({ reel, index }: { reel: (typeof REELS)[number]; index: number
           {/* caption */}
           <div className="absolute inset-x-0 bottom-0 p-5">
             <span
-              className="inline-block text-[10px] font-bold tracking-wide px-2.5 py-1 rounded-full mb-2 text-white"
-              style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
+              className="sf-deva inline-block text-xs px-2.5 py-1 rounded-full mb-2 text-white"
+              style={{ background: 'var(--sf-crimson)' }}
             >
               {reel.sub}
             </span>
-            <h3 className="font-display font-semibold text-white text-xl md:text-2xl leading-tight">
+            <h3 className="sf-display font-semibold text-white text-xl md:text-2xl leading-tight">
               {reel.title}
             </h3>
           </div>
@@ -265,31 +264,36 @@ function ReelCard({ reel, index }: { reel: (typeof REELS)[number]; index: number
 
 export function ReelsShowcase() {
   return (
-    <section>
-      <div className="flex items-end justify-between gap-4 mb-7">
-        <div>
-          <p className="eyebrow mb-2" style={{ fontFamily: 'serif', letterSpacing: '0.05em', textTransform: 'none', color: 'rgba(196,18,48,0.75)', fontSize: '0.9rem' }}>
-            एक झलक
-          </p>
-          <h2 className="font-display text-3xl md:text-[2.5rem] font-semibold text-[#1A0808] leading-[1.05]">
-            A peek behind the counter
-          </h2>
-          <div className="rule-draw w-14 mt-3 mb-2.5" />
-          <p className="text-sm text-[#5C1818]">Little films from the shop floor</p>
-        </div>
+    <section className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+      {/* left — editorial heading column */}
+      <div className="lg:col-span-4">
+        <p className="sf-eyebrow mb-4 flex items-center gap-2.5">
+          <span className="inline-block w-6 h-px" style={{ background: 'var(--sf-crimson)' }} />
+          A Peek Behind the Counter
+        </p>
+        <h2 className="sf-display sf-h2" style={{ color: 'var(--sf-ink)' }}>
+          Little films from the floor
+        </h2>
+        <p className="sf-deva mt-2 text-xl" style={{ color: 'rgba(196,18,48,0.7)' }}>एक झलक</p>
+        <div className="sf-rule w-16 mt-4 mb-4" />
+        <p className="sf-lead max-w-xs" style={{ color: 'var(--sf-ink-soft)' }}>
+          Fresh off the kadhai, straight to your screen — a glimpse of the shop
+          floor on Station Road.
+        </p>
         <Link
           to="/category/all"
-          className="group shrink-0 flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full transition-all hover:gap-2.5"
-          style={{ color: '#C41230', background: 'rgba(196,18,48,0.08)' }}
+          className="sf-btn sf-btn-ghost mt-7 px-6 py-3 text-sm"
         >
-          Shop now
-          <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+          Shop now <ArrowRight size={14} />
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto">
+      {/* right — staggered reels */}
+      <div className="lg:col-span-8 grid grid-cols-2 gap-5 sm:gap-6">
         {REELS.map((reel, i) => (
-          <ReelCard key={reel.src} reel={reel} index={i} />
+          <div key={reel.src} className={i % 2 === 1 ? 'lg:mt-16' : ''}>
+            <ReelCard reel={reel} index={i} />
+          </div>
         ))}
       </div>
     </section>

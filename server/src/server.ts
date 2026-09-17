@@ -31,6 +31,10 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Behind Nginx: trust the first proxy hop so req.ip, secure cookies, and
+// express-rate-limit read the real client IP from X-Forwarded-For.
+app.set('trust proxy', 1);
+
 app.use(helmet());
 // Serve uploaded product/category images (cross-origin allowed so client on :5173 can load them)
 app.use('/uploads', (_req, res, next) => {

@@ -1,24 +1,26 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Clock, Star, ShoppingBag, ArrowRight, Heart } from 'lucide-react';
 
+/* Storefront footer — "The Counter" redesign.
+   Sits on the signature bottle-green display-case surface. Logo SVG untouched. */
+
 export default function Footer() {
   return (
-    <footer className="mt-20" style={{ background: '#1A0808' }}>
+    <footer className="mt-24 sf-body sf-band-dark">
 
-      {/* Brand-colour top border */}
-      <div className="h-1" style={{ background: 'linear-gradient(90deg, transparent, #C41230, #D4AF37, #F0CE6A, #C41230, transparent)' }} />
+      {/* Brass hairline top border (varak) */}
+      <div className="h-px" style={{ background: 'linear-gradient(90deg, transparent, var(--sf-crimson), var(--sf-gold), var(--sf-crimson), transparent)' }} />
 
-      {/* Subtle pattern overlay */}
       <div className="relative">
-        <div className="absolute inset-0 dot-grid-light pointer-events-none opacity-30" />
+        <div className="absolute inset-0 dot-grid-light pointer-events-none opacity-20" />
 
-        <div className="relative max-w-6xl mx-auto px-4 py-16">
+        <div className="relative max-w-7xl mx-auto px-4 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-14">
 
             {/* Brand column */}
             <div className="md:col-span-1">
               <div className="flex items-center gap-3 mb-5">
-                {/* Oval VYAS logo — footer version */}
+                {/* Oval VYAS logo — footer version, mark untouched */}
                 <svg viewBox="0 0 120 78" width="72" height="47" xmlns="http://www.w3.org/2000/svg" aria-label="Vyas logo">
                   <defs>
                     <linearGradient id="ftr-gold" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -34,24 +36,21 @@ export default function Footer() {
                   <text x="102" y="29" textAnchor="middle" fill="#F0CE6A" fontFamily="Arial, sans-serif" fontSize="9">®</text>
                 </svg>
                 <div>
-                  <div
-                    className="font-black text-white text-base leading-tight"
-                    style={{ fontFamily: 'Fraunces, Georgia, serif' }}
-                  >
+                  <div className="sf-display font-bold text-white text-lg leading-none">
                     Vyas Sweets
                   </div>
-                  <div className="text-[9px] font-bold tracking-[0.14em] uppercase" style={{ color: '#D4AF37' }}>
+                  <div className="sf-tag mt-1.5" style={{ color: 'var(--sf-marigold)', letterSpacing: '0.12em' }}>
                     &amp; Dryfruits · Mumbai
                   </div>
                 </div>
               </div>
 
-              <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(255,248,240,0.55)' }}>
-                Authentic Indian sweets &amp; snacks crafted with pure desi ghee every morning.
-                Trusted by Mumbai families since 1951.
+              <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(247,239,224,0.6)' }}>
+                Ghee-roasted mithai, farsan &amp; dryfruits — handmade fresh every
+                morning. Trusted by Mumbai families since 1951.
               </p>
 
-              {/* Rating badges */}
+              {/* Rating tickets */}
               <div className="flex gap-2 flex-wrap">
                 {[
                   { label: 'Delivery', value: '4.3' },
@@ -61,13 +60,13 @@ export default function Footer() {
                   <div
                     key={label}
                     className="rounded-xl px-3 py-2 text-center"
-                    style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(212,175,55,0.18)' }}
+                    style={{ background: 'var(--sf-dark-2)', border: '1px solid var(--sf-dark-line)' }}
                   >
                     <div className="flex items-center gap-1 justify-center">
-                      {label !== 'Reviews' && <Star size={11} style={{ fill: '#D4AF37', color: '#D4AF37' }} />}
-                      <span className="text-white font-black text-sm">{value}</span>
+                      {label !== 'Reviews' && <Star size={11} style={{ fill: 'var(--sf-marigold)', color: 'var(--sf-marigold)' }} />}
+                      <span className="sf-num text-white font-medium text-sm">{value}</span>
                     </div>
-                    <p className="text-[10px] mt-0.5" style={{ color: 'rgba(255,248,240,0.4)' }}>{label}</p>
+                    <p className="sf-tag mt-1" style={{ color: 'rgba(247,239,224,0.45)', letterSpacing: '0.08em' }}>{label}</p>
                   </div>
                 ))}
               </div>
@@ -75,10 +74,7 @@ export default function Footer() {
 
             {/* Quick links */}
             <div>
-              <h4
-                className="text-white font-bold mb-5 text-xs uppercase tracking-widest"
-                style={{ color: 'rgba(255,248,240,0.6)' }}
-              >
+              <h4 className="sf-tag mb-5" style={{ color: 'var(--sf-gold)', letterSpacing: '0.16em' }}>
                 Quick Links
               </h4>
               <ul className="space-y-3 text-sm">
@@ -92,14 +88,14 @@ export default function Footer() {
                     <Link
                       to={to}
                       className="flex items-center gap-2 font-medium transition-colors group"
-                      style={{ color: 'rgba(255,248,240,0.5)' }}
+                      style={{ color: 'rgba(247,239,224,0.62)' }}
                     >
                       <ArrowRight
                         size={12}
-                        style={{ color: '#D4AF37' }}
+                        style={{ color: 'var(--sf-marigold)' }}
                         className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all"
                       />
-                      <span className="group-hover:text-[#D4AF37] transition-colors">{label}</span>
+                      <span className="group-hover:text-white transition-colors">{label}</span>
                     </Link>
                   </li>
                 ))}
@@ -108,10 +104,7 @@ export default function Footer() {
 
             {/* What we offer */}
             <div>
-              <h4
-                className="font-bold mb-5 text-xs uppercase tracking-widest"
-                style={{ color: 'rgba(255,248,240,0.6)' }}
-              >
+              <h4 className="sf-tag mb-5" style={{ color: 'var(--sf-gold)', letterSpacing: '0.16em' }}>
                 What We Offer
               </h4>
               <div className="flex flex-wrap gap-2">
@@ -123,7 +116,7 @@ export default function Footer() {
                   <span
                     key={c}
                     className="text-[11px] font-semibold px-2.5 py-1 rounded-full"
-                    style={{ background: 'rgba(196,18,48,0.15)', color: 'rgba(240,206,106,0.85)' }}
+                    style={{ background: 'var(--sf-dark-2)', border: '1px solid var(--sf-dark-line)', color: 'rgba(247,239,224,0.78)' }}
                   >
                     {c}
                   </span>
@@ -133,52 +126,42 @@ export default function Footer() {
 
             {/* Contact */}
             <div>
-              <h4
-                className="font-bold mb-5 text-xs uppercase tracking-widest"
-                style={{ color: 'rgba(255,248,240,0.6)' }}
-              >
+              <h4 className="sf-tag mb-5" style={{ color: 'var(--sf-gold)', letterSpacing: '0.16em' }}>
                 Visit Us
               </h4>
               <div className="space-y-4 text-sm">
                 <a href="tel:+919869313539" className="flex items-center gap-3 group">
                   <div
                     className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform"
-                    style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
+                    style={{ background: 'var(--sf-crimson)' }}
                   >
                     <Phone size={14} className="text-white" />
                   </div>
                   <div>
-                    <p className="text-white font-bold group-hover:text-[#D4AF37] transition-colors">+91 98693 13539</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(255,248,240,0.35)' }}>Tap to call</p>
+                    <p className="sf-num text-white font-medium group-hover:text-[var(--sf-marigold)] transition-colors">+91 98693 13539</p>
+                    <p className="sf-tag" style={{ color: 'rgba(247,239,224,0.4)', letterSpacing: '0.06em' }}>Tap to call</p>
                   </div>
                 </a>
 
                 <div className="flex items-start gap-3">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
-                    style={{ background: 'rgba(255,255,255,0.07)' }}
-                  >
-                    <MapPin size={14} style={{ color: '#D4AF37' }} />
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5" style={{ background: 'var(--sf-dark-2)', border: '1px solid var(--sf-dark-line)' }}>
+                    <MapPin size={14} style={{ color: 'var(--sf-marigold)' }} />
                   </div>
-                  <p className="leading-relaxed" style={{ color: 'rgba(255,248,240,0.5)' }}>
-                    Station Road,<br />Goregaon West, Mumbai
+                  <p className="leading-relaxed" style={{ color: 'rgba(247,239,224,0.6)' }}>
+                    Station Road,<br />Goregaon West, Mumbai — 400 104
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ background: 'rgba(255,255,255,0.07)' }}
-                  >
-                    <Clock size={14} style={{ color: '#F0CE6A' }} />
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'var(--sf-dark-2)', border: '1px solid var(--sf-dark-line)' }}>
+                    <Clock size={14} style={{ color: 'var(--sf-gold-light)' }} />
                   </div>
-                  <p style={{ color: 'rgba(255,248,240,0.5)' }}>Opens 8:15 AM daily</p>
+                  <p style={{ color: 'rgba(247,239,224,0.6)' }}>Opens 8:15 AM daily</p>
                 </div>
 
                 <Link
                   to="/category/all"
-                  className="btn-shine flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-sm transition-all hover:-translate-y-0.5 hover:shadow-lg mt-2"
-                  style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)', color: '#fff' }}
+                  className="sf-btn sf-btn-primary flex w-full py-3.5 text-sm mt-2"
                 >
                   <ShoppingBag size={14} /> Order Now
                 </Link>
@@ -188,12 +171,12 @@ export default function Footer() {
 
           {/* Bottom bar */}
           <div
-            className="border-t pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs"
-            style={{ borderColor: 'rgba(255,255,255,0.06)', color: 'rgba(255,248,240,0.25)' }}
+            className="pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs"
+            style={{ borderTop: '1px solid var(--sf-dark-line)', color: 'rgba(247,239,224,0.35)' }}
           >
-            <p>© {new Date().getFullYear()} Vyas Sweets and Dryfruits. All rights reserved.</p>
+            <p className="sf-tag" style={{ letterSpacing: '0.04em', textTransform: 'none' }}>© {new Date().getFullYear()} Vyas Sweets and Dryfruits. All rights reserved.</p>
             <p className="flex items-center gap-1.5">
-              Crafted with <Heart size={11} style={{ color: '#C41230', fill: '#C41230' }} /> in Mumbai, India
+              Crafted with <Heart size={11} style={{ color: 'var(--sf-crimson)', fill: 'var(--sf-crimson)' }} /> in Mumbai, India
             </p>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import {
-  useEffect, useLayoutEffect, useRef, useState,
+  useCallback, useEffect, useLayoutEffect, useRef, useState,
   type CSSProperties, type ReactNode, type PointerEvent as ReactPointerEvent,
 } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 /* ══════════════════════════════════════════════════════════════════════
    VYAS DESIGNED BANNERS — 1a–1f
@@ -596,82 +597,173 @@ function MobileRibbon() {
    PUBLIC: HERO CAROUSEL (1a ⇄ 1b)
 ══════════════════════════════════════ */
 
-const HERO_SLIDES = [Banner1a, Banner1b] as const;
+type HeroSlide = {
+  Desktop: (p: { entered: boolean; fill?: boolean }) => ReactNode;
+  Mobile: () => ReactNode;
+};
+const HERO_SLIDES: HeroSlide[] = [
+  { Desktop: Banner1a, Mobile: MobileHero1a },
+  { Desktop: Banner1b, Mobile: MobileHero1b },
+];
 
+/**
+ * Draggable / swipeable / snap-scrolling hero carousel.
+ * - Touch: native horizontal scroll-snap (the browser picks swipe vs page-scroll).
+ * - Mouse (fine pointer): click-drag to pan, releases to the nearest slide.
+ * - Arrows + dots stay in sync with scroll position; autoplay advances every 6s
+ *   and pauses on hover, while dragging, and when the tab is hidden.
+ */
 export function VyasHeroCarousel() {
+  const reduce = usePrefersReducedMotion();
+  const fine = usePointerFine();
+  const trackRef = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(0);
-  const [entered, setEntered] = useState<boolean[]>([true, false]);
+  const [entered, setEntered] = useState<boolean[]>(() => HERO_SLIDES.map((_, i) => i === 0));
   const [paused, setPaused] = useState(false);
+  const [grabbing, setGrabbing] = useState(false);
+  const drag = useRef({ active: false, startX: 0, scroll: 0 });
 
-  // advance; pause on hover and when the tab is hidden
+  const markEntered = useCallback(
+    (i: number) => setEntered((e) => (e[i] ? e : e.map((v, k) => (k === i ? true : v)))),
+    [],
+  );
+
+  const scrollToIdx = useCallback((i: number, smooth = true) => {
+    const el = trackRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: smooth && !reduce ? 'smooth' : 'auto' });
+  }, [reduce]);
+
+  // keep active index + entered flags in sync with the scroll position
   useEffect(() => {
-    if (paused) return;
-    const t = setInterval(() => {
-      setIdx((i) => {
-        const next = (i + 1) % HERO_SLIDES.length;
-        setEntered((e) => (e[next] ? e : e.map((v, k) => (k === next ? true : v))));
-        return next;
+    const el = trackRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const i = Math.round(el.scrollLeft / el.clientWidth);
+        setIdx((prev) => (prev === i ? prev : i));
+        markEntered(i);
       });
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => { el.removeEventListener('scroll', onScroll); if (raf) cancelAnimationFrame(raf); };
+  }, [markEntered]);
+
+  // autoplay — skip while paused / reduced-motion / tab hidden
+  useEffect(() => {
+    if (paused || reduce) return;
+    const t = setInterval(() => {
+      const el = trackRef.current;
+      if (!el || document.hidden) return;
+      const cur = Math.round(el.scrollLeft / el.clientWidth);
+      scrollToIdx((cur + 1) % HERO_SLIDES.length);
     }, 6000);
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, reduce, scrollToIdx]);
 
-  useEffect(() => {
-    const onVis = () => setPaused(document.hidden);
-    document.addEventListener('visibilitychange', onVis);
-    return () => document.removeEventListener('visibilitychange', onVis);
-  }, []);
+  const go = (dir: number) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const cur = Math.round(el.scrollLeft / el.clientWidth);
+    scrollToIdx((cur + dir + HERO_SLIDES.length) % HERO_SLIDES.length);
+  };
 
-  const go = (i: number) => {
-    setIdx(i);
-    setEntered((e) => (e[i] ? e : e.map((v, k) => (k === i ? true : v))));
+  // mouse drag-to-pan (fine pointers only; touch uses native scroll)
+  const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (!fine || e.button !== 0) return;
+    const el = trackRef.current;
+    if (!el) return;
+    drag.current = { active: true, startX: e.clientX, scroll: el.scrollLeft };
+    setPaused(true);
+    setGrabbing(true);
+  };
+  const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (!drag.current.active) return;
+    const el = trackRef.current;
+    if (!el) return;
+    el.scrollLeft = drag.current.scroll - (e.clientX - drag.current.startX);
+  };
+  const endDrag = () => {
+    if (!drag.current.active) return;
+    drag.current.active = false;
+    setGrabbing(false);
+    setPaused(false);
+    const el = trackRef.current;
+    if (el) scrollToIdx(Math.round(el.scrollLeft / el.clientWidth));
   };
 
   return (
-    <div>
-      {/* desktop / tablet: full designed composition, cross-fading */}
+    <div className="relative">
       <div
-        className="relative hidden sm:block rounded-3xl overflow-hidden"
-        style={{ aspectRatio: '2700 / 1648' }}
+        ref={trackRef}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Vyas Sweets banners"
+        className={`vyas-hscroll flex overflow-x-auto snap-x snap-mandatory rounded-3xl ${fine ? 'vyas-grab' : ''} ${grabbing ? 'vyas-grabbing' : ''}`}
         onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
+        onMouseLeave={() => { if (!drag.current.active) setPaused(false); }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onPointerLeave={endDrag}
+        onDragStart={(e) => e.preventDefault()}
       >
-        {HERO_SLIDES.map((Slide, i) => (
+        {HERO_SLIDES.map((s, i) => (
           <div
             key={i}
-            className="absolute inset-0 transition-opacity duration-700"
-            style={{ opacity: i === idx ? 1 : 0, zIndex: i === idx ? 2 : 1, pointerEvents: i === idx ? 'auto' : 'none' }}
+            className="snap-center shrink-0 basis-full w-full select-none"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} of ${HERO_SLIDES.length}`}
+            aria-hidden={i !== idx}
           >
-            <Slide entered={entered[i]} fill />
+            {/* desktop / tablet: full designed composition */}
+            <div className="hidden sm:block relative rounded-3xl overflow-hidden" style={{ aspectRatio: '2700 / 1648' }}>
+              <s.Desktop entered={entered[i]} fill />
+            </div>
+            {/* mobile: reflowed, legible stack */}
+            <div className="sm:hidden w-full [&_img]:pointer-events-none">
+              <s.Mobile />
+            </div>
           </div>
         ))}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-          {HERO_SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => go(i)}
-              aria-label={`Show banner ${i + 1}`}
-              className="rounded-full transition-all duration-300"
-              style={{ background: i === idx ? GOLD : 'rgba(255,255,255,0.55)', width: i === idx ? '2rem' : '0.625rem', height: '0.625rem' }}
-            />
-          ))}
-        </div>
       </div>
 
-      {/* mobile: reflowed, legible stack */}
-      <div className="sm:hidden">
-        {idx === 0 ? <MobileHero1a /> : <MobileHero1b />}
-        <div className="mt-4 flex justify-center gap-2">
-          {HERO_SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => go(i)}
-              aria-label={`Show banner ${i + 1}`}
-              className="rounded-full transition-all duration-300"
-              style={{ background: i === idx ? CRIMSON : 'rgba(158,15,39,0.3)', width: i === idx ? '2rem' : '0.625rem', height: '0.625rem' }}
-            />
-          ))}
-        </div>
+      {/* prev / next arrows (desktop) */}
+      <button
+        type="button" onClick={() => go(-1)} aria-label="Previous banner"
+        className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95"
+        style={{ background: 'rgba(255,255,255,0.82)', color: CRIMSON, boxShadow: '0 6px 20px rgba(60,2,10,.22)', backdropFilter: 'blur(4px)' }}
+      >
+        <ChevronLeft size={22} strokeWidth={2.5} />
+      </button>
+      <button
+        type="button" onClick={() => go(1)} aria-label="Next banner"
+        className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95"
+        style={{ background: 'rgba(255,255,255,0.82)', color: CRIMSON, boxShadow: '0 6px 20px rgba(60,2,10,.22)', backdropFilter: 'blur(4px)' }}
+      >
+        <ChevronRight size={22} strokeWidth={2.5} />
+      </button>
+
+      {/* dots */}
+      <div className="mt-4 sm:mt-0 sm:absolute sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 z-10 flex justify-center gap-2">
+        {HERO_SLIDES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => scrollToIdx(i)}
+            aria-label={`Show banner ${i + 1}`}
+            aria-current={i === idx}
+            className="rounded-full transition-all duration-300"
+            style={{
+              background: i === idx ? GOLD : (fine ? 'rgba(255,255,255,0.55)' : 'rgba(158,15,39,0.3)'),
+              width: i === idx ? '2rem' : '0.625rem', height: '0.625rem',
+            }}
+          />
+        ))}
       </div>
     </div>
   );

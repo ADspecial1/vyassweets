@@ -23,7 +23,13 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(5000),
   MONGO_URI: z.string().min(1),
   JWT_SECRET: z.string().min(32),
-  JWT_EXPIRES_IN: z.string().default('7d'),
+  // Must be a plain number of seconds ("3600") or an ms-style timespan ("7d", "12h").
+  // jwt.sign() throws on anything else — validate here so a bad value fails at boot,
+  // not as a 500 on every login.
+  JWT_EXPIRES_IN: z
+    .string()
+    .regex(/^(\d+|\d+(ms|s|m|h|d|w|y))$/, 'JWT_EXPIRES_IN must look like "7d", "12h", or "3600"')
+    .default('7d'),
   COOKIE_DOMAIN: z.string().default('localhost'),
   CLIENT_ORIGIN: z.string().min(1),
   RAZORPAY_KEY_ID: z.string().min(1),
@@ -35,7 +41,13 @@ const envSchema = z.object({
   S3_BUCKET: z.string().min(1),
 });
 
-const parsed = envSchema.safeParse(process.env);
+// dotenv turns `KEY=` into `""`, but zod `.default()` only fires on `undefined`.
+// Drop blank values so defaulted vars fall back and required vars still fail loudly.
+const cleanedEnv = Object.fromEntries(
+  Object.entries(process.env).filter(([, v]) => v !== undefined && v.trim() !== ''),
+);
+
+const parsed = envSchema.safeParse(cleanedEnv);
 
 if (!parsed.success) {
   const missing = parsed.error.issues.map((i) => i.path.join('.')).join(', ');

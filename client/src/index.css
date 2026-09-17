@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Hanken+Grotesk:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Marcellus&family=DM+Sans:wght@400;500;700&display=swap');
+/* Storefront redesign — "The Counter" typeface stack */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Mono:wght@400;500&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -533,6 +535,13 @@
 .vyas-stage { position: relative; width: 100%; overflow: hidden; }
 .vyas-scale { position: absolute; top: 0; left: 0; transform-origin: top left; }
 
+/* Horizontal snap track for the hero carousel — hidden scrollbar, grab cursor */
+.vyas-hscroll { -ms-overflow-style: none; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.vyas-hscroll::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.vyas-hscroll.vyas-grab   { cursor: grab; }
+.vyas-hscroll.vyas-grabbing { cursor: grabbing; }
+.vyas-hscroll.vyas-grabbing * { cursor: grabbing !important; }
+
 /* ── The cartouche (scalloped / quatrefoil) photo frame ──
    Four ellipse gradients intersected so each side bows inward. */
 .vyas-cartouche {
@@ -694,4 +703,244 @@
 @media (prefers-reduced-motion: reduce) {
   .vyas-kenburns, .vyas-scroll-cue, .vyas-glow-drift { animation: none !important; }
   .vyas-hero-word { animation: none !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   STOREFRONT REDESIGN — "THE COUNTER"
+   A modern refresh of the customer storefront that KEEPS the locked brand
+   palette (crimson / gold / cream / cocoa). The "make it beautiful" work is
+   in the type (Bricolage display + DM Mono weigh-scale numerals + Tiro
+   Devanagari), the counter-ticket label system, layout rhythm and motion —
+   NOT new colours. Everything is namespaced `sf-` / `--sf-*` and is unused by
+   pages/admin/*. The original brand :root tokens above are left untouched;
+   these mirror them so the storefront can be restyled in isolation.
+══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --sf-paper:        #FBF4E9;   /* brand cream canvas */
+  --sf-paper-2:      #F5E7D0;   /* recessed cream (wells, ticket edge) */
+  --sf-ink:          #1A0808;   /* brand cocoa text */
+  --sf-ink-soft:     #5C1818;   /* muted cocoa */
+  --sf-crimson:      #C41230;   /* brand anchor + primary action */
+  --sf-crimson-dk:   #9B0E25;
+  --sf-crimson-deep: #7E0A1D;
+  --sf-gold:         #D4AF37;   /* brand gold */
+  --sf-gold-dk:      #B8962A;
+  --sf-gold-light:   #F0CE6A;
+  --sf-marigold:     #D4AF37;   /* alias → brand gold (legacy refs) */
+  --sf-dark:         #1A0808;   /* signature dark display-case band */
+  --sf-dark-2:       #2A1210;   /* raised surface on the dark band */
+  --sf-dark-line:    rgba(247,239,224,0.12);
+  --sf-cream:        #F7EFE0;   /* type/detail on dark */
+  --sf-pista:        #3E6B4F;   /* the one disciplined green accent (veg-dot / added) */
+  --sf-pista-dk:     #2E5540;
+  --sf-pista-tint:   rgba(62,107,79,0.12);
+  --sf-line:         rgba(196,18,48,0.12);
+  --sf-line-2:       rgba(196,18,48,0.20);
+}
+
+/* ── Typeface roles ── */
+/* Display stays FRAUNCES (the brand's known face) — the transformation is in
+   composition/scale/ornament, not the typeface. */
+.sf-display {
+  font-family: 'Fraunces', Georgia, Cambria, serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+}
+.sf-mono  { font-family: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; }
+.sf-deva  { font-family: 'Tiro Devanagari Hindi', 'Hanken Grotesk', Georgia, serif; }
+.sf-body  { font-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif; }
+
+/* ── Counter ticket: the signature label system ──
+   A mono spec line (name · हिन्दी · NET · ₹) that reads like a weigh-scale
+   ticket. `sf-tag` is the small tracked mono; `sf-perf` draws the torn
+   perforation edge used on ticket cards and ribbons. */
+.sf-tag {
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.sf-num { font-family: 'DM Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+.sf-perf {
+  height: 8px;
+  background-image: radial-gradient(circle at 4px 8px, transparent 4px, currentColor 4px);
+  background-size: 12px 8px;
+  background-repeat: repeat-x;
+  background-position: 0 -4px;
+}
+
+/* ── Eyebrow / kicker (mono, tracked) ── */
+.sf-eyebrow {
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sf-crimson);
+}
+
+/* the section rule: crimson→gold hairline */
+.sf-rule {
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--sf-crimson), var(--sf-gold));
+}
+
+/* ── Surfaces / bands ── */
+.sf-band-dark {
+  background:
+    radial-gradient(120% 120% at 85% -10%, rgba(196,18,48,0.20) 0%, transparent 55%),
+    radial-gradient(90% 90% at 0% 110%, rgba(212,175,55,0.12) 0%, transparent 55%),
+    var(--sf-dark);
+  color: var(--sf-cream);
+}
+.sf-card {
+  background: #fff;
+  border: 1px solid var(--sf-line);
+  border-radius: 1.25rem;
+}
+
+/* soft, disciplined card hover (replaces ubiquitous 3D tilt off the hero) */
+.sf-hover {
+  transition: transform 0.34s cubic-bezier(0.22,1,0.36,1), box-shadow 0.34s ease, border-color 0.2s ease;
+  will-change: transform;
+}
+.sf-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 44px -22px rgba(26,8,8,0.34);
+  border-color: rgba(196,18,48,0.28);
+}
+
+/* pill buttons */
+.sf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  font-weight: 700;
+  border-radius: 999px;
+  transition: transform 0.18s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.sf-btn:active { transform: scale(0.97); }
+.sf-btn-primary { background: var(--sf-crimson); color: #fff; }
+.sf-btn-primary:hover { background: var(--sf-crimson-dk); transform: translateY(-2px); box-shadow: 0 12px 26px -12px rgba(196,18,48,0.6); }
+.sf-btn-ghost { background: transparent; color: var(--sf-ink); border: 1.5px solid var(--sf-line-2); }
+.sf-btn-ghost:hover { border-color: var(--sf-crimson); color: var(--sf-crimson); }
+
+/* ── Hero: orchestrated load sequence (opacity/transform only) ── */
+@keyframes sf-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+.sf-rise { opacity: 0; animation: sf-rise 0.8s cubic-bezier(0.22,1,0.36,1) both; }
+.sf-d1 { animation-delay: 0.08s; } .sf-d2 { animation-delay: 0.18s; }
+.sf-d3 { animation-delay: 0.30s; } .sf-d4 { animation-delay: 0.44s; }
+.sf-d5 { animation-delay: 0.58s; } .sf-d6 { animation-delay: 0.72s; }
+
+/* full-bleed helper (breaks the content column edge-to-edge) */
+.sf-bleed { width: 100vw; margin-left: calc(50% - 50vw); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-rise { opacity: 1 !important; animation: none !important; transform: none !important; }
+  .sf-hover { transition: none !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   "THE COUNTER" — PREMIUM COMPOSITION KIT
+   Type scale, soft shadows, hairline borders, gold/crimson ornaments and
+   richer motion. All on the locked brand palette. Namespaced sf- .
+══════════════════════════════════════════════════════════════════════ */
+
+/* ── Type scale: real jumps H1 ≫ H2 ≫ body ── */
+.sf-h1 { font-size: clamp(3.25rem, 8vw, 7rem);      font-weight: 900; line-height: 0.94; letter-spacing: -0.03em; }
+.sf-h2 { font-size: clamp(2.25rem, 4.4vw, 3.6rem);  font-weight: 800; line-height: 1.0;  letter-spacing: -0.02em; }
+.sf-h3 { font-size: clamp(1.5rem, 2.4vw, 2rem);     font-weight: 700; line-height: 1.08; letter-spacing: -0.015em; }
+.sf-lead { font-size: clamp(1.0625rem, 1.4vw, 1.25rem); line-height: 1.7; }
+
+/* ── Soft, layered shadows (never harsh) ── */
+.sf-shadow    { box-shadow: 0 10px 30px -18px rgba(26,8,8,0.28); }
+.sf-shadow-lg { box-shadow: 0 24px 60px -30px rgba(26,8,8,0.30), 0 8px 20px -16px rgba(26,8,8,0.18); }
+.sf-shadow-xl { box-shadow: 0 40px 90px -40px rgba(26,8,8,0.40), 0 12px 30px -18px rgba(26,8,8,0.20); }
+
+/* hairline borders — gold or crimson at low opacity, applied as ring so they
+   never fight the soft shadow */
+.sf-ring-gold    { box-shadow: inset 0 0 0 1px rgba(212,175,55,0.38); }
+.sf-ring-crimson { box-shadow: inset 0 0 0 1px rgba(196,18,48,0.14); }
+
+/* ── Gold L-corner brackets (framing ornament) ── */
+.sf-brackets { position: relative; }
+.sf-brackets::before,
+.sf-brackets::after {
+  content: '';
+  position: absolute;
+  width: 26px; height: 26px;
+  border: 2px solid var(--sf-gold);
+  pointer-events: none;
+  opacity: 0.85;
+}
+.sf-brackets::before { top: 14px;  left: 14px;  border-right: 0; border-bottom: 0; border-top-left-radius: 6px; }
+.sf-brackets::after  { bottom: 14px; right: 14px; border-left: 0;  border-top: 0;    border-bottom-right-radius: 6px; }
+/* draw-in on hover for interactive frames */
+.sf-brackets-hover::before,
+.sf-brackets-hover::after { opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; transform: scale(0.7); }
+.sf-brackets-hover:hover::before,
+.sf-brackets-hover:hover::after { opacity: 0.9; transform: none; }
+
+/* ── Crimson hairline + center diamond divider (replaces flat rule) ── */
+.sf-diamond-rule {
+  display: flex; align-items: center; gap: 0; justify-content: center;
+  color: var(--sf-crimson);
+}
+.sf-diamond-rule::before,
+.sf-diamond-rule::after {
+  content: ''; height: 1px; flex: 1;
+  background: linear-gradient(90deg, transparent, rgba(196,18,48,0.35));
+}
+.sf-diamond-rule::after { background: linear-gradient(90deg, rgba(196,18,48,0.35), transparent); }
+.sf-diamond-rule > span {
+  width: 8px; height: 8px; margin: 0 14px; transform: rotate(45deg);
+  background: var(--sf-gold);
+  box-shadow: 0 0 0 4px rgba(212,175,55,0.15);
+  flex: none;
+}
+
+/* ── Oversized quotation ornament ── */
+.sf-quote-glyph {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 7rem; line-height: 0.7; font-weight: 900;
+  color: var(--sf-gold); opacity: 0.35;
+}
+
+/* ── Card lift + gold border-glow on hover ── */
+.sf-glow {
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s ease;
+  box-shadow: 0 10px 30px -20px rgba(26,8,8,0.25);
+}
+.sf-glow:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 0 1px rgba(212,175,55,0.55), 0 26px 55px -24px rgba(196,18,48,0.30), 0 0 30px -6px rgba(212,175,55,0.30);
+}
+
+/* ── Headline clip-path wipe reveal ── */
+@keyframes sf-wipe-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.sf-wipe { clip-path: inset(0 100% 0 0); animation: sf-wipe-in 0.9s cubic-bezier(0.65,0,0.35,1) both; }
+
+/* rotated edge rail (EST. 1951) */
+.sf-rail {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+
+/* watermark numeral behind plaque text */
+.sf-watermark {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 900;
+  line-height: 0.8;
+  color: rgba(212,175,55,0.07);
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-wipe { clip-path: none !important; animation: none !important; }
+  .sf-glow { transition: none !important; }
+  .sf-brackets-hover::before, .sf-brackets-hover::after { opacity: 0.9 !important; transform: none !important; }
 }

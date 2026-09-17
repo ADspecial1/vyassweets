@@ -9,6 +9,7 @@ import {
 import { getCategories, getProducts } from '../api/catalog';
 import type { Category, Product } from '../types';
 import { formatINR } from '../lib/format';
+import { WM, sweetImage } from '../lib/sweetImage';
 import { useCartStore } from '../store/cart';
 import ProductCard from '../components/ProductCard';
 import Reveal from '../components/Reveal';
@@ -18,292 +19,191 @@ import { VyasHeroCarousel, VyasWideBanner
   , OrnamentStrip } from '../components/VyasBanners';
 import CinematicHero from '../components/CinematicHero';
 
-/* ══════════════════════════════════════
-   STATIC DATA
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════
+   HOMEPAGE — "THE COUNTER" premium re-composition
+   Same locked brand palette + Fraunces display. The transformation is
+   structural: asymmetric grids, a bento display case, an ink museum-plaque
+   band, staggered gold-glow tiles, pull-quote testimonials, a split CTA,
+   doubled whitespace, soft layered shadows, and gold/crimson ornaments.
+══════════════════════════════════════════════════════════════════════ */
 
 const FEATURED_SWEETS = [
-  {
-    id: 1,
-    name: 'Kaju Katli',
-    hindi: 'काजू कतली',
-    desc: 'Premium cashews, saffron & silver leaf — the jewel of Indian sweets.',
-    accent: '#C41230',
-    dot: '#C41230',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Kaju_Katri.jpg/280px-Kaju_Katri.jpg',
-    emoji: '🍬',
-  },
-  {
-    id: 2,
-    name: 'Besan Ladoo',
-    hindi: 'बेसन लड्डू',
-    desc: 'Roasted gram flour rounds in pure desi ghee with cardamom.',
-    accent: '#B8962A',
-    dot: '#D4AF37',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Besan_laddu.jpg/280px-Besan_laddu.jpg',
-    emoji: '🟤',
-  },
-  {
-    id: 3,
-    name: 'Kesar Barfi',
-    hindi: 'केसर बर्फी',
-    desc: 'Soft milk fudge infused with Kashmiri saffron and pistachios.',
-    accent: '#9B0E25',
-    dot: '#C41230',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Burfi.jpg/280px-Burfi.jpg',
-    emoji: '🍰',
-  },
-  {
-    id: 4,
-    name: 'Gulab Jamun',
-    hindi: 'गुलाब जामुन',
-    desc: 'Melt-in-mouth dumplings soaked in rose and cardamom syrup.',
-    accent: '#D4AF37',
-    dot: '#F0CE6A',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Gulab_jamun_%28culture%29.jpg/280px-Gulab_jamun_%28culture%29.jpg',
-    emoji: '🫘',
-  },
+  { id: 1, name: 'Kaju Katli',  hindi: 'काजू कतली',   image: WM('Kaju_barfi.jpg') },
+  { id: 2, name: 'Besan Ladoo', hindi: 'बेसन लड्डू',  image: WM('Motichoor_Laddu.jpg') },
+  { id: 3, name: 'Kesar Barfi', hindi: 'केसर बर्फी',  image: WM('Burfi.jpg') },
+  { id: 4, name: 'Gulab Jamun', hindi: 'गुलाब जामुन', image: WM('Gulab_jamun.jpg') },
 ];
 
 const TESTIMONIALS = [
-  {
-    name: 'Priya Sharma',
-    location: 'Goregaon West',
-    rating: 5,
-    text: 'Vyas Sweets has been our family tradition for 15 years. The Kaju Katli literally melts in your mouth — pure cashew magic you can\'t find anywhere else in Mumbai!',
-    initials: 'PS',
-    accent: '#C41230',
-  },
-  {
-    name: 'Rajesh Mehta',
-    location: 'Andheri',
-    rating: 5,
-    text: 'Ordered Diwali gift boxes for our entire office. The packaging was gorgeous, and every single sweet was fresh and authentic. My colleagues were thoroughly impressed!',
-    initials: 'RM',
-    accent: '#D4AF37',
-  },
-  {
-    name: 'Sunita Patel',
-    location: 'Borivali',
-    rating: 5,
-    text: 'The ladoos and namkeen are consistently excellent — fresh stock every morning and made with real desi ghee. My children now refuse sweets from anywhere else!',
-    initials: 'SP',
-    accent: '#9B0E25',
-  },
+  { name: 'Priya Sharma',  location: 'Goregaon West', rating: 5, initials: 'PS',
+    text: 'Vyas Sweets has been our family tradition for 15 years. The Kaju Katli literally melts in your mouth — pure cashew magic you can\'t find anywhere else in Mumbai.' },
+  { name: 'Rajesh Mehta',  location: 'Andheri',       rating: 5, initials: 'RM',
+    text: 'Ordered Diwali gift boxes for the whole office. Gorgeous packaging, every sweet fresh and authentic.' },
+  { name: 'Sunita Patel',  location: 'Borivali',      rating: 5, initials: 'SP',
+    text: 'Ladoos and namkeen are consistently excellent — fresh every morning, real desi ghee.' },
 ];
 
-/* Category image map using Wikimedia Commons public-domain food photos */
-const CATEGORY_IMAGES: Record<string, string> = {
-  sweets:       'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Kaju_Katri.jpg/200px-Kaju_Katri.jpg',
-  mithai:       'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Kaju_Katri.jpg/200px-Kaju_Katri.jpg',
-  ladoo:        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Besan_laddu.jpg/200px-Besan_laddu.jpg',
-  barfi:        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Burfi.jpg/200px-Burfi.jpg',
-  halwa:        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Suji-Halwa.jpg/200px-Suji-Halwa.jpg',
-  namkeen:      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Chakli.jpg/200px-Chakli.jpg',
-  chakli:       'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Chakli.jpg/200px-Chakli.jpg',
-  'dry-fruit':  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Mixed_nuts_and_dry_fruits.jpg/200px-Mixed_nuts_and_dry_fruits.jpg',
-  bakery:       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Assorted_Indian_cookies.jpg/200px-Assorted_Indian_cookies.jpg',
-  rasgulla:     'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Rasgulla.jpg/200px-Rasgulla.jpg',
-  modak:        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Modak_3.jpg/200px-Modak_3.jpg',
-};
-
-const CAT_COLORS: Record<string, string> = {
-  sweets:      'from-red-400 to-rose-600',
-  mithai:      'from-red-400 to-rose-600',
-  barfi:       'from-rose-300 to-red-500',
-  ladoo:       'from-amber-400 to-yellow-500',
-  halwa:       'from-orange-400 to-amber-500',
-  namkeen:     'from-lime-400 to-green-500',
-  chakli:      'from-teal-400 to-cyan-500',
-  mixture:     'from-emerald-400 to-teal-500',
-  chivda:      'from-yellow-300 to-amber-400',
-  'dry-fruit': 'from-amber-500 to-orange-600',
-  cookies:     'from-orange-300 to-amber-400',
-  chocolate:   'from-stone-500 to-stone-700',
-  gifts:       'from-purple-400 to-violet-600',
-  snacks:      'from-green-400 to-emerald-500',
-  upvas:       'from-sky-400 to-blue-500',
-  farali:      'from-cyan-400 to-sky-500',
-  bakery:      'from-amber-300 to-yellow-500',
-};
-function catGradient(slug: string) {
-  return CAT_COLORS[slug] ?? 'from-[#C41230] to-[#9B0E25]';
-}
 function catInitials(name: string) {
   return name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 }
 
 /* ══════════════════════════════════════
-   MARQUEE TICKER
+   DIAMOND DIVIDER
 ══════════════════════════════════════ */
+function DiamondRule() {
+  return <div className="sf-diamond-rule py-2"><span /></div>;
+}
 
+/* ══════════════════════════════════════
+   SECTION HEADING — bigger, optionally centered
+══════════════════════════════════════ */
+function SectionHead({
+  eyebrow, title, titleHindi, sub, to, center = false,
+}: {
+  eyebrow?: string; title: string; titleHindi?: string; sub: string; to?: string; center?: boolean;
+}) {
+  return (
+    <div className={`flex items-end gap-4 mb-10 ${center ? 'flex-col text-center' : 'justify-between'}`}>
+      <div className={center ? 'max-w-2xl mx-auto' : ''}>
+        {eyebrow && (
+          <p className={`sf-eyebrow mb-4 flex items-center gap-2.5 ${center ? 'justify-center' : ''}`}>
+            <span className="inline-block w-6 h-px" style={{ background: 'var(--sf-crimson)' }} />
+            {eyebrow}
+          </p>
+        )}
+        <h2 className="sf-display sf-h2" style={{ color: 'var(--sf-ink)' }}>{title}</h2>
+        {titleHindi && (
+          <p className="sf-deva mt-2 text-xl" style={{ color: 'rgba(196,18,48,0.7)' }}>{titleHindi}</p>
+        )}
+        <div className={`sf-rule w-16 mt-4 mb-3 ${center ? 'mx-auto' : ''}`} />
+        <p className="text-[15px]" style={{ color: 'var(--sf-ink-soft)' }}>{sub}</p>
+      </div>
+      {to && !center && (
+        <Link
+          to={to}
+          className="group shrink-0 flex items-center gap-1.5 text-sm font-semibold px-5 py-2.5 rounded-full transition-all hover:gap-2.5"
+          style={{ color: 'var(--sf-crimson)', background: 'rgba(196,18,48,0.08)' }}
+        >
+          View all <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+        </Link>
+      )}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════
+   COUNTER TICKET RIBBON  (marquee, perforated)
+══════════════════════════════════════ */
 const TICKER = [
   'Kaju Katli', 'Gulab Jamun', 'Besan Ladoo', 'Soan Papdi', 'Kesar Barfi',
   'Chakli', 'Chivda', 'Dry Fruits', 'Halwa', 'Modak',
   'Rasmalai', 'Jalebi', 'Gift Boxes', 'Namkeen', 'Peda',
 ];
-
-function MarqueeTicker() {
+function CounterRibbon() {
   const doubled = [...TICKER, ...TICKER];
   return (
-    <div
-      className="overflow-hidden rounded-2xl relative"
-      style={{ background: 'linear-gradient(90deg, #FBF4E9, #F5E7D0 50%, #FBF4E9)' }}
-    >
-      <div className="absolute left-0 inset-y-0 w-16 z-10" style={{ background: 'linear-gradient(90deg, #FBF4E9, transparent)' }} />
-      <div className="absolute right-0 inset-y-0 w-16 z-10" style={{ background: 'linear-gradient(270deg, #FBF4E9, transparent)' }} />
-      <div className="py-3.5 flex animate-marquee whitespace-nowrap" style={{ animationDuration: '32s' }}>
-        {doubled.map((item, i) => (
-          <span key={i} className="inline-flex items-center mx-5 text-sm font-bold" style={{ color: '#5C1818' }}>
-            <span className="w-1.5 h-1.5 rounded-full mr-5 shrink-0" style={{ background: '#C41230' }} />
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ══════════════════════════════════════
-   STORE INFO BAR
-══════════════════════════════════════ */
-
-function StoreInfoBar() {
-  return (
-    <div
-      className="animate-fade-up rounded-2xl border px-5 py-4 flex flex-wrap items-center gap-x-5 gap-y-2.5 text-sm shadow-sm"
-      style={{ background: '#fff', borderColor: 'rgba(196,18,48,0.15)' }}
-    >
-      <div className="flex items-center gap-2">
-        <div className="flex">
-          {[1,2,3,4].map((s) => <Star key={s} size={13} style={{ fill: '#D4AF37', color: '#D4AF37' }} />)}
-          <Star size={13} style={{ fill: 'rgba(212,175,55,0.35)', color: 'rgba(212,175,55,0.35)' }} />
+    <div className="relative" style={{ background: 'var(--sf-paper-2)' }}>
+      <div className="sf-perf" style={{ color: 'var(--sf-paper)' }} />
+      <div className="overflow-hidden relative py-3.5">
+        <div className="absolute left-0 inset-y-0 w-20 z-10" style={{ background: 'linear-gradient(90deg, var(--sf-paper-2), transparent)' }} />
+        <div className="absolute right-0 inset-y-0 w-20 z-10" style={{ background: 'linear-gradient(270deg, var(--sf-paper-2), transparent)' }} />
+        <div className="flex animate-marquee whitespace-nowrap" style={{ animationDuration: '36s' }}>
+          {doubled.map((item, i) => (
+            <span key={i} className="sf-tag inline-flex items-center mx-5" style={{ color: 'var(--sf-ink)', letterSpacing: '0.1em' }}>
+              <span className="w-1.5 h-1.5 rounded-full mr-5 shrink-0" style={{ background: i % 2 ? 'var(--sf-gold)' : 'var(--sf-crimson)' }} />
+              {item}
+            </span>
+          ))}
         </div>
-        <span className="font-black text-[#1A0808]">4.3</span>
-        <span className="text-xs text-[#5C1818]">Delivery · 1,172 ratings</span>
       </div>
-
-      <span className="text-red-200 hidden md:block">|</span>
-
-      <div className="flex items-center gap-1.5 text-[#5C1818]">
-        <Star size={13} style={{ fill: '#D4AF37', color: '#D4AF37' }} />
-        <span className="font-black text-[#1A0808]">4.1</span>
-        <span className="text-xs text-[#5C1818]">Dining · 20 ratings</span>
-      </div>
-
-      <span className="text-red-200 hidden md:block">|</span>
-
-      <div className="flex items-center gap-1.5 text-[#5C1818]">
-        <MapPin size={12} style={{ color: '#C41230' }} className="shrink-0" />
-        Station Road, Goregaon West, Mumbai
-      </div>
-
-      <span className="text-red-200 hidden md:block">|</span>
-
-      <div className="flex items-center gap-1.5 text-[#5C1818]">
-        <Clock size={12} style={{ color: '#C41230' }} className="shrink-0" />
-        Opens 8:15 AM daily
-      </div>
-
-      <a
-        href="tel:+919869313539"
-        className="btn-shine ml-auto flex items-center gap-2 text-white text-xs font-black px-4 py-2.5 rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all shrink-0"
-        style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
-      >
-        <Phone size={12} /> +91 98693 13539
-      </a>
+      <div className="sf-perf" style={{ color: 'var(--sf-paper)', transform: 'rotate(180deg)' }} />
     </div>
   );
 }
 
 /* ══════════════════════════════════════
-   FEATURED SWEETS SHOWCASE
-   Live from backend (featured=true products),
-   falls back to static cards when none exist.
+   OVERLAPPING STAT STRIP  (was single pill)
+   Four counter tickets with gold hairline dividers, pulled up to overlap the
+   ribbon seam so it layers instead of stacking flat.
 ══════════════════════════════════════ */
+function StatStrip() {
+  const stats = [
+    { k: '1951', l: 'Serving since', mono: true },
+    { k: '4.3 ★', l: '1,172 reviews' },
+    { k: '8:15 AM', l: 'Fresh daily', mono: true },
+    { k: 'Goregaon W', l: 'Station Road' },
+  ];
+  return (
+    <div className="relative z-20 mt-10 md:mt-12 bg-white rounded-3xl sf-shadow-lg sf-ring-gold grid grid-cols-2 md:grid-cols-4 overflow-hidden">
+      {stats.map((s, i) => (
+        <div key={s.l} className="px-5 py-6 md:py-7 text-center relative" style={i % 4 !== 0 ? { borderLeft: '1px solid var(--sf-line)' } : undefined}>
+          <div className={`${s.mono ? 'sf-num' : 'sf-display'} font-medium text-2xl md:text-[1.75rem]`} style={{ color: i === 1 ? 'var(--sf-crimson)' : 'var(--sf-ink)' }}>
+            {s.k}
+          </div>
+          <div className="sf-tag mt-1.5" style={{ color: 'var(--sf-ink-soft)' }}>{s.l}</div>
+          {/* hairline top accent for the last two on mobile wrap */}
+          {i >= 2 && <div className="md:hidden absolute top-0 left-0 right-0 h-px" style={{ background: 'var(--sf-line)' }} />}
+        </div>
+      ))}
+    </div>
+  );
+}
 
-/* One editorial tile — full-bleed photo, serif name laid over it like a
-   display-case card. `large` gets the confident type. No two the same size. */
+/* ══════════════════════════════════════
+   FEATURED — BENTO DISPLAY CASE
+   One large 2×2 hero tile (tilts) + one wide + two square tiles. Varied
+   aspect ratios and type scale, gold-brackets on the hero tile.
+══════════════════════════════════════ */
 type MosaicItem = {
-  key: string;
-  to: string;
-  img?: string;
-  name: string;
-  sub?: string;
-  price?: number;
-  onAdd?: () => void;
+  key: string; to: string; img?: string; name: string; sub?: string; price?: number; onAdd?: () => void;
 };
 
-function MosaicCard({ item }: { item: MosaicItem }) {
+function MosaicCard({ item, size }: { item: MosaicItem; size: 'lg' | 'wide' | 'sm' }) {
+  const big = size === 'lg';
   return (
-    <Link
-      to={item.to}
-      className="group relative block w-full overflow-hidden rounded-3xl"
-      style={{ aspectRatio: '4 / 5', border: '1px solid rgba(26,8,8,0.06)' }}
-    >
+    <Link to={item.to} className="group relative block w-full h-full overflow-hidden rounded-3xl" style={{ border: '1px solid rgba(212,175,55,0.30)' }}>
       {item.img ? (
         <img
           src={item.img}
           alt={item.name}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.05]"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.06]"
           onError={(e) => { e.currentTarget.style.opacity = '0'; }}
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(150deg,#FBF4E9,#F5E7D0)' }}>
+        <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(150deg,var(--sf-paper),var(--sf-paper-2))' }}>
           <div className="absolute inset-0 indian-pattern opacity-60" />
-          <span
-            className="font-display leading-none select-none"
-            style={{ fontSize: '6rem', color: 'rgba(196,18,48,0.14)' }}
-            aria-hidden="true"
-          >
+          <span className="sf-display leading-none select-none" style={{ fontSize: big ? '9rem' : '5rem', color: 'rgba(196,18,48,0.14)' }} aria-hidden="true">
             {item.name.charAt(0).toUpperCase()}
           </span>
         </div>
       )}
 
-      {/* readability wash rising from the base */}
-      <div className="absolute inset-0" style={{
-        background: item.img
-          ? 'linear-gradient(0deg, rgba(26,8,8,0.84) 0%, rgba(26,8,8,0.22) 46%, transparent 70%)'
-          : 'linear-gradient(0deg, rgba(126,10,29,0.10), transparent 60%)',
-      }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(0deg, rgba(26,8,8,0.88) 0%, rgba(26,8,8,0.20) 48%, transparent 72%)' }} />
 
-      {/* Signature badge, top-left */}
-      <span className="absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm text-white tracking-wide"
-        style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}>
-        Signature
+      <span className="sf-tag absolute top-3 left-3 px-2.5 py-1 rounded-md text-white sf-shadow" style={{ background: 'var(--sf-crimson)', letterSpacing: '0.08em' }}>
+        {big ? 'House Signature' : 'Signature'}
       </span>
 
-      {/* Add button, top-right (live products only) */}
       {item.onAdd && (
         <button
           onClick={(e) => { e.preventDefault(); item.onAdd?.(); }}
           aria-label={`Add ${item.name} to cart`}
-          className="btn-shine absolute top-2.5 right-2.5 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white shadow-md transition-all active:scale-95 hover:-translate-y-0.5 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-          style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
+          className="sf-btn sf-btn-primary absolute top-2.5 right-2.5 px-3 py-2 text-xs opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
         >
           <ShoppingBag size={13} /> Add
         </button>
       )}
 
-      {/* Name + meta, laid over the base of the photo */}
-      <div className="absolute inset-x-0 bottom-0 flex flex-col p-4">
-        {item.sub && (
-          <p className="tnum uppercase tracking-wide text-white/70 mb-1 text-[10px]">
-            {item.sub}
-          </p>
-        )}
-        <h3 className={`font-display font-semibold text-white leading-tight text-lg ${item.img ? '' : '!text-[#7E0A1D]'}`}>
-          {item.name}
-        </h3>
-        <div className="flex items-center justify-between gap-2 mt-2">
-          {item.price != null ? (
-            <span className="tnum font-display font-semibold text-white text-sm">
-              {formatINR(item.price)}
-            </span>
-          ) : <span />}
-          <span className="inline-flex items-center gap-1 font-semibold text-white/90 group-hover:gap-2 transition-all text-xs">
-            {item.price != null ? 'View' : 'Order now'} <ArrowRight size={12} />
+      {/* ticket overlay slides up on hover */}
+      <div className="absolute inset-x-0 bottom-0 p-4 md:p-6 transition-transform duration-500 ease-out group-hover:-translate-y-1">
+        {item.sub && <p className="sf-deva mb-1.5 text-white/75 leading-none" style={{ fontSize: big ? '1.25rem' : '0.95rem' }}>{item.sub}</p>}
+        <h3 className={`sf-display font-semibold text-white leading-tight ${big ? 'text-3xl md:text-5xl' : 'text-lg'}`}>{item.name}</h3>
+        <div className="flex items-center justify-between gap-2 mt-2.5">
+          {item.price != null
+            ? <span className={`sf-num font-medium text-white ${big ? 'text-xl' : 'text-sm'}`}>{formatINR(item.price)}</span>
+            : <span />}
+          <span className="sf-tag inline-flex items-center gap-1 text-white/90 group-hover:gap-2 transition-all">
+            {item.price != null ? 'View' : 'Order'} <ArrowRight size={12} />
           </span>
         </div>
       </div>
@@ -311,155 +211,94 @@ function MosaicCard({ item }: { item: MosaicItem }) {
   );
 }
 
-/* A clean four-up showcase — each card self-sizes via aspect-ratio so it can
-   never collapse, and tilts on hover. */
-function FeaturedMosaic({ items }: { items: MosaicItem[] }) {
-  return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {items.map((it, i) => (
-        <div key={it.key} className="animate-fade-up" style={{ animationDelay: `${i * 0.07}s` }}>
-          <Tilt max={7} lift={10} className="h-full rounded-3xl">
-            <MosaicCard item={it} />
-          </Tilt>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function FeaturedSweetsSection({ featured }: { featured: Product[] }) {
   const addItem = useCartStore((s) => s.addItem);
+  const ordered = [...featured].sort((a, b) => (b.images?.[0] ? 1 : 0) - (a.images?.[0] ? 1 : 0));
 
-  // surface products that actually have a photo first, so the showcase leads
-  // with imagery when any exists in the catalogue
-  const ordered = [...featured].sort(
-    (a, b) => (b.images?.[0] ? 1 : 0) - (a.images?.[0] ? 1 : 0),
-  );
-
-  const items: MosaicItem[] = featured.length > 0
+  const items: MosaicItem[] = (featured.length > 0
     ? ordered.slice(0, 4).map((p) => ({
-        key: p._id,
-        to: `/product/${p.slug}`,
-        img: p.images[0],
-        name: p.name,
-        sub: `Net ${p.weight}${p.unit}`,
-        price: p.price,
+        key: p._id, to: `/product/${p.slug}`, img: p.images[0] || sweetImage(p.name), name: p.name,
+        sub: `Net ${p.weight}${p.unit}`, price: p.price,
         onAdd: p.stock === 0 ? undefined : () => addItem(p._id),
       }))
-    : FEATURED_SWEETS.slice(0, 4).map((s) => ({
-        key: String(s.id),
-        to: '/category/all',
-        img: s.image,
-        name: s.name,
-        sub: s.hindi,
-      }));
+    : FEATURED_SWEETS.map((s) => ({ key: String(s.id), to: '/category/all', img: s.image, name: s.name, sub: s.hindi })));
 
   return (
     <section>
-      <SectionHead
-        title="Our Signature Sweets"
-        titleHindi="हमारी खास मिठाइयाँ"
-        sub="Timeless classics crafted with generations of expertise"
-        to="/category/all"
-      />
-      <FeaturedMosaic items={items} />
+      <SectionHead eyebrow="The Display Case" title="Our Signature Sweets" titleHindi="हमारी खास मिठाइयाँ"
+        sub="Timeless classics, crafted with generations of expertise" to="/category/all" />
+
+      <div className="grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-4 md:gap-5 md:h-[580px]">
+        {items[0] && (
+          <div className="col-span-2 md:row-span-2 aspect-[4/5] md:aspect-auto md:h-full animate-fade-up">
+            <Tilt max={6} lift={12} className="h-full rounded-3xl sf-brackets">
+              <MosaicCard item={items[0]} size="lg" />
+            </Tilt>
+          </div>
+        )}
+        {items[1] && (
+          <div className="col-span-2 aspect-[16/10] md:aspect-auto md:h-full animate-fade-up" style={{ animationDelay: '0.07s' }}>
+            <MosaicCard item={items[1]} size="wide" />
+          </div>
+        )}
+        {items[2] && (
+          <div className="aspect-square md:aspect-auto md:h-full animate-fade-up" style={{ animationDelay: '0.14s' }}>
+            <MosaicCard item={items[2]} size="sm" />
+          </div>
+        )}
+        {items[3] && (
+          <div className="aspect-square md:aspect-auto md:h-full animate-fade-up" style={{ animationDelay: '0.21s' }}>
+            <MosaicCard item={items[3]} size="sm" />
+          </div>
+        )}
+      </div>
     </section>
   );
 }
 
 /* ══════════════════════════════════════
-   ABOUT SECTION
+   ABOUT — INK MUSEUM PLAQUE  (full-bleed)
 ══════════════════════════════════════ */
-
 function AboutSection() {
+  const stats = [
+    { k: '1951', l: 'Established' },
+    { k: '3', l: 'Generations' },
+    { k: '100%', l: 'Desi ghee' },
+    { k: '0', l: 'Preservatives' },
+  ];
   return (
-    <section
-      className="relative overflow-hidden rounded-3xl"
-      style={{ background: '#1A0808' }}
-    >
-      <div className="absolute inset-0 dot-grid-light pointer-events-none opacity-40" />
+    <section className="relative overflow-hidden sf-band-dark sf-brackets">
+      <div className="absolute inset-0 dot-grid-light pointer-events-none opacity-20" />
+      {/* oversized watermark numeral */}
+      <div className="sf-watermark absolute -right-6 -bottom-16 select-none" style={{ fontSize: 'clamp(12rem, 26vw, 26rem)' }}>1951</div>
 
-      {/* Orbs */}
-      <div
-        className="absolute rounded-full pointer-events-none"
-        style={{
-          width: 350, height: 350,
-          top: -100, right: -80,
-          background: 'radial-gradient(circle, rgba(196,18,48,0.15) 0%, transparent 70%)',
-        }}
-      />
-      <div
-        className="absolute rounded-full pointer-events-none"
-        style={{
-          width: 280, height: 280,
-          bottom: -80, left: -60,
-          background: 'radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%)',
-        }}
-      />
+      <div className="relative z-10 max-w-3xl mx-auto text-center px-6 py-24 md:py-36">
+        <p className="sf-eyebrow mb-6 inline-flex items-center gap-2" style={{ color: 'var(--sf-gold-light)' }}>
+          <Award size={12} /> Our Heritage
+        </p>
 
-      <div className="relative z-10 grid md:grid-cols-2 gap-10 p-10 md:p-14">
+        <h2 className="sf-display font-bold text-white leading-[1.05]" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
+          A legacy of <span style={{ color: 'var(--sf-gold-light)' }}>sweetness</span>
+        </h2>
+        <p className="sf-deva mt-3 text-2xl" style={{ color: 'rgba(247,239,224,0.5)' }}>मिठास की विरासत</p>
 
-        {/* Left: Story */}
-        <div>
-          <div
-            className="inline-flex items-center gap-2 mb-5 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide"
-            style={{ background: 'rgba(196,18,48,0.12)', border: '1px solid rgba(196,18,48,0.25)', color: '#C41230' }}
-          >
-            <Award size={11} /> Our Heritage
-          </div>
+        {/* single thin gold rule */}
+        <div className="mx-auto mt-8 mb-8 h-px w-40" style={{ background: 'linear-gradient(90deg, transparent, var(--sf-gold), transparent)' }} />
 
-          <h2
-            className="text-3xl md:text-4xl font-black text-white mb-2 leading-tight"
-            style={{ fontFamily: 'Fraunces, Georgia, serif' }}
-          >
-            A Legacy of<br />
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #C41230, #9B0E25)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Sweetness
-            </span>
-          </h2>
+        <p className="sf-lead mx-auto max-w-2xl" style={{ color: 'rgba(247,239,224,0.72)' }}>
+          Since 1951, Vyas Sweets has been weaving sweetness into the lives of
+          Mumbai families — every <em>मिठाई</em> made with pure desi ghee,
+          hand-selected ingredients, and recipes passed down through generations.
+        </p>
 
-          <p className="text-sm font-medium mb-2" style={{ color: 'rgba(255,248,240,0.45)' }}>
-            मिठास की विरासत
-          </p>
-
-          <p className="text-[15px] leading-relaxed mb-5" style={{ color: 'rgba(255,248,240,0.65)' }}>
-            Since 1951, Vyas Sweets has been weaving sweetness into
-            the lives of Mumbai families. Every <em>मिठाई</em> we craft carries
-            the warmth of tradition — made with pure desi ghee, hand-selected
-            ingredients, and recipes passed down through generations.
-          </p>
-
-          <p className="text-[15px] leading-relaxed" style={{ color: 'rgba(255,248,240,0.55)' }}>
-            From the bustling festivals of Diwali to the quiet joy of a Sunday
-            morning, our sweets have been present at every celebration, every
-            memory, every moment of your life.
-          </p>
-        </div>
-
-        {/* Right: what we promise — a quiet ledger, hairline-ruled, not boxed */}
-        <div className="flex flex-col justify-center">
-          {[
-            { icon: <ChefHat size={16} />, title: 'Pure Desi Ghee',     desc: 'Every sweet crafted with 100% authentic desi ghee — no substitutes, no shortcuts.',   color: '#C41230' },
-            { icon: <Leaf    size={16} />, title: 'No Preservatives',    desc: 'Fresh daily. No artificial colours, flavours, or preservatives. Ever.',               color: '#D4AF37' },
-            { icon: <Award   size={16} />, title: 'Traditional Recipes', desc: 'Ancestral recipes refined over 70+ years, preserving the authentic taste of India.',   color: '#F0CE6A' },
-            { icon: <Gift    size={16} />, title: 'Gift Packaging',      desc: 'Elegant presentation for every occasion — Diwali, weddings, birthdays & more.',       color: '#D4AF37' },
-          ].map((pillar, i) => (
-            <div
-              key={pillar.title}
-              className="flex items-start gap-4 py-4"
-              style={i > 0 ? { borderTop: '1px solid rgba(255,255,255,0.09)' } : undefined}
-            >
-              <span className="shrink-0 mt-1" style={{ color: pillar.color }}>{pillar.icon}</span>
-              <div>
-                <h4 className="font-display font-semibold text-white text-base mb-1">{pillar.title}</h4>
-                <p className="text-[12.5px] leading-relaxed" style={{ color: 'rgba(255,248,240,0.5)' }}>{pillar.desc}</p>
+        {/* plaque stat row with diamond separators */}
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+          {stats.map((s, i) => (
+            <div key={s.l} className="flex items-center gap-10">
+              {i > 0 && <span className="hidden sm:block w-1.5 h-1.5 rotate-45" style={{ background: 'var(--sf-gold)' }} />}
+              <div className="text-center">
+                <div className="sf-display font-bold text-3xl md:text-4xl" style={{ color: 'var(--sf-gold-light)' }}>{s.k}</div>
+                <div className="sf-tag mt-1.5" style={{ color: 'rgba(247,239,224,0.5)' }}>{s.l}</div>
               </div>
             </div>
           ))}
@@ -470,218 +309,182 @@ function AboutSection() {
 }
 
 /* ══════════════════════════════════════
-   SECTION HEADING
+   PROMISES — hairline ledger (was inside About)
 ══════════════════════════════════════ */
-
-function SectionHead({
-  title, titleHindi, sub, to,
-}: {
-  title: string;
-  titleHindi?: string;
-  sub: string;
-  to?: string;
-}) {
+function PromisesRow() {
+  const promises = [
+    { icon: <ChefHat size={18} />, title: 'Pure Desi Ghee',     desc: '100% authentic ghee — no substitutes.' },
+    { icon: <Leaf    size={18} />, title: 'No Preservatives',    desc: 'Fresh daily. No artificial anything.' },
+    { icon: <Award   size={18} />, title: 'Traditional Recipes', desc: 'Refined over 70+ years.' },
+    { icon: <Gift    size={18} />, title: 'Gift Packaging',      desc: 'Elegant for every occasion.' },
+  ];
   return (
-    <div className="flex items-end justify-between gap-4 mb-7">
-      <div>
-        {titleHindi && (
-          <p className="eyebrow mb-2" style={{ fontFamily: 'serif', letterSpacing: '0.05em', textTransform: 'none', color: 'rgba(196,18,48,0.75)', fontSize: '0.9rem' }}>
-            {titleHindi}
-          </p>
-        )}
-        <h2 className="font-display text-3xl md:text-[2.5rem] font-semibold text-[#1A0808] leading-[1.05]">
-          {title}
-        </h2>
-        <div className="rule-draw w-14 mt-3 mb-2.5" />
-        <p className="text-sm text-[#5C1818]">{sub}</p>
-      </div>
-      {to && (
-        <Link
-          to={to}
-          className="group shrink-0 flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full transition-all hover:gap-2.5"
-          style={{ color: '#C41230', background: 'rgba(196,18,48,0.08)' }}
-        >
-          View all
-          <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
-        </Link>
-      )}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-px rounded-3xl overflow-hidden sf-ring-gold" style={{ background: 'var(--sf-line)' }}>
+      {promises.map((p) => (
+        <div key={p.title} className="bg-white p-6 md:p-7 flex flex-col gap-3">
+          <span className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(196,18,48,0.09)', color: 'var(--sf-crimson)' }}>{p.icon}</span>
+          <h4 className="sf-display font-semibold text-base" style={{ color: 'var(--sf-ink)' }}>{p.title}</h4>
+          <p className="text-[13px] leading-relaxed" style={{ color: 'var(--sf-ink-soft)' }}>{p.desc}</p>
+        </div>
+      ))}
     </div>
   );
 }
 
 /* ══════════════════════════════════════
-   CATEGORY CARD
+   CATEGORY CARD — staggered + gold glow
 ══════════════════════════════════════ */
-
 function CatCard({ cat, index }: { cat: Category; index: number }) {
-  const gradient = catGradient(cat.slug);
-  // Use admin-set image first, then Wikimedia fallback, then gradient
-  const imageSrc = cat.image || CATEGORY_IMAGES[cat.slug];
-
+  const imageSrc = cat.image || sweetImage(`${cat.name} ${cat.slug}`, 400);
   return (
-    <div className="animate-fade-up" style={{ animationDelay: `${index * 0.055}s` }}>
-    <Tilt max={9} lift={10} className="rounded-2xl h-full">
-    <Link
-      to={`/category/${cat.slug}`}
-      className="group flex flex-col items-center gap-3 p-4 rounded-2xl h-full"
-      style={{
-        background: '#fff',
-        border: '1.5px solid rgba(196,18,48,0.12)',
-      }}
-    >
-      <div className="relative w-16 h-16 rounded-2xl overflow-hidden shrink-0">
-        {imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={cat.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-            onError={(e) => {
-              const img = e.target as HTMLImageElement;
-              img.style.display = 'none';
-              const fallback = img.nextElementSibling as HTMLElement | null;
-              if (fallback) fallback.style.display = 'flex';
-            }}
-          />
-        ) : null}
-        <div
-          className={`${imageSrc ? 'hidden' : ''} w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
-          style={{ display: imageSrc ? 'none' : undefined }}
-        >
-          <span className="text-white font-black text-xl tracking-tight drop-shadow">
-            {catInitials(cat.name)}
-          </span>
+    <div className="animate-fade-up" style={{ animationDelay: `${index * 0.05}s` }}>
+      <Link to={`/category/${cat.slug}`} className="sf-glow bg-white rounded-3xl group flex flex-col items-center gap-3.5 p-5 h-full" style={{ border: '1px solid var(--sf-line)' }}>
+        <div className="relative w-20 h-20 rounded-2xl overflow-hidden shrink-0">
+          {imageSrc ? (
+            <img src={imageSrc} alt={cat.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              onError={(e) => {
+                const img = e.target as HTMLImageElement; img.style.display = 'none';
+                const fb = img.nextElementSibling as HTMLElement | null; if (fb) fb.style.display = 'flex';
+              }} />
+          ) : null}
+          <div className={`${imageSrc ? 'hidden' : ''} w-full h-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500`}
+            style={{ display: imageSrc ? 'none' : undefined, background: 'linear-gradient(135deg, var(--sf-crimson), var(--sf-crimson-deep))' }}>
+            <span className="sf-display text-white font-bold text-2xl">{catInitials(cat.name)}</span>
+          </div>
+        </div>
+        <span className="text-[13px] font-bold text-center leading-snug transition-colors group-hover:text-[var(--sf-crimson)]" style={{ color: 'var(--sf-ink-soft)' }}>
+          {cat.name}
+        </span>
+      </Link>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════
+   NEW ARRIVALS — first item promoted to a wide feature
+══════════════════════════════════════ */
+function FeatureProduct({ product }: { product: Product }) {
+  const addItem = useCartStore((s) => s.addItem);
+  return (
+    <div className="col-span-2 row-span-1 sf-glow bg-white rounded-3xl overflow-hidden group flex flex-col sm:flex-row h-full" style={{ border: '1px solid var(--sf-line)' }}>
+      <Link to={`/product/${product.slug}`} className="relative sm:w-1/2 overflow-hidden block">
+        <img src={product.images[0] || sweetImage(product.name)} alt={product.name} className="w-full h-48 sm:h-full min-h-[192px] object-cover group-hover:scale-105 transition-transform duration-[700ms]" />
+        <span className="sf-tag absolute top-3 left-3 px-2.5 py-1 rounded-md text-white" style={{ background: 'var(--sf-gold-dk)', letterSpacing: '0.08em' }}>Just in</span>
+      </Link>
+      <div className="p-6 sm:w-1/2 flex flex-col justify-center">
+        <Link to={`/product/${product.slug}`}>
+          <div className="flex items-start gap-2">
+            <span className="veg-dot mt-1.5 shrink-0" aria-label="Vegetarian" />
+            <h3 className="sf-display font-semibold text-2xl leading-tight group-hover:text-[var(--sf-crimson)] transition-colors" style={{ color: 'var(--sf-ink)' }}>{product.name}</h3>
+          </div>
+          <p className="sf-tag mt-2" style={{ color: 'var(--sf-ink-soft)' }}>Net {product.weight}{product.unit}</p>
+        </Link>
+        <div className="flex items-end justify-between gap-2 mt-5">
+          <span className="sf-num font-medium text-2xl" style={{ color: 'var(--sf-ink)' }}>{formatINR(product.price)}</span>
+          <button onClick={() => addItem(product._id)} disabled={product.stock === 0}
+            className="sf-btn sf-btn-primary px-4 py-2.5 text-sm disabled:opacity-40">
+            <ShoppingBag size={14} /> Add
+          </button>
         </div>
       </div>
-      <span className="text-xs font-bold text-[#5C1818] group-hover:text-[#C41230] text-center transition-colors leading-snug">
-        {cat.name}
-      </span>
-    </Link>
-    </Tilt>
     </div>
   );
 }
 
 /* ══════════════════════════════════════
-   TESTIMONIALS SECTION
+   TESTIMONIALS — pull-quote 7/5
 ══════════════════════════════════════ */
-
 function TestimonialsSection() {
+  const [lead, ...rest] = TESTIMONIALS;
   return (
     <section>
-      <SectionHead
-        title="Loved by Mumbai"
-        titleHindi="मुंबई की पसंद"
-        sub="What our customers say about Vyas Sweets"
-      />
+      <SectionHead center eyebrow="From the Regulars" title="Loved by Mumbai" titleHindi="मुंबई की पसंद"
+        sub="What our customers say about Vyas Sweets" />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {TESTIMONIALS.map((t, i) => (
-          <div key={t.name} className="animate-fade-up" style={{ animationDelay: `${i * 0.1}s` }}>
-          <Tilt
-            max={7}
-            lift={10}
-            className="rounded-3xl p-6 flex flex-col gap-4 h-full"
-            style={{
-              background: '#fff',
-              border: '1.5px solid rgba(196,18,48,0.12)',
-              boxShadow: '0 4px 24px rgba(26,8,8,0.05)',
-            }}
-          >
-            {/* Quote icon */}
-            <Quote size={24} style={{ color: t.accent, opacity: 0.5 }} />
-
-            {/* Stars */}
-            <div className="flex gap-0.5">
-              {Array.from({ length: t.rating }).map((_, j) => (
-                <Star key={j} size={14} style={{ fill: '#D4AF37', color: '#D4AF37' }} />
-              ))}
+      <div className="grid lg:grid-cols-12 gap-5">
+        {/* big pull-quote */}
+        <div className="lg:col-span-7 relative bg-white rounded-3xl p-8 md:p-12 sf-shadow-lg sf-ring-gold sf-brackets overflow-hidden">
+          <span className="sf-quote-glyph absolute top-4 left-6 leading-none select-none" aria-hidden="true">“</span>
+          <div className="relative">
+            <div className="flex gap-1 mb-6">
+              {Array.from({ length: lead.rating }).map((_, j) => <Star key={j} size={18} style={{ fill: 'var(--sf-gold)', color: 'var(--sf-gold)' }} />)}
             </div>
-
-            {/* Text */}
-            <p className="text-sm leading-relaxed text-[#5C1818] flex-1">
-              "{t.text}"
+            <p className="sf-display font-medium leading-[1.3]" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', color: 'var(--sf-ink)' }}>
+              {lead.text}
             </p>
-
-            {/* Author */}
-            <div className="flex items-center gap-3 pt-2" style={{ borderTop: '1px solid rgba(196,18,48,0.1)' }}>
-              <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0"
-                style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.accent}bb)` }}
-              >
-                {t.initials}
-              </div>
+            <div className="flex items-center gap-3 mt-8 pt-6" style={{ borderTop: '1px solid var(--sf-line)' }}>
+              <div className="w-11 h-11 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ background: 'var(--sf-crimson)' }}>{lead.initials}</div>
               <div>
-                <p className="text-sm font-bold text-[#1A0808]">{t.name}</p>
-                <p className="text-[11px] text-[#5C1818] flex items-center gap-1">
-                  <MapPin size={9} style={{ color: t.accent }} /> {t.location}
+                <p className="font-bold" style={{ color: 'var(--sf-ink)' }}>{lead.name}</p>
+                <p className="sf-tag flex items-center gap-1" style={{ color: 'var(--sf-ink-soft)' }}>
+                  <MapPin size={9} style={{ color: 'var(--sf-crimson)' }} /> {lead.location}
                 </p>
               </div>
             </div>
-          </Tilt>
           </div>
-        ))}
+        </div>
+
+        {/* two compact stacked */}
+        <div className="lg:col-span-5 flex flex-col gap-5">
+          {rest.map((t) => (
+            <div key={t.name} className="bg-white rounded-3xl p-6 sf-shadow flex-1 flex flex-col gap-3" style={{ border: '1px solid var(--sf-line)' }}>
+              <div className="flex items-center justify-between">
+                <Quote size={22} style={{ color: 'var(--sf-crimson)', opacity: 0.3 }} />
+                <div className="flex gap-0.5">
+                  {Array.from({ length: t.rating }).map((_, j) => <Star key={j} size={13} style={{ fill: 'var(--sf-gold)', color: 'var(--sf-gold)' }} />)}
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--sf-ink-soft)' }}>"{t.text}"</p>
+              <div className="flex items-center gap-2.5 pt-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style={{ background: 'var(--sf-crimson)' }}>{t.initials}</div>
+                <div>
+                  <p className="text-sm font-bold" style={{ color: 'var(--sf-ink)' }}>{t.name}</p>
+                  <p className="sf-tag" style={{ color: 'var(--sf-ink-soft)' }}>{t.location}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 /* ══════════════════════════════════════
-   GIFT CTA BANNER
+   GIFT CTA — split band, visual bleeds off the edge
 ══════════════════════════════════════ */
-
 function GiftCTA() {
   return (
-    <div
-      className="relative overflow-hidden rounded-3xl"
-      style={{
-        background: 'linear-gradient(135deg, #FBF4E9 0%, #F5E7D0 50%, #FBF4E9 100%)',
-        border: '1.5px solid rgba(196,18,48,0.15)',
-      }}
-    >
-      <div className="absolute inset-0 indian-pattern opacity-50 pointer-events-none" />
-      <div className="absolute inset-0 paper-grain pointer-events-none" />
-
-      {/* Soft orbs */}
-      <div className="absolute right-0 top-0 w-64 h-64 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(196,18,48,0.1) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
-      <div className="absolute left-0 bottom-0 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
-
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 p-10 md:p-14">
-        <div className="text-center md:text-left">
-          <div
-            className="inline-flex items-center gap-2 mb-4 px-3.5 py-1.5 rounded-full text-xs font-bold"
-            style={{ background: 'rgba(26,8,8,0.06)', color: '#1A0808' }}
-          >
-            <Gift size={11} /> For Every Celebration
-          </div>
-          <h3
-            className="text-[#1A0808] font-black text-3xl md:text-4xl leading-tight mb-3"
-            style={{ fontFamily: 'Fraunces, Georgia, serif' }}
-          >
-            Gift Your<br />
-            <span style={{ background: 'linear-gradient(135deg, #C41230, #D4AF37)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Loved Ones
-            </span>
+    <div className="relative grid md:grid-cols-2 rounded-3xl overflow-hidden sf-shadow-lg" style={{ border: '1px solid var(--sf-line-2)' }}>
+      {/* left: text on cream */}
+      <div className="relative p-10 md:p-16 flex flex-col justify-center" style={{ background: 'var(--sf-paper)' }}>
+        <div className="absolute inset-0 paper-grain pointer-events-none" />
+        <div className="relative">
+          <p className="sf-eyebrow inline-flex items-center gap-2 mb-5"><Gift size={12} /> For Every Celebration</p>
+          <h3 className="sf-display font-bold leading-[1.02]" style={{ fontSize: 'clamp(2.25rem, 4vw, 3.5rem)', color: 'var(--sf-ink)' }}>
+            Gift your<br /><span style={{ color: 'var(--sf-crimson)' }}>loved ones</span>
           </h3>
-          <p className="text-[15px] max-w-sm" style={{ color: '#5C1818' }}>
-            Beautifully packed sweet gift boxes — perfect for Diwali, Holi,
-            weddings &amp; birthdays.
+          <p className="sf-lead max-w-sm mt-4" style={{ color: 'var(--sf-ink-soft)' }}>
+            Beautifully packed sweet gift boxes — perfect for Diwali, Holi, weddings &amp; birthdays.
           </p>
+          <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <Link to="/category/all" className="sf-btn sf-btn-primary text-base px-8 py-4 sf-shadow-lg">Shop Gift Boxes</Link>
+            <a href="tel:+919869313539" className="sf-tag flex items-center gap-1.5 hover:text-[var(--sf-crimson)] transition-colors" style={{ color: 'var(--sf-ink-soft)' }}>
+              <Phone size={12} /> Custom orders
+            </a>
+          </div>
         </div>
-        <div className="flex flex-col items-center gap-3 shrink-0">
-          <Link
-            to="/category/all"
-            className="btn-shine text-white font-black text-base px-10 py-4 rounded-full shadow-xl hover:-translate-y-1 hover:scale-[1.04] transition-all duration-200 whitespace-nowrap"
-            style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
-          >
-            Shop Gift Boxes
-          </Link>
-          <a
-            href="tel:+919869313539"
-            className="text-sm font-semibold hover:text-[#C41230] transition-colors flex items-center gap-1.5"
-            style={{ color: 'rgba(26,8,8,0.5)' }}
-          >
-            <Phone size={12} /> Custom orders: +91 98693 13539
-          </a>
+      </div>
+      {/* right: festive sweets photo that bleeds to the edge */}
+      <div className="relative min-h-[260px] overflow-hidden flex items-center justify-center">
+        <img src={WM('Motichoor_Laddu.jpg', 900)} alt="Assorted festive sweets" className="absolute inset-0 w-full h-full object-cover" />
+        {/* crimson→ink wash for legibility of the mark */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(155,14,37,0.82), rgba(26,8,8,0.72))' }} />
+        <div className="absolute inset-0 indian-pattern opacity-20" />
+        <div className="relative text-center px-8">
+          <Gift size={64} style={{ color: 'var(--sf-gold-light)' }} className="mx-auto mb-4 drop-shadow" />
+          <p className="sf-deva text-2xl" style={{ color: 'var(--sf-cream)' }}>हर मौके के लिए मिठास</p>
         </div>
       </div>
     </div>
@@ -689,76 +492,49 @@ function GiftCTA() {
 }
 
 /* ══════════════════════════════════════
-   CONTACT SECTION
+   CONTACT — 8/4 asymmetric
 ══════════════════════════════════════ */
-
 function ContactSection() {
   return (
     <section>
-      <SectionHead
-        title="Find Us"
-        titleHindi="हमारा पता"
-        sub="Come visit us at our store in Goregaon West, Mumbai"
-      />
+      <SectionHead eyebrow="Visit the Shop" title="Find Us" titleHindi="हमारा पता"
+        sub="Come visit our store in Goregaon West, Mumbai" />
 
-      <div className="grid md:grid-cols-3 gap-5">
-        {[
-          {
-            icon: <MapPin size={20} />,
-            title: 'Our Location',
-            content: 'Station Road, Goregaon West, Mumbai — 400 104',
-            action: { label: 'Get Directions', href: 'https://maps.google.com/?q=Vyas+Sweets+Goregaon+West+Mumbai' },
-            color: '#C41230',
-            bg: '#FFF0F2',
-          },
-          {
-            icon: <Phone size={20} />,
-            title: 'Call Us',
-            content: '+91 98693 13539\nFreshest sweets every morning',
-            action: { label: 'Call Now', href: 'tel:+919869313539' },
-            color: '#D4AF37',
-            bg: '#FFFBF0',
-          },
-          {
-            icon: <Clock size={20} />,
-            title: 'Store Hours',
-            content: 'Opens 8:15 AM daily\nFresh stock every morning',
-            action: { label: 'Order Online', href: '/category/all' },
-            color: '#B8962A',
-            bg: '#FFFBF0',
-          },
-        ].map((item) => (
-          <Tilt
-            key={item.title}
-            max={7}
-            lift={10}
-            className="rounded-3xl p-6 flex flex-col gap-4 h-full"
-            style={{ background: item.bg, border: `1.5px solid ${item.color}30` }}
-          >
-            <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm"
-              style={{ background: `linear-gradient(135deg, ${item.color}22, ${item.color}44)`, color: item.color }}
-            >
-              {item.icon}
-            </div>
+      <div className="grid lg:grid-cols-12 gap-5">
+        {/* big address panel */}
+        <a href="https://maps.google.com/?q=Vyas+Sweets+Goregaon+West+Mumbai" target="_blank" rel="noreferrer"
+          className="lg:col-span-8 relative rounded-3xl overflow-hidden sf-band-dark sf-brackets sf-shadow-lg group p-10 md:p-14 flex flex-col justify-end min-h-[280px]">
+          <img src={WM('Bengali_sweets.jpg', 900)} alt="" aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover opacity-25 group-hover:opacity-30 group-hover:scale-105 transition-all duration-[900ms]" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(120deg, rgba(26,8,8,0.88) 30%, rgba(26,8,8,0.55))' }} />
+          <div className="absolute inset-0 dot-grid-light opacity-20" />
+          <div className="relative">
+            <span className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style={{ background: 'rgba(212,175,55,0.15)', color: 'var(--sf-gold-light)' }}><MapPin size={22} /></span>
+            <h4 className="sf-display font-bold text-white text-3xl md:text-4xl leading-tight">Station Road,<br />Goregaon West</h4>
+            <p className="sf-lead mt-3" style={{ color: 'rgba(247,239,224,0.7)' }}>Mumbai — 400 104</p>
+            <span className="inline-flex items-center gap-1.5 mt-6 font-bold text-sm group-hover:gap-2.5 transition-all" style={{ color: 'var(--sf-gold-light)' }}>
+              Get directions <ArrowRight size={14} />
+            </span>
+          </div>
+        </a>
+
+        {/* stacked spec tickets */}
+        <div className="lg:col-span-4 flex flex-col gap-5">
+          <a href="tel:+919869313539" className="sf-glow bg-white rounded-3xl p-6 flex items-center gap-4 flex-1" style={{ border: '1px solid var(--sf-line)' }}>
+            <span className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(196,18,48,0.09)', color: 'var(--sf-crimson)' }}><Phone size={20} /></span>
             <div>
-              <h4
-                className="font-bold text-[#1A0808] mb-1.5"
-                style={{ fontFamily: 'Fraunces, Georgia, serif' }}
-              >
-                {item.title}
-              </h4>
-              <p className="text-sm text-[#5C1818] leading-relaxed whitespace-pre-line">{item.content}</p>
+              <h4 className="sf-display font-semibold" style={{ color: 'var(--sf-ink)' }}>Call us</h4>
+              <p className="sf-num text-sm" style={{ color: 'var(--sf-ink-soft)' }}>+91 98693 13539</p>
             </div>
-            <a
-              href={item.action.href}
-              className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold transition-all"
-              style={{ color: item.color }}
-            >
-              {item.action.label} <ArrowRight size={13} />
-            </a>
-          </Tilt>
-        ))}
+          </a>
+          <div className="sf-glow bg-white rounded-3xl p-6 flex items-center gap-4 flex-1" style={{ border: '1px solid var(--sf-line)' }}>
+            <span className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(212,175,55,0.15)', color: 'var(--sf-gold-dk)' }}><Clock size={20} /></span>
+            <div>
+              <h4 className="sf-display font-semibold" style={{ color: 'var(--sf-ink)' }}>Store hours</h4>
+              <p className="sf-tag" style={{ color: 'var(--sf-ink-soft)' }}>Opens 8:15 AM daily</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -767,28 +543,15 @@ function ContactSection() {
 /* ══════════════════════════════════════
    EMPTY STATE
 ══════════════════════════════════════ */
-
 function EmptyState() {
   return (
     <div className="text-center py-24">
-      <div
-        className="w-20 h-20 mx-auto rounded-3xl flex items-center justify-center mb-5 shadow-xl animate-bounce-soft"
-        style={{ background: 'linear-gradient(135deg, #C41230, #9B0E25)' }}
-      >
+      <div className="w-20 h-20 mx-auto rounded-3xl flex items-center justify-center mb-5 sf-shadow-lg animate-bounce-soft" style={{ background: 'var(--sf-crimson)' }}>
         <ShoppingBag size={32} className="text-white" />
       </div>
-      <h2
-        className="text-2xl font-black text-[#1A0808] mb-2"
-        style={{ fontFamily: 'Fraunces, Georgia, serif' }}
-      >
-        Coming Soon!
-      </h2>
-      <p className="text-[#5C1818] mb-6">We're stocking up with fresh products.</p>
-      <Link
-        to="/admin/products"
-        className="inline-flex items-center gap-2 text-sm font-bold hover:underline"
-        style={{ color: '#C41230' }}
-      >
+      <h2 className="sf-display font-bold text-2xl mb-2" style={{ color: 'var(--sf-ink)' }}>Coming soon</h2>
+      <p className="mb-6" style={{ color: 'var(--sf-ink-soft)' }}>We're stocking up with fresh products.</p>
+      <Link to="/admin/products" className="inline-flex items-center gap-2 text-sm font-bold hover:underline" style={{ color: 'var(--sf-crimson)' }}>
         Add products from admin <ArrowRight size={14} />
       </Link>
     </div>
@@ -796,21 +559,10 @@ function EmptyState() {
 }
 
 /* ══════════════════════════════════════
-   LOADING SPINNER
-══════════════════════════════════════ */
-
-
-/* ══════════════════════════════════════
    MAIN PAGE
 ══════════════════════════════════════ */
-
 function withTimeout<T>(p: Promise<T>, ms = 8000): Promise<T> {
-  return Promise.race([
-    p,
-    new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error('timeout')), ms),
-    ),
-  ]);
+  return Promise.race([p, new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))]);
 }
 
 export default function HomePage() {
@@ -821,7 +573,6 @@ export default function HomePage() {
 
   useEffect(() => {
     let alive = true;
-
     Promise.allSettled([
       withTimeout(getCategories()),
       withTimeout(getProducts({ limit: 8, sort: 'newest' })),
@@ -831,132 +582,103 @@ export default function HomePage() {
       if (c.status === 'fulfilled') setCategories(c.value);
       if (p.status === 'fulfilled') setNewArrivals(p.value.items.slice(0, 8));
       if (f.status === 'fulfilled') setFeaturedProducts(f.value.items.slice(0, 8));
-    }).finally(() => {
-      if (alive) setApiReady(true);
-    });
-
+    }).finally(() => { if (alive) setApiReady(true); });
     return () => { alive = false; };
   }, []);
 
   return (
     <>
-      {/* Full-viewport cinematic video hero */}
+      {/* 1 — asymmetric split hero */}
       <CinematicHero />
 
-      <div className="max-w-6xl mx-auto px-4 py-6 space-y-12">
+      <div className="max-w-7xl mx-auto px-4 py-12 md:py-20 space-y-24 md:space-y-32">
 
-      {/* Designed Vyas banner carousel (1a ⇄ 1b) — pulled wider than the content column so it reads as a hero */}
-      <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }} className="px-4 sm:px-6 lg:px-8">
-        <div className="max-w-[1600px] mx-auto">
-          <Reveal variant="up"><VyasHeroCarousel /></Reveal>
+        {/* client banner carousel — kept, contained frame */}
+        <Reveal variant="up"><VyasHeroCarousel /></Reveal>
+
+        {/* ribbon + overlapping stat strip */}
+        <div>
+          <div className="sf-bleed"><Reveal variant="fade"><CounterRibbon /></Reveal></div>
+          <Reveal variant="up"><StatStrip /></Reveal>
         </div>
+
+        {/* 2 — bento display case */}
+        <Reveal variant="up"><FeaturedSweetsSection featured={featuredProducts.length ? featuredProducts : newArrivals} /></Reveal>
+
+        <Reveal variant="fade"><OrnamentStrip variant="gold" /></Reveal>
       </div>
 
-      {/* Ticker */}
-      <Reveal variant="fade"><MarqueeTicker /></Reveal>
+      {/* 3 — ink museum-plaque band, full-bleed */}
+      <Reveal variant="fade" className="sf-bleed block"><AboutSection /></Reveal>
 
-      {/* Store info */}
-      <Reveal variant="up"><StoreInfoBar /></Reveal>
+      <div className="max-w-7xl mx-auto px-4 py-12 md:py-20 space-y-24 md:space-y-32">
 
-      {/* 2. Featured Sweets showcase */}
-      <Reveal variant="up"><FeaturedSweetsSection featured={featuredProducts.length ? featuredProducts : newArrivals} /></Reveal>
+        {/* promises ledger — clean spacing below the plaque, no overlap */}
+        <Reveal variant="up"><PromisesRow /></Reveal>
 
-      {/* Ornament divider */}
-      <Reveal variant="fade"><OrnamentStrip variant="gold" /></Reveal>
+        {/* wide client banner — full-bleed */}
+        <div className="sf-bleed"><Reveal variant="fade"><VyasWideBanner bleed /></Reveal></div>
 
-      {/* 3. About / Heritage */}
-      <Reveal variant="scale"><AboutSection /></Reveal>
-
-      {/* Wide designed banner (1d) — full-bleed background band */}
-      <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
-        <Reveal variant="fade"><VyasWideBanner bleed /></Reveal>
-      </div>
-
-      {/* 4. Categories + 5. Products — skeleton while API loads */}
-      {!apiReady ? (
-        <div className="flex flex-col items-center gap-3 py-10">
-          <div className="relative w-12 h-12">
-            <div className="absolute inset-0 rounded-full border-4 border-red-100 border-t-[#C41230] animate-spin" />
-            <div className="absolute inset-0 rounded-full border-4 border-transparent border-b-[#D4AF37] animate-spin-slow-rev" />
+        {!apiReady ? (
+          <div className="flex flex-col items-center gap-3 py-16">
+            <div className="relative w-12 h-12">
+              <div className="absolute inset-0 rounded-full border-4 animate-spin" style={{ borderColor: 'rgba(196,18,48,0.15)', borderTopColor: 'var(--sf-crimson)' }} />
+            </div>
+            <p className="sf-tag" style={{ color: 'var(--sf-ink-soft)' }}>Loading fresh products…</p>
           </div>
-          <p className="text-sm text-[#5C1818]">Loading fresh products…</p>
-        </div>
-      ) : (
-        <>
-          {/* 5. Categories */}
-          {categories.length > 0 && (
-            <Reveal as="section" variant="up">
-              <SectionHead
-                title="Shop by Category"
-                titleHindi="श्रेणी के अनुसार"
-                sub={`${categories.length} categor${categories.length === 1 ? 'y' : 'ies'} available`}
-                to="/category/all"
-              />
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                {categories.slice(0, 12).map((cat, i) => (
-                  <CatCard key={cat._id} cat={cat} index={i} />
-                ))}
-              </div>
-            </Reveal>
-          )}
+        ) : (
+          <>
+            {/* 4 — staggered gold-glow categories */}
+            {categories.length > 0 && (
+              <Reveal as="section" variant="up">
+                <SectionHead eyebrow="Browse the Counter" title="Shop by Category" titleHindi="श्रेणी के अनुसार"
+                  sub={`${categories.length} categor${categories.length === 1 ? 'y' : 'ies'} available`} to="/category/all" />
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4 md:gap-5">
+                  {categories.slice(0, 12).map((cat, i) => <CatCard key={cat._id} cat={cat} index={i} />)}
+                </div>
+              </Reveal>
+            )}
 
-          {/* 6. Menu / Products */}
-          {newArrivals.length > 0 && (
-            <Reveal as="section" variant="up">
-              <SectionHead
-                title="New Arrivals"
-                titleHindi="नए उत्पाद"
-                sub="Freshly added to our collection"
-                to="/category/all"
-              />
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {newArrivals.map((p, i) => (
-                  <div
-                    key={p._id}
-                    className="animate-fade-up"
-                    style={{ animationDelay: `${i * 0.065}s` }}
-                  >
-                    <Tilt className="h-full rounded-3xl">
+            {/* new arrivals — first promoted to wide feature */}
+            {newArrivals.length > 0 && (
+              <Reveal as="section" variant="up">
+                <SectionHead eyebrow="Fresh This Week" title="New Arrivals" titleHindi="नए उत्पाद"
+                  sub="Freshly added to our collection" to="/category/all" />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-fr">
+                  {newArrivals[0] && <FeatureProduct product={newArrivals[0]} />}
+                  {newArrivals.slice(1).map((p, i) => (
+                    <div key={p._id} className="animate-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
                       <ProductCard product={p} />
-                    </Tilt>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-          )}
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+            )}
 
-          {categories.length === 0 && newArrivals.length === 0 && <EmptyState />}
-        </>
-      )}
+            {categories.length === 0 && newArrivals.length === 0 && <EmptyState />}
+          </>
+        )}
 
-      {/* Full-catalogue ribbon banner (1c) — full-bleed background band */}
-      {/* <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
-        <Reveal variant="fade"><VyasRibbonBanner bleed /></Reveal>
-      </div> */}
+        <DiamondRule />
 
-      {/* Divider */}
-      <div className="divider-warm" />
+        {/* reels showcase (recomposed in VideoShowcase) */}
+        <Reveal variant="up"><ReelsShowcase /></Reveal>
 
-      {/* Vertical reels showcase */}
-      <Reveal variant="up"><ReelsShowcase /></Reveal>
+        <DiamondRule />
 
-      {/* Divider */}
-      <div className="divider-warm" />
+        {/* 5 — pull-quote testimonials */}
+        <Reveal variant="up"><TestimonialsSection /></Reveal>
 
-      {/* 7. Testimonials */}
-      <Reveal variant="up"><TestimonialsSection /></Reveal>
+        {/* split gift CTA */}
+        <Reveal variant="scale"><GiftCTA /></Reveal>
 
-      {/* 8. Gift CTA */}
-      <Reveal variant="scale"><GiftCTA /></Reveal>
+        {/* contact */}
+        <Reveal variant="up"><ContactSection /></Reveal>
 
-      {/* 9. Contact */}
-      <Reveal variant="up"><ContactSection /></Reveal>
-
-      {/* Bottom strip */}
-      <div className="flex items-center justify-center gap-2 text-xs pb-2" style={{ color: 'rgba(26,8,8,0.4)' }}>
-        <MapPin size={11} style={{ color: '#C41230' }} />
-        Serving Mumbai since 1951 · Station Road, Goregaon West · Open 8:15 AM daily
-      </div>
+        <div className="sf-tag flex items-center justify-center gap-2 pb-2" style={{ color: 'rgba(26,8,8,0.4)' }}>
+          <MapPin size={11} style={{ color: 'var(--sf-crimson)' }} />
+          Serving Mumbai since 1951 · Station Road, Goregaon West · Open 8:15 AM daily
+        </div>
       </div>
     </>
   );
